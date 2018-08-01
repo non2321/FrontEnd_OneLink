@@ -1,0 +1,7 @@
+export const alertConstants = {
+    SUCCESS: 'ALERT_SUCCESS',
+    BIGSUCCESS: 'BIGALERT_SUCCESS',
+    ERROR: 'ALERT_ERROR',
+    BIGERROR: 'BIGALERT_ERROR',
+    CLEAR: 'ALERT_CLEAR'
+};

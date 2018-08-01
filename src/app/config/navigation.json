@@ -1,0 +1,158 @@
+{
+  "items": [
+    {
+      "title": "Home",
+      "route": "/home",
+      "icon": "fa fa-lg fa-fw fa-home",
+      "comment": "Home",
+      "screen_id": "Home"
+    },
+    {
+      "title": "SDC",
+      "icon": "fa fa-lg fa-fw fa-inbox",
+      "comment": "SDC",
+      "screen_id": "SDC",
+      "items": [
+        {
+          "title": "Store Date Consolidate - Sales",
+          "comment": "Store Date Consolidate - Sales",
+          "screen_id": "H0001",
+          "items": [
+            {
+              "title": "Bank Account Configuration",
+              "route": "/SDC/SetupBankAccount",
+              "comment": "Bank Account Configuration",
+              "screen_id": "S0001"
+            },
+            {
+              "title": "Company Account Configuration",
+              "route": "/SDC/SetupCompanyAccount",
+              "comment": "Company Account Configuration",
+              "screen_id": "S0002"
+            },
+            {
+              "title": "Setup Company",
+              "route": "/SDC/SetupCompany",
+              "comment": "Setup Company",
+              "screen_id": "S0003"
+            },
+            {
+              "title": "Financial Code Configuration",
+              "route": "/SDC/SetupFinancialCode",
+              "comment": "Financial Code Configuration",
+              "screen_id": "S0004"
+            },
+            {
+              "title": "Petty Cash Configuration",
+              "route": "/views/forum-post",
+              "comment": "Petty Cash Configuration",
+              "screen_id": "S0005"
+            },
+            {
+              "title": "Store Configuration",
+              "route": "/SDC/SetupStore",
+              "comment": "Store Configuration",
+              "screen_id": "S0006"
+            },
+            {
+              "title": "Account Code Setup For Sale",
+              "route": "/SDC/AccountCodeSetupForSale",
+              "comment": "Account Code Setup For Sale",
+              "screen_id": "S0007"
+            },
+            {
+              "title": "Bank-In Adjustment",
+              "route": "/SDC/BankInAdjustment",
+              "comment": "Bank-In Adjustment",
+              "screen_id": "S0008"
+            },
+            {
+              "title": "Stamp Close Daily Fins",
+              "route": "/SDC/SteampCloseDailyFins",
+              "comment": "Stamp Close Daily Fins",
+              "screen_id": "S0009"
+            }
+          ]
+        },
+        {
+          "title": "Store Date Consolidate - Inventory",
+          "comment": "Store Date Consolidate - Inventory",
+          "screen_id": "H0002",
+          "items": [
+            {
+              "title": "Account Code For Inventory",
+              "route": "/views/forum-general",
+              "comment": "Account Code For Inventory",
+              "screen_id": "S0010"
+            },
+            {
+              "title": "Ending Inventory",
+              "route": "/views/forum-topic",
+              "comment": "Ending Inventory",
+              "screen_id": "S0011"
+            },
+            {
+              "title": "Receipts",
+              "route": "/views/forum-post",
+              "comment": "Receipts",
+              "screen_id": "S0012"
+            },
+            {
+              "title": "Term Closing",
+              "route": "/views/forum-post",
+              "comment": "Term Closing",
+              "screen_id": "S0013"
+            },
+            {
+              "title": "Transfer Inventory",
+              "route": "/views/forum-post",
+              "comment": "Transfer Inventory",
+              "screen_id": "S0014"
+            },
+            {
+              "title": "Unit Cost",
+              "route": "/views/forum-post",
+              "comment": "Unit Cost",
+              "screen_id": "S0015"
+            },
+            {
+              "title": "Stamp Inventory",
+              "route": "/views/forum-post",
+              "comment": "Stamp Inventory",
+              "screen_id": "S0016"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Report",
+      "icon": "fa fa-lg fa-fw fa-file-text",
+      "comment": "Report",
+      "screen_id": "Report",
+      "items": [
+        {
+          "title": "Store Date Consolidate - Sales",
+          "comment": "Store Date Consolidate - Sales",
+          "screen_id": "H0003",
+          "items": [
+            {
+              "title": "Report Daily Flash Sales",
+              "route": "/Report/SDC/DailyFlashSales",
+              "comment": "Report Daily Flash Sales",
+              "screen_id": "S0023"
+            }
+          ]
+        },
+        {
+          "title": "Store Date Consolidate - Inventory",
+          "comment": "Store Date Consolidate - Inventory",
+          "screen_id": "H0002",
+          "items": [
+            {}
+          ]
+        }
+      ]
+    }
+  ]
+}
