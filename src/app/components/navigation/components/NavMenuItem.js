@@ -41,6 +41,8 @@ export default class SmartMenuItem extends React.Component {
     //   <a href={item.href || '#'} onClick={this._handleClick} title={item.title}>
     //     {icon} {title} {badge}
     //   </a>;
+    console.log(111)
+    console.log(item.route)
      const link = item.route ?
       <Link to={item.route} title={item.comment} activeClassName="active">
         {icon} {title} {badge}

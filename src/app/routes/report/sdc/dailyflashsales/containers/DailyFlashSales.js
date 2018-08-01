@@ -146,32 +146,13 @@ class DailyFlashSales extends React.Component {
                                         <div className="form-group">
                                             <div className="col-md-6 form-group">
                                                 <div className="col-md-4 control-label"><label > From Store</label><span class="text-danger">*</span></div>
-                                                <div className="col-md-6">
-                                                    {/* <Delay wait={250} >
-                                                        <Async
-                                                            placeholder='From Store'
-                                                            name="from_store"
-                                                            loadOptions={getOptionsStore}
-                                                            value={from_store}
-                                                            onChange={this.handleChangesFromStore}
-                                                        />
-                                                    </Delay> */}
+                                                <div className="col-md-6">                                                  
                                                     <Select options={this.state.options}  placeholder='From Store' name="from_store" value={from_store} onChange={this.handleChangesFromStore}/>
                                                 </div>
                                             </div>
                                             <div className="col-md-6 form-group">
                                                 <div className="col-md-4 control-label"><label > To Store</label><span class="text-danger">*</span></div>
-                                                <div className="col-md-6">
-                                                    {/* <Delay wait={500} >
-                                                        <Async
-                                                            disabled={!from_store}
-                                                            placeholder='To Store'
-                                                            name="to_store"
-                                                            loadOptions={getOptionsStore}
-                                                            value={to_store}
-                                                            onChange={this.handleChangesToStore}
-                                                        />
-                                                    </Delay> */}
+                                                <div className="col-md-6">                                                    
                                                     <Select options={this.state.options.filter((option) => { return option.value >= parseInt(from_store.value)})}  disabled={!from_store} placeholder='To Store' name="to_store" value={to_store} onChange={this.handleChangesToStore}/>
                                                 </div>
                                             </div>

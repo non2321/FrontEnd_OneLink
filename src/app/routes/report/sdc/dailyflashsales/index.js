@@ -5,7 +5,7 @@ export default {
 
   childRoutes: [
     {
-      path: '/Report/SDC/DailyFlashSales',
+      path: '/SDC/ReportDailyFlashSales',
       getComponent(nextState, cb) {
         System.import('./containers/DailyFlashSales').then((m) => {
           cb(null, m.default)

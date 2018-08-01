@@ -138,7 +138,7 @@
           "items": [
             {
               "title": "Report Daily Flash Sales",
-              "route": "/Report/SDC/DailyFlashSales",
+              "route": "/SDC/ReportDailyFlashSales",
               "comment": "Report Daily Flash Sales",
               "screen_id": "S0023"
             }
@@ -153,6 +153,6 @@
           ]
         }
       ]
-    }
+    }    
   ]
 }
