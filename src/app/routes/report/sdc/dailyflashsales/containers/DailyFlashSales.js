@@ -50,7 +50,7 @@ class DailyFlashSales extends React.Component {
             subledger_type: '',
             subledger: '',
             submitted: false,
-            screen_id: ScreenIDReportDailyFlashSales          
+            screen_id: ScreenIDReportDailyFlashSales
         }
 
         this.handleDateFrom = this.handleDateFrom.bind(this)
@@ -74,14 +74,14 @@ class DailyFlashSales extends React.Component {
         });
     }
 
-    handleChangesFromStore = (from_store) => {        
-        this.setState({ 
-            from_store: (from_store == null)? '' : from_store, to_store: ''
-         });
+    handleChangesFromStore = (from_store) => {
+        this.setState({
+            from_store: (from_store == null) ? '' : from_store, to_store: ''
+        });
     }
 
-    handleChangesToStore = (to_store) => {      
-        this.setState({ to_store: (to_store == null)? '' : to_store });
+    handleChangesToStore = (to_store) => {
+        this.setState({ to_store: (to_store == null) ? '' : to_store });
     }
 
     onStampChanged(e) {
@@ -98,7 +98,7 @@ class DailyFlashSales extends React.Component {
 
     handleSubmit(e) {
         e.preventDefault();
-       
+
     }
 
     componentDidMount() {
@@ -106,15 +106,15 @@ class DailyFlashSales extends React.Component {
         let apiRequest1 = setTimeout(function () {
             fetch(`${PathBackEnd}/api/report/storeall`)
                 .then(response => response.json())
-                .then(data => {                  
+                .then(data => {
                     self.setState({ options: data })
                     return data
                 });
-        }, 250)       
+        }, 250)
     }
 
     render() {
-        const { stamp, datefrom, dateto, from_store, to_store, formular_name, account_code, bu_type, type, subledger_type, subledger, submitted, screen_id } = this.state;
+        const { stamp, datefrom, dateto, from_store, to_store, options, formular_name, account_code, bu_type, type, subledger_type, subledger, submitted, screen_id } = this.state;
         const { modify, screen_name } = this.props;
         const seft = this
 
@@ -146,14 +146,18 @@ class DailyFlashSales extends React.Component {
                                         <div className="form-group">
                                             <div className="col-md-6 form-group">
                                                 <div className="col-md-4 control-label"><label > From Store</label><span class="text-danger">*</span></div>
-                                                <div className="col-md-6">                                                  
-                                                    <Select options={this.state.options}  placeholder='From Store' name="from_store" value={from_store} onChange={this.handleChangesFromStore}/>
+                                                <div className="col-md-6">
+                                                    {options &&
+                                                        <Select options={options} placeholder='From Store' name="from_store" value={from_store} onChange={this.handleChangesFromStore} />
+                                                    }
                                                 </div>
                                             </div>
                                             <div className="col-md-6 form-group">
                                                 <div className="col-md-4 control-label"><label > To Store</label><span class="text-danger">*</span></div>
-                                                <div className="col-md-6">                                                    
-                                                    <Select options={this.state.options.filter((option) => { return option.value >= parseInt(from_store.value)})}  disabled={!from_store} placeholder='To Store' name="to_store" value={to_store} onChange={this.handleChangesToStore}/>
+                                                <div className="col-md-6">
+                                                    {options &&
+                                                        <Select options={options.filter((option) => { return option.value >= parseInt(from_store.value) })} disabled={!from_store} placeholder='To Store' name="to_store" value={to_store} onChange={this.handleChangesToStore} />
+                                                    }
                                                 </div>
                                             </div>
                                         </div>
