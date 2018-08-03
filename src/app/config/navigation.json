@@ -122,15 +122,7 @@
               "screen_id": "S0016"
             }
           ]
-        }
-      ]
-    },
-    {
-      "title": "Report",
-      "icon": "fa fa-lg fa-fw fa-file-text",
-      "comment": "Report",
-      "screen_id": "Report",
-      "items": [
+        },
         {
           "title": "Store Date Consolidate - Sales",
           "comment": "Store Date Consolidate - Sales",
@@ -147,12 +139,12 @@
         {
           "title": "Store Date Consolidate - Inventory",
           "comment": "Store Date Consolidate - Inventory",
-          "screen_id": "H0002",
+          "screen_id": "H0004",
           "items": [
             {}
           ]
         }
       ]
-    }    
+    }       
   ]
 }

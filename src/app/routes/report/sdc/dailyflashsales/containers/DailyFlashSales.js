@@ -2,7 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux';
 
 import { userAuth } from '../../../../../actions/auth';
-import { financialActions } from '../../../../../actions/sdc'
+import { reportsdc } from '../../../../../actions/report'
 
 import { Stats, BigBreadcrumbs, WidgetGrid, JarvisWidget } from '../../../../../components'
 import { smallBox, bigBox, SmartMessageBox } from '../../../../../components/utils/actions/MessageActions'
@@ -13,9 +13,10 @@ import { ScreenIDReportDailyFlashSales, PathBackEnd } from '../../../../../../..
 import Delay from 'react-delay'
 
 import Select from 'react-select'
-import { Async } from 'react-select';
 import 'react-select/dist/react-select.css';
 
+import jsPDF from 'jspdf'
+import html2canvas from 'html2canvas'
 
 const getOptionsStore = () => {
     return fetch(`${PathBackEnd}/api/report/storeall`)
@@ -43,12 +44,10 @@ class DailyFlashSales extends React.Component {
             dateto: '',
             from_store: '',
             to_store: '',
-            formular_name: '',
-            account_code: '',
-            bu_type: '',
-            type: '',
-            subledger_type: '',
-            subledger: '',
+            errordatefrom: '',
+            errordateto: '',
+            errorfrom_store: '',
+            errorto_store: '',
             submitted: false,
             screen_id: ScreenIDReportDailyFlashSales
         }
@@ -60,6 +59,8 @@ class DailyFlashSales extends React.Component {
 
         this.handleReset = this.handleReset.bind(this)
         this.handleSubmit = this.handleSubmit.bind(this)
+
+        this.printDocument = this.printDocument.bind(this)
     }
 
     handleDateFrom(data) {
@@ -94,11 +95,32 @@ class DailyFlashSales extends React.Component {
         e.preventDefault();
 
         this.setState({ datefrom: '', dateto: '', from_store: '', to_store: '', stamp: 'option1' })
+        this.setState({ errordatefrom: '', errordateto: '', errorfrom_store: '', errorto_store: '' })
     }
 
     handleSubmit(e) {
         e.preventDefault();
 
+        const { datefrom, dateto, from_store, to_store, stamp, screen_id } = this.state
+
+        this.setState({
+            errordatefrom: (datefrom) ? '' : 'The From Date is required',
+            errordateto: (dateto) ? '' : 'The To Date is required',
+            errorfrom_store: (from_store) ? '' : 'The From Store is required',
+            errorto_store: (to_store) ? '' : 'The To Store To is required',
+            submitted: false
+        })
+
+        if (datefrom && dateto && from_store && to_store && screen_id) {
+            const prm = {
+                datefrom: datefrom,
+                dateto: dateto,
+                from_store: from_store,
+                to_store: to_store,
+                screen_id: screen_id
+            }
+            reportsdc.exportdailyflashsales(pmr)
+        }
     }
 
     componentDidMount() {
@@ -113,8 +135,23 @@ class DailyFlashSales extends React.Component {
         }, 250)
     }
 
+
+    printDocument() {
+        const input = document.getElementById('divToPrint');
+        html2canvas(input)
+            .then((canvas) => {
+                const imgData = canvas.toDataURL('image/png');
+                const pdf = new jsPDF();
+                pdf.addImage(imgData, 'JPEG', 0, 0);
+                // pdf.output('dataurlnewwindow');
+                pdf.save("download.pdf");
+            })
+            ;
+    }
+
     render() {
-        const { stamp, datefrom, dateto, from_store, to_store, options, formular_name, account_code, bu_type, type, subledger_type, subledger, submitted, screen_id } = this.state;
+        const { stamp, datefrom, dateto, from_store, to_store, options } = this.state;
+        const { errordatefrom, errordateto, errorfrom_store, errorto_store } = this.state;
         const { modify, screen_name } = this.props;
         const seft = this
 
@@ -134,12 +171,14 @@ class DailyFlashSales extends React.Component {
                                                 <div className="col-md-6">
                                                     <UiDatepicker type="text" name="startdate" id="startdate" changeMonth="true" changeYear="true" dateFormat="dd/mm/yy" addday="7" datefrom="#startdate" dateto="#finishdate" onInputChange={this.handleDateFrom} value={datefrom}
                                                         placeholder="Start date" />
+                                                    <span className="text-danger">{errordatefrom}</span>
                                                 </div>
                                             </div>
                                             <div className="col-md-6 form-group">
                                                 <div className="col-md-4 control-label"><label > To Date</label><span class="text-danger">*</span></div>
                                                 <div className="col-md-6">
                                                     <UiDatepicker type="text" name="finishdate" id="finishdate" changeMonth="true" changeYear="true" dateFormat="dd/mm/yy" addday="7" onInputChange={this.handleDateTo} value={dateto} disabled={!datefrom} placeholder="Finish date" />
+                                                    <span className="text-danger">{errordateto}</span>
                                                 </div>
                                             </div>
                                         </div>
@@ -150,6 +189,7 @@ class DailyFlashSales extends React.Component {
                                                     {options &&
                                                         <Select options={options} placeholder='From Store' name="from_store" value={from_store} onChange={this.handleChangesFromStore} />
                                                     }
+                                                    <span className="text-danger">{errorfrom_store}</span>
                                                 </div>
                                             </div>
                                             <div className="col-md-6 form-group">
@@ -158,6 +198,7 @@ class DailyFlashSales extends React.Component {
                                                     {options &&
                                                         <Select options={options.filter((option) => { return option.value >= parseInt(from_store.value) })} disabled={!from_store} placeholder='To Store' name="to_store" value={to_store} onChange={this.handleChangesToStore} />
                                                     }
+                                                    <span className="text-danger">{errorto_store}</span>
                                                 </div>
                                             </div>
                                         </div>
@@ -178,11 +219,9 @@ class DailyFlashSales extends React.Component {
                                                         </div>
                                                     </section>
                                                 </div>
-
                                             </div>
                                             <div className="col-md-6 form-group">
                                                 <div className="col-md-2">
-
                                                 </div>
                                                 <div className="col-md-8">
                                                     <div className="btn-header transparent pull-right">
@@ -198,6 +237,13 @@ class DailyFlashSales extends React.Component {
                                                 </div>
                                             </div>
                                         </div>
+                                        {/* <div className="mb5">
+                                            <button onClick={this.printDocument}>Print</button>
+                                        </div>
+                                        <div id="divToPrint" className="mt4" >
+                                            <div>Note: Here the dimensions of div are same as A4</div>
+                                            <div>You Can add any component here</div>
+                                        </div> */}
                                     </fieldset>
                                 </div>
                                 }
