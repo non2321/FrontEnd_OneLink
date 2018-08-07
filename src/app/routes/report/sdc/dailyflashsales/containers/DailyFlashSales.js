@@ -15,6 +15,13 @@ import Delay from 'react-delay'
 import Select from 'react-select'
 import 'react-select/dist/react-select.css';
 
+import Workbook from 'react-excel-workbook'
+
+import TableauReport from 'react-tableau-report'
+
+// import XLSX from 'xlsx'
+// import ReactExport from 'react-data-export';
+
 import jsPDF from 'jspdf'
 import html2canvas from 'html2canvas'
 
@@ -39,7 +46,7 @@ class DailyFlashSales extends React.Component {
         }
 
         this.state = {
-            stamp: 'option1',
+            stamp: 'Excel',
             datefrom: '',
             dateto: '',
             from_store: '',
@@ -77,7 +84,8 @@ class DailyFlashSales extends React.Component {
 
     handleChangesFromStore = (from_store) => {
         this.setState({
-            from_store: (from_store == null) ? '' : from_store, to_store: ''
+            from_store: (from_store == null) ? '' : from_store, to_store: '',
+            to_store: (from_store == null) ? '' : from_store
         });
     }
 
@@ -94,14 +102,16 @@ class DailyFlashSales extends React.Component {
     handleReset(e) {
         e.preventDefault();
 
-        this.setState({ datefrom: '', dateto: '', from_store: '', to_store: '', stamp: 'option1' })
+        this.setState({ datefrom: '', dateto: '', from_store: '', to_store: '', stamp: 'Excel', submitted:false })
         this.setState({ errordatefrom: '', errordateto: '', errorfrom_store: '', errorto_store: '' })
     }
 
     handleSubmit(e) {
         e.preventDefault();
 
+        const { dispatch } = this.props
         const { datefrom, dateto, from_store, to_store, stamp, screen_id } = this.state
+        const selft = this
 
         this.setState({
             errordatefrom: (datefrom) ? '' : 'The From Date is required',
@@ -112,14 +122,26 @@ class DailyFlashSales extends React.Component {
         })
 
         if (datefrom && dateto && from_store && to_store && screen_id) {
+            let datePartsfrom = datefrom.split("/");
+            let dateObjectfrom = `${datePartsfrom[2]}/${datePartsfrom[1]}/${datePartsfrom[0]}`
+
+            let datePartsto = dateto.split("/");
+            let dateObjectto = `${datePartsto[2]}/${datePartsto[1]}/${datePartsto[0]}`
+
+
             const prm = {
-                datefrom: datefrom,
-                dateto: dateto,
-                from_store: from_store,
-                to_store: to_store,
+                datefrom: dateObjectfrom,
+                dateto: dateObjectto,
+                from_store: from_store.value,
+                to_store: to_store.value,
+                stamp: stamp,
                 screen_id: screen_id
             }
-            reportsdc.exportdailyflashsales(pmr)
+            // dispatch(reportsdc.exportdailyflashsales(prm))
+            console.log("test")
+            setTimeout(function () {
+                selft.setState({ submitted: true })
+            }, 500)
         }
     }
 
@@ -150,9 +172,9 @@ class DailyFlashSales extends React.Component {
     }
 
     render() {
-        const { stamp, datefrom, dateto, from_store, to_store, options } = this.state;
+        const { stamp, datefrom, dateto, from_store, to_store, options, submitted } = this.state;
         const { errordatefrom, errordateto, errorfrom_store, errorto_store } = this.state;
-        const { modify, screen_name } = this.props;
+        const { modify, screen_name, report } = this.props;
         const seft = this
 
         return (
@@ -205,19 +227,19 @@ class DailyFlashSales extends React.Component {
                                         <div className="form-group">
                                             <div className="col-md-6 form-group">
                                                 <div className="col-md-4 control-label">
-                                                    <label > File Type</label><span class="text-danger">*</span>
+                                                    {/* <label > File Type</label><span class="text-danger">*</span> */}
                                                 </div>
                                                 <div className="col-md-6 smart-form">
-                                                    <section>
+                                                    {/* <section>
                                                         <div className="inline-group">
                                                             <label className="radio">
-                                                                <input type="radio" name="radio-inline" value="option1" checked={stamp === 'option1'} onChange={this.onStampChanged} />
+                                                                <input type="radio" name="radio-inline" value="Excel" checked={stamp === 'Excel'} onChange={this.onStampChanged} />
                                                                 <i />Excel</label>
                                                             <label className="radio">
-                                                                <input type="radio" name="radio-inline" value="option2" checked={stamp === 'option2'} onChange={this.onStampChanged} />
+                                                                <input type="radio" name="radio-inline" value="PDF" checked={stamp === 'PDF'} onChange={this.onStampChanged} />
                                                                 <i />PDF</label>
                                                         </div>
-                                                    </section>
+                                                    </section> */}
                                                 </div>
                                             </div>
                                             <div className="col-md-6 form-group">
@@ -236,14 +258,15 @@ class DailyFlashSales extends React.Component {
                                                     </div>
                                                 </div>
                                             </div>
+                                            <div className="col-md-12">
+                                                {submitted && <TableauReport
+                                                    url="http://public.tableau.com/views/RegionalSampleWorkbook/Storms"
+                                                // options={option}
+                                                />
+                                                }
+                                            </div>
+
                                         </div>
-                                        {/* <div className="mb5">
-                                            <button onClick={this.printDocument}>Print</button>
-                                        </div>
-                                        <div id="divToPrint" className="mt4" >
-                                            <div>Note: Here the dimensions of div are same as A4</div>
-                                            <div>You Can add any component here</div>
-                                        </div> */}
                                     </fieldset>
                                 </div>
                                 }
@@ -258,12 +281,13 @@ class DailyFlashSales extends React.Component {
 
 
 function mapStateToProps(state) {
-    const { loadpage } = state;
+    const { loadpage, report } = state;
     const screen_name = loadpage.screen_name
     const modify = loadpage.modify
     return {
         modify,
-        screen_name
+        screen_name,
+        report
     };
 }
 

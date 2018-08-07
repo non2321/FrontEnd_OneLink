@@ -3,7 +3,7 @@ import { localStorageAuth, PathBackEnd } from '../../../../settings'
 import 'isomorphic-fetch'
 
 export const reportsdcService = {
-    exportdailyflashsales,    
+    exportdailyflashsales,
 };
 
 function exportdailyflashsales(prm) {
@@ -20,16 +20,15 @@ function exportdailyflashsales(prm) {
         body: JSON.stringify({ datefrom, dateto, from_store, to_store, stamp, screen_id })
     };
 
-    return fetch(`${PathBackEnd}/api/companyconfig`, requestOptions)
+    return fetch(`${PathBackEnd}/api/report/exportdailyflashsales`, requestOptions)
         .then(response => {
             return handleResponse(response)
         })
-        .then(user => {
+        .then(user => {           
             // login successful if there's a jwt token in the response
-            if (user && user.token && user.status == 'Y') {
+            if (user  && user.status == 'Y') {                        
                 // store user details and jwt token in local storage to keep user logged in between page refreshes
-
-                localStorage.setItem(localStorageAuth, JSON.stringify(user));
+                localStorage.setItem(localStorageAuth, JSON.stringify(user.user));
             }
 
             return user;

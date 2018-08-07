@@ -1,6 +1,6 @@
 import { alertConstants } from '../constants';
 
-export function alertreducers(state = {}, action) {
+export function alertreducers(state = {type: '', message: ''}, action) {
   switch (action.type) {
     case alertConstants.SUCCESS:
       return {
@@ -10,6 +10,11 @@ export function alertreducers(state = {}, action) {
     case alertConstants.BIGSUCCESS:
       return {
         type: 'bigalert-success',
+        message: action.message
+      };
+    case alertConstants.WARNING:
+      return {
+        type: 'alert-warning',
         message: action.message
       };
     case alertConstants.ERROR:

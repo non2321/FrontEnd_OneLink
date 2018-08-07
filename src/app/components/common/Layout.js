@@ -66,6 +66,17 @@ class Layout extends React.Component {
       });
       this.props.dispatch(alertActions.clear());
     }
+    if (alert.type == 'alert-warning') {
+
+      smallBox({
+        title: "Alert Warning",
+        content: (alert.message == "") ? "Can't receive message from SQL Server" : alert.message,
+        color: "#ffc107",
+        timeout: 6000,
+        icon: "fa fa-warning flip animated"
+      });
+      this.props.dispatch(alertActions.clear());
+    }
   }
 
 
