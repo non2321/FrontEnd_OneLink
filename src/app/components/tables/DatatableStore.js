@@ -199,7 +199,7 @@ class DatatableStore extends React.Component {
       self.setState({
         store_id: data['STORE_CODE'],
         store_name: data['STORE'],
-        bank_code: { value: data['BANK_CODE'], label: data['BANK_BRANCH'] }
+        bank_code: { value: data['BANK_CODE'], label: `${data['BANK_NAME']} - ${data['BANK_BRANCH']}` }
       })
     })
 
