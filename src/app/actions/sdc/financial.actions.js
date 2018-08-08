@@ -92,12 +92,12 @@ function addbankaccount(prm) {
     const screen_id = prm.screen_id
 
     return dispatch => {
-        dispatch(request({ bank_code }))
+        // $("#btnAdd").setAttribute("disabled", "disabled")
+        dispatch(request({ bank_code }))              
         financialService.addbankaccount(prm)
             .then(
                 financial => {
                     if (financial.status == 'Y') {
-
                         $('#myModalAdd').modal('hide');
                         $('#table').DataTable().ajax.reload();
 
@@ -109,7 +109,7 @@ function addbankaccount(prm) {
                         dispatch(alertActions.error(financial.message));
                         hashHistory.push('/Login');
                     } else {
-
+                        // $("#btnAdd").removeAttribute("disabled");
                         dispatch(failure(financial.message));
                         dispatch(alertActions.error(financial.message));
                     }

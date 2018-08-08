@@ -57,6 +57,7 @@ function logout() {
         method: 'POST',
         headers: { ...authHeader(), 'Content-Type': 'application/json' }
     };
+    console.log(requestOptions)
     return fetch(`${PathBackEnd}/api/logout`, requestOptions)
         .then(response => {
             if (!response.ok) {

@@ -127,27 +127,34 @@ class BankInAdjustment extends React.Component {
                     objectitem.push(tempitem)
                 })
                 let checkColumn = true
-                if (objectitem[0][0]['Store ID'] === undefined) checkColumn = false
-                if (objectitem[0][0]['Financial Code'] === undefined) checkColumn = false
-                if (objectitem[0][0]['Financial Date'] === undefined) checkColumn = false
-                if (objectitem[0][0]['Account Daily Fins'] === undefined) checkColumn = false
 
-                if (checkColumn == true) {
-                    for (let item in objectitem[0]) {
-                        objectitem[0][item]['Status'] = ''
+                if (objectitem[0].length > 0) {
+                    if (objectitem[0][0]['Store ID'] === undefined) checkColumn = false
+                    if (objectitem[0][0]['Financial Code'] === undefined) checkColumn = false
+                    if (objectitem[0][0]['Financial Date'] === undefined) checkColumn = false
+                    if (objectitem[0][0]['Account Daily Fins'] === undefined) checkColumn = false
+
+                    if (checkColumn == true) {
+                        for (let item in objectitem[0]) {
+                            objectitem[0][item]['Status'] = ''
+                        }
+
+                        let data = {
+                            "aaData": objectitem[0]
+                        }
+                        self.setState({ uploading: false, upload: data, obj: objectitem[0] })
+
+                    } else {
+
+                        self.setState({ file: null, filename: 'Choose a file...', uploading: false, upload: null, obj: null })
+                        self.props.dispatch(alertActions.error("File incorrect."))
                     }
-
-                    let data = {
-                        "aaData": objectitem[0]
-                    }
-                    self.setState({ uploading: false, upload: data, obj: objectitem[0] })
-
                 } else {
-
                     self.setState({ file: null, filename: 'Choose a file...', uploading: false, upload: null, obj: null })
-                    self.props.dispatch(alertActions.error("File ไม่ถูกต้อง"))
+                    self.props.dispatch(alertActions.warning("Data not found."))
                 }
-            };
+
+            }
             fileReader.readAsArrayBuffer(file)
             e.target.value = '';
         }
@@ -488,7 +495,7 @@ class BankInAdjustment extends React.Component {
                                                             </div>
                                                         </div>
                                                     </div>
-                                                </div>                                               
+                                                </div>
                                             </fieldset>
                                         </div>
                                         {submitted &&

@@ -20,4 +20,5 @@ exports.ScreenIDSteampCloseDailyFins = 'S0009'
 //Report
 //SDC
 exports.ScreenIDReportDailyFlashSales = 'S0023'
+exports.ScreenIDReportCashSalesReconciliation = 'S0024'
 

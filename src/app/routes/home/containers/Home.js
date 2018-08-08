@@ -8,13 +8,13 @@ import { ScreenIDHomePage } from '../../../../../settings'
 class Home extends React.Component {
     constructor(props) {
         super(props);
-       
+           
         if (this.state === undefined) {
             const prm = {
-                screen_id: ScreenIDHomePage,          
-            }    
+                screen_id: ScreenIDHomePage,
+            }
             this.props.dispatch(userAuth.loadpage(prm))
-        }       
+        }
     }
     
 

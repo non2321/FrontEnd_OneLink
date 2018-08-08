@@ -21,15 +21,15 @@ function login(prm) {
 
         userService.login(prm)
             .then(
-                user => {                   
+                user => {
                     if (user.status == 'Y') {
                         dispatch(success(user));
                         // dispatch(alertActions.success(user.message));
-                        hashHistory.push('/home');                        
+                        hashHistory.push('/home');
                     } else {
                         dispatch(failure(user.message));
                         dispatch(alertActions.error(user.message));
-                    }                   
+                    }
                 },
                 error => {
                     dispatch(failure(error));
@@ -45,19 +45,22 @@ function login(prm) {
 
 function logout() {
     userService.logout()
-    .then(
-        user => {   
-            if (user.status == 'Y') {
-                // dispatch(alertActions.success(user.message));
-                hashHistory.push('/login');                   
-            } else {              
-                dispatch(alertActions.error(user.message));
-            }                   
-        },
-        error => {          
-            dispatch(alertActions.error(error));
-        }
-    )
+        .then(
+            user => {
+                if (user.status == 'Y') {
+                    // dispatch(alertActions.success(user.message));
+                    hashHistory.push('/login');
+                } else if (user.status == 'NA') {                 
+                    hashHistory.push('/login');
+                }
+                else {
+                    dispatch(alertActions.error(user.message));
+                }
+            },
+            error => {
+                dispatch(alertActions.error(error));
+            }
+        )
     return { type: userConstants.LOGOUT };
 }
 

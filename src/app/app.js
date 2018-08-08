@@ -27,9 +27,11 @@ const routes = {
     require('./routes/sdc/accountcodesetupforsale').default,
     require('./routes/sdc/bankinadjustment').default,
     require('./routes/sdc/steampclosedailyfins').default,
-
+   
+    
     //Report
     require('./routes/report/sdc/dailyflashsales').default,
+    require('./routes/report/sdc/cashsalesreconciliation').default,
     // require('./routes/notfound').default,
     // comment unused routes
     // this will speed up builds

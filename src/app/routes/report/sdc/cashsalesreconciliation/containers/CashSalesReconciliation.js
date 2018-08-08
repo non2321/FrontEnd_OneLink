@@ -8,31 +8,14 @@ import { Stats, BigBreadcrumbs, WidgetGrid, JarvisWidget } from '../../../../../
 import { smallBox, bigBox, SmartMessageBox } from '../../../../../components/utils/actions/MessageActions'
 
 import UiDatepicker from '../../../../../components/forms/inputs/UiDatepicker'
-import { ScreenIDReportDailyFlashSales, PathBackEnd } from '../../../../../../../settings'
+import { ScreenIDReportCashSalesReconciliation, PathBackEnd } from '../../../../../../../settings'
 
 import Delay from 'react-delay'
 
 import Select from 'react-select'
 import 'react-select/dist/react-select.css';
 
-import Workbook from 'react-excel-workbook'
-
 import TableauReport from 'react-tableau-report'
-
-// import XLSX from 'xlsx'
-// import ReactExport from 'react-data-export';
-
-import jsPDF from 'jspdf'
-import html2canvas from 'html2canvas'
-
-const getOptionsStore = () => {
-    return fetch(`${PathBackEnd}/api/report/storeall`)
-        .then((response) => {
-            return response.json();
-        }).then((json) => {
-            return { options: json };
-        });
-}
 
 class DailyFlashSales extends React.Component {
     constructor(props) {
@@ -40,34 +23,29 @@ class DailyFlashSales extends React.Component {
 
         if (this.state === undefined) {
             const prm = {
-                screen_id: ScreenIDReportDailyFlashSales,
+                screen_id: ScreenIDReportCashSalesReconciliation,
             }
             this.props.dispatch(userAuth.loadpage(prm))
         }
 
         this.state = {
-            stamp: 'Excel',
             datefrom: '',
             dateto: '',
-            from_store: '',
-            to_store: '',
+            store: '',
             errordatefrom: '',
             errordateto: '',
-            errorfrom_store: '',
-            errorto_store: '',
+            errorstore: '',
             submitted: false,
-            screen_id: ScreenIDReportDailyFlashSales
+            screen_id: ScreenIDReportCashSalesReconciliation
         }
 
         this.handleDateFrom = this.handleDateFrom.bind(this)
         this.handleDateTo = this.handleDateTo.bind(this)
 
-        this.onStampChanged = this.onStampChanged.bind(this)
+        // this.onStampChanged = this.onStampChanged.bind(this)
 
         this.handleReset = this.handleReset.bind(this)
         this.handleSubmit = this.handleSubmit.bind(this)
-
-        this.printDocument = this.printDocument.bind(this)
     }
 
     handleDateFrom(data) {
@@ -82,16 +60,11 @@ class DailyFlashSales extends React.Component {
         });
     }
 
-    handleChangesFromStore = (from_store) => {
+    handleChangesStore = (store) => {
         this.setState({
-            from_store: (from_store == null) ? '' : from_store, to_store: '',
-            to_store: (from_store == null) ? '' : from_store
+            store: (store == null) ? '' : store           
         });
-    }
-
-    handleChangesToStore = (to_store) => {
-        this.setState({ to_store: (to_store == null) ? '' : to_store });
-    }
+    }    
 
     onStampChanged(e) {
         this.setState({
@@ -102,46 +75,45 @@ class DailyFlashSales extends React.Component {
     handleReset(e) {
         e.preventDefault();
 
-        this.setState({ datefrom: '', dateto: '', from_store: '', to_store: '', stamp: 'Excel', submitted:false })
-        this.setState({ errordatefrom: '', errordateto: '', errorfrom_store: '', errorto_store: '' })
+        this.setState({ datefrom: '', dateto: '', store: '', submitted: false })
+        this.setState({ errordatefrom: '', errordateto: '', errorstore: '' })
     }
 
     handleSubmit(e) {
         e.preventDefault();
 
         const { dispatch } = this.props
-        const { datefrom, dateto, from_store, to_store, stamp, screen_id } = this.state
+        const { datefrom, dateto, store, screen_id } = this.state
         const selft = this
 
         this.setState({
             errordatefrom: (datefrom) ? '' : 'The From Date is required',
             errordateto: (dateto) ? '' : 'The To Date is required',
-            errorfrom_store: (from_store) ? '' : 'The From Store is required',
-            errorto_store: (to_store) ? '' : 'The To Store To is required',
+            errorstore: (store) ? '' : 'The Store is required',
             submitted: false
         })
 
-        if (datefrom && dateto && from_store && to_store && screen_id) {
-            let datePartsfrom = datefrom.split("/");
-            let dateObjectfrom = `${datePartsfrom[2]}/${datePartsfrom[1]}/${datePartsfrom[0]}`
+        // if (datefrom && dateto && from_store && to_store && screen_id) {
+        //     let datePartsfrom = datefrom.split("/");
+        //     let dateObjectfrom = `${datePartsfrom[2]}/${datePartsfrom[1]}/${datePartsfrom[0]}`
 
-            let datePartsto = dateto.split("/");
-            let dateObjectto = `${datePartsto[2]}/${datePartsto[1]}/${datePartsto[0]}`
+        //     let datePartsto = dateto.split("/");
+        //     let dateObjectto = `${datePartsto[2]}/${datePartsto[1]}/${datePartsto[0]}`
 
 
-            const prm = {
-                datefrom: dateObjectfrom,
-                dateto: dateObjectto,
-                from_store: from_store.value,
-                to_store: to_store.value,
-                stamp: stamp,
-                screen_id: screen_id
-            }
-            // dispatch(reportsdc.exportdailyflashsales(prm))            
-            setTimeout(function () {
-                selft.setState({ submitted: true })
-            }, 500)
-        }
+        //     const prm = {
+        //         datefrom: dateObjectfrom,
+        //         dateto: dateObjectto,
+        //         from_store: from_store.value,
+        //         to_store: to_store.value,
+        //         stamp: stamp,
+        //         screen_id: screen_id
+        //     }
+        //     // dispatch(reportsdc.exportdailyflashsales(prm))            
+        //     setTimeout(function () {
+        //         selft.setState({ submitted: true })
+        //     }, 500)
+        // }
     }
 
     componentDidMount() {
@@ -150,29 +122,15 @@ class DailyFlashSales extends React.Component {
             fetch(`${PathBackEnd}/api/report/storeall`)
                 .then(response => response.json())
                 .then(data => {
-                    self.setState({ options: data })
+                    self.setState({ optionstore: data })
                     return data
                 });
         }, 300)
     }
 
-
-    printDocument() {
-        const input = document.getElementById('divToPrint');
-        html2canvas(input)
-            .then((canvas) => {
-                const imgData = canvas.toDataURL('image/png');
-                const pdf = new jsPDF();
-                pdf.addImage(imgData, 'JPEG', 0, 0);
-                // pdf.output('dataurlnewwindow');
-                pdf.save("download.pdf");
-            })
-            ;
-    }
-
     render() {
-        const { stamp, datefrom, dateto, from_store, to_store, options, submitted } = this.state;
-        const { errordatefrom, errordateto, errorfrom_store, errorto_store } = this.state;
+        const { datefrom, dateto, store, optionstore, submitted } = this.state;
+        const { errordatefrom, errordateto, errorstore } = this.state;
         const { modify, screen_name, report } = this.props;
         const seft = this
 
@@ -207,38 +165,24 @@ class DailyFlashSales extends React.Component {
                                             <div className="col-md-6 form-group">
                                                 <div className="col-md-4 control-label"><label > From Store</label><span class="text-danger">*</span></div>
                                                 <div className="col-md-6">
-                                                    {options &&
-                                                        <Select options={options} placeholder='From Store' name="from_store" value={from_store} onChange={this.handleChangesFromStore} />
+                                                    {optionstore &&
+                                                        <Select options={optionstore} placeholder='Store' name="store" value={store} onChange={this.handleChangesStore} />
                                                     }
-                                                    <span className="text-danger">{errorfrom_store}</span>
+                                                    <span className="text-danger">{errorstore}</span>
                                                 </div>
                                             </div>
                                             <div className="col-md-6 form-group">
-                                                <div className="col-md-4 control-label"><label > To Store</label><span class="text-danger">*</span></div>
+                                                <div className="col-md-4 control-label">                                                  
+                                                </div>
                                                 <div className="col-md-6">
-                                                    {options &&
-                                                        <Select options={options.filter((option) => { return option.value >= parseInt(from_store.value) })} disabled={!from_store} placeholder='To Store' name="to_store" value={to_store} onChange={this.handleChangesToStore} />
-                                                    }
-                                                    <span className="text-danger">{errorto_store}</span>
                                                 </div>
                                             </div>
                                         </div>
                                         <div className="form-group">
                                             <div className="col-md-6 form-group">
-                                                <div className="col-md-4 control-label">
-                                                    {/* <label > File Type</label><span class="text-danger">*</span> */}
+                                                <div className="col-md-4 control-label">                                                   
                                                 </div>
-                                                <div className="col-md-6 smart-form">
-                                                    {/* <section>
-                                                        <div className="inline-group">
-                                                            <label className="radio">
-                                                                <input type="radio" name="radio-inline" value="Excel" checked={stamp === 'Excel'} onChange={this.onStampChanged} />
-                                                                <i />Excel</label>
-                                                            <label className="radio">
-                                                                <input type="radio" name="radio-inline" value="PDF" checked={stamp === 'PDF'} onChange={this.onStampChanged} />
-                                                                <i />PDF</label>
-                                                        </div>
-                                                    </section> */}
+                                                <div className="col-md-6 smart-form">                                                   
                                                 </div>
                                             </div>
                                             <div className="col-md-6 form-group">

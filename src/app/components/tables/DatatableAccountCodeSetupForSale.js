@@ -14,6 +14,8 @@ import 'react-select/dist/react-select.css';
 
 import { PathBackEnd } from '../../../../settings'
 
+const Notuse = 'No Use'
+
 const validatorOptions = {
   feedbackIcons: {
     // valid: 'glyphicon glyphicon-ok',
@@ -124,14 +126,13 @@ class DatatableAccountCodeSetupForSale extends React.Component {
       const prm = {
         formular_id: formular_id.toString(),
         formular_name: formular_name.toString(),
-        account_code: account_code.toString(),
+        account_code: (account_code.trim() == '' )? Notuse : account_code.toString(),
         bu_type: (bu_type)? bu_type.value.toString() : '',
         type: (type)? type.value.toString() : '',
         subledger_type: subledger_type.toString(),
         subledger: subledger.toString(),
         screen_id: screen_id
-      }
-      console.log(prm)
+      }     
       dispatch(financialActions.editaccountforsale(prm));
     }
   }
@@ -237,6 +238,11 @@ class DatatableAccountCodeSetupForSale extends React.Component {
   render() {
     let { children, options, detailsFormat, paginationLength, ...props } = this.props;
     const { formular_id, formular_name, account_code, bu_type, type, subledger_type, subledger, } = this.state;
+    let itemaccount_code = ''
+    if(account_code.trim() == Notuse) {
+      this.setState({account_code: ''})
+    }
+
     return (
       <BootstrapValidator options={validatorOptions}>
         <div>
@@ -273,7 +279,7 @@ class DatatableAccountCodeSetupForSale extends React.Component {
                           </div>
                           <div className="col-md-6">
                             <label htmlFor="account_code">Account Code</label>
-                            <input type="text" name="account_code" value={account_code} onChange={this.handleChange} className="form-control" placeholder="Account Code" />
+                            <input type="text" name="account_code" value={account_code} onChange={this.handleChange} className="form-control" placeholder="No Use" />
                           </div>
                         </div>
                         <div className="row">

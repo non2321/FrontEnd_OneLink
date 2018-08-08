@@ -133,6 +133,12 @@
               "route": "/SDC/ReportDailyFlashSales",
               "comment": "Report Daily Flash Sales",
               "screen_id": "S0023"
+            },
+            {
+              "title": "H&OT Cash/Sales Reconciliation (Diff DB/CR)",
+              "route": "/SDC/ReportCashSalesReconciliation",
+              "comment": "H&OT Cash/Sales Reconciliation (Diff DB/CR)",
+              "screen_id": "S0024"
             }
           ]
         },

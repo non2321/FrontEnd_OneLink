@@ -261,7 +261,7 @@ class SetupBankAccount extends React.Component {
                     <button type="button" type="submit" className="btn btn-primary">
                       Save
                 </button>
-                    <button type="button" className="btn btn-default" data-dismiss="modal">
+                    <button  type="button" className="btn btn-default" data-dismiss="modal">
                       Cancel
                 </button>
                   </div>
