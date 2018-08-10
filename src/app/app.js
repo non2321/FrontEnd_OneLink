@@ -32,6 +32,12 @@ const routes = {
     //Report
     require('./routes/report/sdc/dailyflashsales').default,
     require('./routes/report/sdc/cashsalesreconciliation').default,
+    require('./routes/report/sdc/bankinsummarybybank').default,
+    require('./routes/report/sdc/cashsalesreconcilationbystore').default,
+    require('./routes/report/sdc/totalpettycashreimbursementbystore').default,
+    require('./routes/report/sdc/restaurantdataanalysisformonth').default,
+    require('./routes/report/sdc/restaurantpettycashananlysis').default,
+    require('./routes/report/sdc/summarycashreconciliation').default,
     // require('./routes/notfound').default,
     // comment unused routes
     // this will speed up builds

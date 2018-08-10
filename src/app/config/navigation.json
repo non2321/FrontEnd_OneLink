@@ -139,6 +139,42 @@
               "route": "/SDC/ReportCashSalesReconciliation",
               "comment": "H&OT Cash/Sales Reconciliation (Diff DB/CR)",
               "screen_id": "S0024"
+            },
+            {
+              "title": "BankIn Summary By Bank",
+              "route": "/SDC/ReportBankInSummaryByBank",
+              "comment": "BankIn Summary By Bank",
+              "screen_id": "S0019"
+            },
+            {
+              "title": "Cash/Sales Reconcilation By Store",
+              "route": "/SDC/ReportCashSalesReconcilationByStore",
+              "comment": "Cash/Sales Reconcilation By Store",
+              "screen_id": "S0022"
+            },
+            {
+              "title": "Total Petty Cash Reimbursement By Store",
+              "route": "/SDC/ReportTotalPettyCashReimbursementByStore",
+              "comment": "Total Petty Cash Reimbursement By Store",
+              "screen_id": "S0021"
+            },
+            {
+              "title": "Restaurant Data analysis For Month",
+              "route": "/SDC/ReportRestaurantDataAnalysisForMonth",
+              "comment": "Restaurant Data analysis For Month",
+              "screen_id": "S0018"
+            },
+            {
+              "title": "Restaurant Petty Cash Ananlysis",
+              "route": "/SDC/ReportRestaurantPettyCashAnanlysis",
+              "comment": "Restaurant Petty Cash Ananlysis",
+              "screen_id": "S0017"
+            },
+            {
+              "title": "Summary Cash Reconciliation",
+              "route": "/SDC/ReportSummaryCashReconciliation",
+              "comment": "Summary Cash Reconciliation",
+              "screen_id": "S0020"
             }
           ]
         },

@@ -317,6 +317,16 @@ class BankInAdjustment extends React.Component {
                             status = false
                         }
                     }
+                    
+                    let checkduplicate = 0
+                    for (let subitem in obj) {                                 
+                        if (obj[item]['Store ID'].trim() == obj[subitem]['Store ID'].trim() &&
+                            obj[item]['Financial Code'].trim() == obj[subitem]['Financial Code'].trim() &&
+                            obj[item]['Financial Date'].trim() == obj[subitem]['Financial Date'].trim()) {
+                            checkduplicate = checkduplicate + 1
+                        }         
+                    }
+                    if(checkduplicate > 1) status = false
 
                     if (obj[item]['Account Daily Fins'].trim() == '') status = false
                     let val = parseFloat(parseFloat(obj[item]['Account Daily Fins'].trim()))

@@ -8,7 +8,7 @@ import { Stats, BigBreadcrumbs, WidgetGrid, JarvisWidget } from '../../../../../
 import { smallBox, bigBox, SmartMessageBox } from '../../../../../components/utils/actions/MessageActions'
 
 import UiDatepicker from '../../../../../components/forms/inputs/UiDatepicker'
-import { ScreenIDReportCashSalesReconciliation, PathBackEnd } from '../../../../../../../settings'
+import { ScreenIDReportSummaryCashReconciliation, PathBackEnd } from '../../../../../../../settings'
 
 import Delay from 'react-delay'
 
@@ -17,13 +17,13 @@ import 'react-select/dist/react-select.css';
 
 import TableauReport from 'react-tableau-report'
 
-class CashSalesReconciliation extends React.Component {
+class SummaryCashReconciliation extends React.Component {
     constructor(props) {
         super(props)
 
         if (this.state === undefined) {
             const prm = {
-                screen_id: ScreenIDReportCashSalesReconciliation,
+                screen_id: ScreenIDReportSummaryCashReconciliation,
             }
             this.props.dispatch(userAuth.loadpage(prm))
         }
@@ -36,13 +36,11 @@ class CashSalesReconciliation extends React.Component {
             errordateto: '',
             errorstore: '',
             submitted: false,
-            screen_id: ScreenIDReportCashSalesReconciliation
+            screen_id: ScreenIDReportSummaryCashReconciliation
         }
 
         this.handleDateFrom = this.handleDateFrom.bind(this)
         this.handleDateTo = this.handleDateTo.bind(this)
-
-        // this.onStampChanged = this.onStampChanged.bind(this)
 
         this.handleReset = this.handleReset.bind(this)
         this.handleSubmit = this.handleSubmit.bind(this)
@@ -62,13 +60,7 @@ class CashSalesReconciliation extends React.Component {
 
     handleChangesStore = (store) => {
         this.setState({
-            store: (store == null) ? '' : store           
-        });
-    }    
-
-    onStampChanged(e) {
-        this.setState({
-            stamp: e.target.value
+            store: (store == null) ? '' : store
         });
     }
 
@@ -126,6 +118,8 @@ class CashSalesReconciliation extends React.Component {
                     return data
                 });
         }, 300)
+
+
     }
 
     render() {
@@ -144,11 +138,30 @@ class CashSalesReconciliation extends React.Component {
                                 {modify && <div className="widget-body ">
                                     <br />
                                     <fieldset>
-                                        <div className="form-group">
+                                        <div className="form-group row">
+                                            <div className="col-md-6 form-group">
+                                                <div className="col-md-4 control-label"><label > From Store</label><span class="text-danger">*</span></div>
+                                                <div className="col-md-6">
+                                                    {optionstore &&
+                                                        <Select options={optionstore} placeholder='Store' name="store" value={store} onChange={this.handleChangesStore} />
+                                                    }
+                                                    <span className="text-danger">{errorstore}</span>
+                                                </div>
+                                            </div>
+                                            <div className="col-md-6 form-group">
+                                                <div className="col-md-4 control-label">
+                                                </div>
+                                                <div className="col-md-6">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div className="form-group row">
                                             <div className="col-md-6 form-group">
                                                 <div className="col-md-4 control-label"><label > From Date</label><span class="text-danger">*</span></div>
                                                 <div className="col-md-6">
-                                                    <UiDatepicker type="text" name="startdate" id="startdate" changeMonth="true" changeYear="true" dateFormat="dd/mm/yy" addday="7" datefrom="#startdate" dateto="#finishdate" onInputChange={this.handleDateFrom} value={datefrom}
+                                                    {/* <UiDatepicker type="text" name="startdate" id="startdate" changeMonth="true" changeYear="true" dateFormat="dd/mm/yy" addday="7" datefrom="#startdate" dateto="#finishdate" onInputChange={this.handleDateFrom} value={datefrom}
+                                                        placeholder="Start date" /> */}
+                                                    <UiDatepicker type="text" name="startdate" id="startdate" onInputChange={this.handleDateFrom} value={datefrom}
                                                         placeholder="Start date" />
                                                     <span className="text-danger">{errordatefrom}</span>
                                                 </div>
@@ -163,26 +176,9 @@ class CashSalesReconciliation extends React.Component {
                                         </div>
                                         <div className="form-group">
                                             <div className="col-md-6 form-group">
-                                                <div className="col-md-4 control-label"><label > From Store</label><span class="text-danger">*</span></div>
-                                                <div className="col-md-6">
-                                                    {optionstore &&
-                                                        <Select options={optionstore} placeholder='Store' name="store" value={store} onChange={this.handleChangesStore} />
-                                                    }
-                                                    <span className="text-danger">{errorstore}</span>
+                                                <div className="col-md-4 control-label">
                                                 </div>
-                                            </div>
-                                            <div className="col-md-6 form-group">
-                                                <div className="col-md-4 control-label">                                                  
-                                                </div>
-                                                <div className="col-md-6">
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div className="form-group">
-                                            <div className="col-md-6 form-group">
-                                                <div className="col-md-4 control-label">                                                   
-                                                </div>
-                                                <div className="col-md-6 smart-form">                                                   
+                                                <div className="col-md-6 smart-form">
                                                 </div>
                                             </div>
                                             <div className="col-md-6 form-group">
@@ -204,11 +200,9 @@ class CashSalesReconciliation extends React.Component {
                                             <div className="col-md-12">
                                                 {submitted && <TableauReport
                                                     url="http://public.tableau.com/views/RegionalSampleWorkbook/Storms"
-                                                // options={option}
                                                 />
                                                 }
-                                            </div>
-
+                                            </div>                                            
                                         </div>
                                     </fieldset>
                                 </div>
@@ -234,5 +228,5 @@ function mapStateToProps(state) {
     };
 }
 
-const connectedCashSalesReconciliation = connect(mapStateToProps)(CashSalesReconciliation);
-export default connectedCashSalesReconciliation
+const connectedSummaryCashReconciliation = connect(mapStateToProps)(SummaryCashReconciliation);
+export default connectedSummaryCashReconciliation

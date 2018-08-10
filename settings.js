@@ -19,6 +19,12 @@ exports.ScreenIDSteampCloseDailyFins = 'S0009'
 
 //Report
 //SDC
+exports.ScreenIDReportRestaurantPettyCashAnanlysis = 'S0017'
+exports.ScreenIDReportRestaurantDataAnalysisForMonth = 'S0018'
+exports.ScreenIDReportBankInSummaryByBank = 'S0019'
+exports.ScreenIDReportSummaryCashReconciliation = 'S0020'
+exports.ScreenIDReportTotalPettyCashReimbursementByStore = 'S0021'
+exports.ScreenIDReportCashSalesReconcilationByStore  ='S0022'
 exports.ScreenIDReportDailyFlashSales = 'S0023'
 exports.ScreenIDReportCashSalesReconciliation = 'S0024'
 

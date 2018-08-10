@@ -24,12 +24,12 @@ function loadpage(prm) {
             }            
             return response.json();
         })
-        .then(auth => {          
-            if (auth  && auth.status == 'Y') {                                  
+        .then(auth => {
+            // login successful if there's a jwt token in the response            
+            if (auth && auth.token && auth.status == 'Y') {
                 // store user details and jwt token in local storage to keep user logged in between page refreshes
-                localStorage.setItem(localStorageAuth, JSON.stringify(auth.user));
-            }
-
+                localStorage.setItem(localStorageAuth, JSON.stringify(auth));
+            }            
             return auth;
         });
 }
