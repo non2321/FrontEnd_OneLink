@@ -137,7 +137,7 @@ class DailyFlashSales extends React.Component {
                 stamp: stamp,
                 screen_id: screen_id
             }
-            // dispatch(reportsdc.exportdailyflashsales(prm))            
+            dispatch(reportsdc.exportdailyflashsales(prm))            
             setTimeout(function () {
                 selft.setState({ submitted: true })
             }, 500)
@@ -261,7 +261,7 @@ class DailyFlashSales extends React.Component {
                                                 {submitted && <TableauReport
                                                 //url="http://192.168.151.31/#/server/analysis/BackgroundTasksforNonExtracts"
                                                 url="http://192.168.151.31/views/PH_RDS_Financial/1_PettyCash?iframeSizedToWindow=true&:embed=y&:showAppBanner=false&:display_count=no&:showVizHome=no"
-                                                token="Im5HrBCYRpu2V99Md4FyeQ|02srsjoFujVvxX9iSRAawsdlr2lGeWKe"
+                                                token="iLID2Mj8QQ-pi3Rjj3dfKg==:dTDeitKcfdFFxrPyPtYV4kMY"
                                                 // url="http://public.tableau.com/views/RegionalSampleWorkbook/Storms"
                                                 // options={option}
                                                 />

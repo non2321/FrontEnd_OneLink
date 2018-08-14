@@ -15,8 +15,7 @@ function exportdailyflashsales(prm) {
     const stamp = prm.stamp
     const screen_id = prm.screen_id
 
-    return dispatch => {
-        console.log(5555)      
+    return dispatch => {    
         dispatch(request({ stamp }))          
         reportsdcService.exportdailyflashsales(prm)
             .then(

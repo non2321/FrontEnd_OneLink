@@ -126,7 +126,18 @@ class RestaurantDataAnalysisForMonth extends React.Component {
         const { datefrom, dateto, store, optionstore, submitted } = this.state;
         const { errordatefrom, errordateto, errorstore } = this.state;
         const { modify, screen_name, report } = this.props;
-        const seft = this
+
+        let pickerLang = {
+            months: ['Jan', 'Feb', 'Mar', 'Spr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+            , from: 'From', to: 'To'
+        }
+            , mvalue = { year: 2015, month: 11 }
+            , mrange = { from: { year: 2014, month: 8 }, to: { year: 2015, month: 5 } }
+
+        let makeText = m => {
+            if (m && m.year && m.month) return (pickerLang.months[m.month - 1] + '. ' + m.year)
+            return '?'
+        }
 
         return (
             <div id="content">
@@ -202,7 +213,7 @@ class RestaurantDataAnalysisForMonth extends React.Component {
                                                     url="http://public.tableau.com/views/RegionalSampleWorkbook/Storms"
                                                 />
                                                 }
-                                            </div>                                            
+                                            </div>
                                         </div>
                                     </fieldset>
                                 </div>

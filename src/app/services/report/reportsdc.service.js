@@ -14,17 +14,26 @@ function exportdailyflashsales(prm) {
     const stamp = prm.stamp
     const screen_id = prm.screen_id
 
+    const username = 'admin'
+    const client_ip = '192.168.151.68'
+
     const requestOptions = {
         method: 'POST',
-        headers: { ...authHeader(), 'Content-Type': 'application/json' },
-        body: JSON.stringify({ datefrom, dateto, from_store, to_store, stamp, screen_id })
+        headers: { 'Content-Type': 'application/json' },
+        // body: JSON.stringify({ datefrom, dateto, from_store, to_store, stamp, screen_id })
+        body: JSON.stringify({ username, client_ip })
     };
 
-    return fetch(`${PathBackEnd}/api/report/exportdailyflashsales`, requestOptions)
+    // return fetch(`${PathBackEnd}/api/report/exportdailyflashsales`, requestOptions)
+    return fetch(`http://192.168.151.31/trusted`, requestOptions)
         .then(response => {
+            console.log(1)
+            console.log(response)
             return handleResponse(response)
         })
-        .then(user => {           
+        .then(user => {      
+            console.log(2)
+            console.log(user)     
             // login successful if there's a jwt token in the response
             if (user  && user.status == 'Y') {                        
                 // store user details and jwt token in local storage to keep user logged in between page refreshes
