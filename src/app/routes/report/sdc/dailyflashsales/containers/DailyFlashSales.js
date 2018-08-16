@@ -8,7 +8,7 @@ import { Stats, BigBreadcrumbs, WidgetGrid, JarvisWidget } from '../../../../../
 import { smallBox, bigBox, SmartMessageBox } from '../../../../../components/utils/actions/MessageActions'
 
 import UiDatepicker from '../../../../../components/forms/inputs/UiDatepicker'
-import { ScreenIDReportDailyFlashSales, PathBackEnd } from '../../../../../../../settings'
+import { ScreenIDReportDailyFlashSales, PathBackEnd, TableauDailyFlashSales } from '../../../../../../../settings'
 
 import Delay from 'react-delay'
 
@@ -25,13 +25,9 @@ import TableauReport from 'react-tableau-report'
 import jsPDF from 'jspdf'
 import html2canvas from 'html2canvas'
 
-const getOptionsStore = () => {
-    return fetch(`${PathBackEnd}/api/report/storeall`)
-        .then((response) => {
-            return response.json();
-        }).then((json) => {
-            return { options: json };
-        });
+const optiontableau = {
+    hideTabs: true,
+    // hideToolbar: true
 }
 
 class DailyFlashSales extends React.Component {
@@ -45,8 +41,7 @@ class DailyFlashSales extends React.Component {
             this.props.dispatch(userAuth.loadpage(prm))
         }
 
-        this.state = {
-            stamp: 'Excel',
+        this.state = {            
             datefrom: '',
             dateto: '',
             from_store: '',
@@ -102,7 +97,7 @@ class DailyFlashSales extends React.Component {
     handleReset(e) {
         e.preventDefault();
 
-        this.setState({ datefrom: '', dateto: '', from_store: '', to_store: '', stamp: 'Excel', submitted:false })
+        this.setState({ datefrom: '', dateto: '', from_store: '', to_store: '', submitted: false, parameters: null })
         this.setState({ errordatefrom: '', errordateto: '', errorfrom_store: '', errorto_store: '' })
     }
 
@@ -110,7 +105,7 @@ class DailyFlashSales extends React.Component {
         e.preventDefault();
 
         const { dispatch } = this.props
-        const { datefrom, dateto, from_store, to_store, stamp, screen_id } = this.state
+        const { datefrom, dateto, from_store, to_store, screen_id } = this.state
         const selft = this
 
         this.setState({
@@ -128,16 +123,19 @@ class DailyFlashSales extends React.Component {
             let datePartsto = dateto.split("/");
             let dateObjectto = `${datePartsto[2]}/${datePartsto[1]}/${datePartsto[0]}`
 
-
             const prm = {
-                datefrom: dateObjectfrom,
-                dateto: dateObjectto,
-                from_store: from_store.value,
-                to_store: to_store.value,
-                stamp: stamp,
                 screen_id: screen_id
             }
-            dispatch(reportsdc.exportdailyflashsales(prm))            
+            dispatch(reportsdc.generatetokentableau(prm))
+            this.setState({
+                parameters: {
+                    p_from_date: dateObjectfrom,
+                    p_to_date: dateObjectto,
+                    p_from_store: from_store,
+                    p_to_store: to_store
+                }
+            })
+    
             setTimeout(function () {
                 selft.setState({ submitted: true })
             }, 500)
@@ -166,16 +164,17 @@ class DailyFlashSales extends React.Component {
                 pdf.addImage(imgData, 'JPEG', 0, 0);
                 // pdf.output('dataurlnewwindow');
                 pdf.save("download.pdf");
-            })
-            ;
+            })            
     }
 
+
     render() {
-        const { stamp, datefrom, dateto, from_store, to_store, options, submitted } = this.state;
+        const { datefrom, dateto, from_store, to_store, options, submitted, parameters } = this.state;
         const { errordatefrom, errordateto, errorfrom_store, errorto_store } = this.state;
-        const { modify, screen_name, report } = this.props;
-        const seft = this
-        const token = "Orh0uNWkQsizLmgTlB9NNA|VGv2hy9t8JAyoOdqkbIeQKB15WMJzJTM";
+        const { modify, screen_name, report } = this.props;        
+
+        const tokentableau = report.data      
+
         return (
             <div id="content">
                 <WidgetGrid>
@@ -190,7 +189,7 @@ class DailyFlashSales extends React.Component {
                                             <div className="col-md-6 form-group">
                                                 <div className="col-md-4 control-label"><label > From Date</label><span class="text-danger">*</span></div>
                                                 <div className="col-md-6">
-                                                    <UiDatepicker type="text" name="startdate" id="startdate" changeMonth="true" changeYear="true" dateFormat="dd/mm/yy" addday="7" datefrom="#startdate" dateto="#finishdate" onInputChange={this.handleDateFrom} value={datefrom}
+                                                    <UiDatepicker type="text" name="startdate" id="startdate" changeMonth="true" changeYear="true" dateFormat="dd/mm/yy" addday="120" datefrom="#startdate" dateto="#finishdate" onInputChange={this.handleDateFrom} value={datefrom}
                                                         placeholder="Start date" />
                                                     <span className="text-danger">{errordatefrom}</span>
                                                 </div>
@@ -198,7 +197,7 @@ class DailyFlashSales extends React.Component {
                                             <div className="col-md-6 form-group">
                                                 <div className="col-md-4 control-label"><label > To Date</label><span class="text-danger">*</span></div>
                                                 <div className="col-md-6">
-                                                    <UiDatepicker type="text" name="finishdate" id="finishdate" changeMonth="true" changeYear="true" dateFormat="dd/mm/yy" addday="7" onInputChange={this.handleDateTo} value={dateto} disabled={!datefrom} placeholder="Finish date" />
+                                                    <UiDatepicker type="text" name="finishdate" id="finishdate" changeMonth="true" changeYear="true" dateFormat="dd/mm/yy" addday="120" onInputChange={this.handleDateTo} value={dateto} disabled={!datefrom} placeholder="Finish date" />
                                                     <span className="text-danger">{errordateto}</span>
                                                 </div>
                                             </div>
@@ -258,16 +257,14 @@ class DailyFlashSales extends React.Component {
                                                 </div>
                                             </div>
                                             <div className="col-md-12">
-                                                {submitted && <TableauReport
-                                                //url="http://192.168.151.31/#/server/analysis/BackgroundTasksforNonExtracts"
-                                                url="http://192.168.151.31/views/PH_RDS_Financial/1_PettyCash?iframeSizedToWindow=true&:embed=y&:showAppBanner=false&:display_count=no&:showVizHome=no"
-                                                token="iLID2Mj8QQ-pi3Rjj3dfKg==:dTDeitKcfdFFxrPyPtYV4kMY"
-                                                // url="http://public.tableau.com/views/RegionalSampleWorkbook/Storms"
-                                                // options={option}
+                                                {submitted && tokentableau && parameters && <TableauReport
+                                                    url={TableauDailyFlashSales}
+                                                    token={tokentableau}
+                                                    parameters={parameters}
+                                                    options={optiontableau}
                                                 />
                                                 }
                                             </div>
-
                                         </div>
                                     </fieldset>
                                 </div>

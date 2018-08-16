@@ -4,32 +4,24 @@ import { alertActions } from '../alert';
 import { hashHistory } from 'react-router'
 
 export const reportsdc = {
-    exportdailyflashsales
+    generatetokentableau
 }
 
-function exportdailyflashsales(prm) {
-    const datefrom = prm.datefrom
-    const dateto = prm.dateto
-    const from_store = prm.from_store
-    const to_store = prm.to_store
-    const stamp = prm.stamp
+function generatetokentableau(prm) {   
     const screen_id = prm.screen_id
 
     return dispatch => {    
-        dispatch(request({ stamp }))          
-        reportsdcService.exportdailyflashsales(prm)
+        dispatch(request({ screen_id }))          
+        reportsdcService.generatetokentableau(prm)
             .then(
                 report => {
                     if (report.status == 'Y') {  
-                        dispatch(success(report.data))
-                        dispatch(alertActions.success(report.message))
+                        dispatch(success(report.data))                       
+                        // dispatch(alertActions.success(report.message))
                     } else if (report.status == 'NA') {   
-                        dispatch(failure(report.message));
-                        dispatch(alertActions.error(report.message))
-                        hashHistory.push('/Login');
-                    } else if (report.status == 'W') {                                               
                         dispatch(failure(report.message))
-                        dispatch(alertActions.warning(report.message))
+                        dispatch(alertActions.error(report.message))
+                        hashHistory.push('/Login')                   
                     } else {  
                         dispatch(failure(report.message))
                         dispatch(alertActions.error(report.message))
@@ -42,7 +34,7 @@ function exportdailyflashsales(prm) {
             )        
     }
 
-    function request(report) { return { type: reportConstants.EXPORT_REQUEST, report } }
-    function success(report) { return { type: reportConstants.EXPORT_SUCCESS, report } }
-    function failure(error) { return { type: reportConstants.EXPORT_FAILURE, error } }
+    function request(token) { return { type: reportConstants.TOKEN_REQUEST, token } }
+    function success(token) { return { type: reportConstants.TOKEN_SUCCESS, token } }
+    function failure(token) { return { type: reportConstants.TOKEN_FAILURE, error } }
 }

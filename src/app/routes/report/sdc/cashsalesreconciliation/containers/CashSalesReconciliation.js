@@ -8,7 +8,7 @@ import { Stats, BigBreadcrumbs, WidgetGrid, JarvisWidget } from '../../../../../
 import { smallBox, bigBox, SmartMessageBox } from '../../../../../components/utils/actions/MessageActions'
 
 import UiDatepicker from '../../../../../components/forms/inputs/UiDatepicker'
-import { ScreenIDReportCashSalesReconciliation, PathBackEnd } from '../../../../../../../settings'
+import { ScreenIDReportCashSalesReconciliation, PathBackEnd, TableauCashSalesReconciliation } from '../../../../../../../settings'
 
 import Delay from 'react-delay'
 
@@ -16,6 +16,11 @@ import Select from 'react-select'
 import 'react-select/dist/react-select.css';
 
 import TableauReport from 'react-tableau-report'
+
+const optiontableau = {
+    hideTabs: true,
+    // hideToolbar: true
+}
 
 class CashSalesReconciliation extends React.Component {
     constructor(props) {
@@ -42,8 +47,6 @@ class CashSalesReconciliation extends React.Component {
         this.handleDateFrom = this.handleDateFrom.bind(this)
         this.handleDateTo = this.handleDateTo.bind(this)
 
-        // this.onStampChanged = this.onStampChanged.bind(this)
-
         this.handleReset = this.handleReset.bind(this)
         this.handleSubmit = this.handleSubmit.bind(this)
     }
@@ -62,20 +65,15 @@ class CashSalesReconciliation extends React.Component {
 
     handleChangesStore = (store) => {
         this.setState({
-            store: (store == null) ? '' : store           
-        });
-    }    
-
-    onStampChanged(e) {
-        this.setState({
-            stamp: e.target.value
+            store: (store == null) ? '' : store
         });
     }
+
 
     handleReset(e) {
         e.preventDefault();
 
-        this.setState({ datefrom: '', dateto: '', store: '', submitted: false })
+        this.setState({ datefrom: '', dateto: '', store: '', submitted: false, parameters: null })
         this.setState({ errordatefrom: '', errordateto: '', errorstore: '' })
     }
 
@@ -93,27 +91,30 @@ class CashSalesReconciliation extends React.Component {
             submitted: false
         })
 
-        // if (datefrom && dateto && from_store && to_store && screen_id) {
-        //     let datePartsfrom = datefrom.split("/");
-        //     let dateObjectfrom = `${datePartsfrom[2]}/${datePartsfrom[1]}/${datePartsfrom[0]}`
+        if (datefrom && dateto && store && screen_id) {
+            let datePartsfrom = datefrom.split("/");
+            let dateObjectfrom = `${datePartsfrom[2]}/${datePartsfrom[1]}/${datePartsfrom[0]}`
 
-        //     let datePartsto = dateto.split("/");
-        //     let dateObjectto = `${datePartsto[2]}/${datePartsto[1]}/${datePartsto[0]}`
+            let datePartsto = dateto.split("/");
+            let dateObjectto = `${datePartsto[2]}/${datePartsto[1]}/${datePartsto[0]}`
 
 
-        //     const prm = {
-        //         datefrom: dateObjectfrom,
-        //         dateto: dateObjectto,
-        //         from_store: from_store.value,
-        //         to_store: to_store.value,
-        //         stamp: stamp,
-        //         screen_id: screen_id
-        //     }
-        //     // dispatch(reportsdc.exportdailyflashsales(prm))            
-        //     setTimeout(function () {
-        //         selft.setState({ submitted: true })
-        //     }, 500)
-        // }
+            const prm = {
+                screen_id: screen_id
+            }
+            dispatch(reportsdc.generatetokentableau(prm))
+            this.setState({
+                parameters: {
+                    p_from_date: dateObjectfrom,
+                    p_to_date: dateObjectto,
+                    p_store: store
+                }
+            })
+
+            setTimeout(function () {
+                selft.setState({ submitted: true })
+            }, 500)
+        }
     }
 
     componentDidMount() {
@@ -129,10 +130,11 @@ class CashSalesReconciliation extends React.Component {
     }
 
     render() {
-        const { datefrom, dateto, store, optionstore, submitted } = this.state;
+        const { datefrom, dateto, store, optionstore, submitted, parameters } = this.state;
         const { errordatefrom, errordateto, errorstore } = this.state;
         const { modify, screen_name, report } = this.props;
-        const seft = this
+
+        const tokentableau = report.data
 
         return (
             <div id="content">
@@ -148,7 +150,7 @@ class CashSalesReconciliation extends React.Component {
                                             <div className="col-md-6 form-group">
                                                 <div className="col-md-4 control-label"><label > From Date</label><span class="text-danger">*</span></div>
                                                 <div className="col-md-6">
-                                                    <UiDatepicker type="text" name="startdate" id="startdate" changeMonth="true" changeYear="true" dateFormat="dd/mm/yy" addday="7" datefrom="#startdate" dateto="#finishdate" onInputChange={this.handleDateFrom} value={datefrom}
+                                                    <UiDatepicker type="text" name="startdate" id="startdate" changeMonth="true" changeYear="true" dateFormat="dd/mm/yy" addday="120" datefrom="#startdate" dateto="#finishdate" onInputChange={this.handleDateFrom} value={datefrom}
                                                         placeholder="Start date" />
                                                     <span className="text-danger">{errordatefrom}</span>
                                                 </div>
@@ -156,14 +158,14 @@ class CashSalesReconciliation extends React.Component {
                                             <div className="col-md-6 form-group">
                                                 <div className="col-md-4 control-label"><label > To Date</label><span class="text-danger">*</span></div>
                                                 <div className="col-md-6">
-                                                    <UiDatepicker type="text" name="finishdate" id="finishdate" changeMonth="true" changeYear="true" dateFormat="dd/mm/yy" addday="7" onInputChange={this.handleDateTo} value={dateto} disabled={!datefrom} placeholder="Finish date" />
+                                                    <UiDatepicker type="text" name="finishdate" id="finishdate" changeMonth="true" changeYear="true" dateFormat="dd/mm/yy" addday="120" onInputChange={this.handleDateTo} value={dateto} disabled={!datefrom} placeholder="Finish date" />
                                                     <span className="text-danger">{errordateto}</span>
                                                 </div>
                                             </div>
                                         </div>
                                         <div className="form-group">
                                             <div className="col-md-6 form-group">
-                                                <div className="col-md-4 control-label"><label > From Store</label><span class="text-danger">*</span></div>
+                                                <div className="col-md-4 control-label"><label > Store</label><span class="text-danger">*</span></div>
                                                 <div className="col-md-6">
                                                     {optionstore &&
                                                         <Select options={optionstore} placeholder='Store' name="store" value={store} onChange={this.handleChangesStore} />
@@ -172,7 +174,7 @@ class CashSalesReconciliation extends React.Component {
                                                 </div>
                                             </div>
                                             <div className="col-md-6 form-group">
-                                                <div className="col-md-4 control-label">                                                  
+                                                <div className="col-md-4 control-label">
                                                 </div>
                                                 <div className="col-md-6">
                                                 </div>
@@ -180,9 +182,9 @@ class CashSalesReconciliation extends React.Component {
                                         </div>
                                         <div className="form-group">
                                             <div className="col-md-6 form-group">
-                                                <div className="col-md-4 control-label">                                                   
+                                                <div className="col-md-4 control-label">
                                                 </div>
-                                                <div className="col-md-6 smart-form">                                                   
+                                                <div className="col-md-6 smart-form">
                                                 </div>
                                             </div>
                                             <div className="col-md-6 form-group">
@@ -202,9 +204,11 @@ class CashSalesReconciliation extends React.Component {
                                                 </div>
                                             </div>
                                             <div className="col-md-12">
-                                                {submitted && <TableauReport
-                                                    url="http://public.tableau.com/views/RegionalSampleWorkbook/Storms"
-                                                // options={option}
+                                                {submitted && tokentableau && parameters && <TableauReport
+                                                    url={TableauCashSalesReconciliation}
+                                                    token={tokentableau}
+                                                    parameters={parameters}
+                                                    options={optiontableau}
                                                 />
                                                 }
                                             </div>

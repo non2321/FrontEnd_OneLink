@@ -8,14 +8,17 @@ import { Stats, BigBreadcrumbs, WidgetGrid, JarvisWidget } from '../../../../../
 import { smallBox, bigBox, SmartMessageBox } from '../../../../../components/utils/actions/MessageActions'
 
 import UiDatepicker from '../../../../../components/forms/inputs/UiDatepicker'
-import { ScreenIDReportRestaurantPettyCashAnanlysis, PathBackEnd } from '../../../../../../../settings'
-
-import Delay from 'react-delay'
+import { ScreenIDReportRestaurantPettyCashAnanlysis, PathBackEnd, TableauReportRestaurantPettyCashAnanlysis } from '../../../../../../../settings'
 
 import Select from 'react-select'
 import 'react-select/dist/react-select.css';
 
 import TableauReport from 'react-tableau-report'
+
+const optiontableau = {
+    hideTabs: true,
+    // hideToolbar: true
+}
 
 class RestaurantPettyCashAnanlysis extends React.Component {
     constructor(props) {
@@ -29,18 +32,15 @@ class RestaurantPettyCashAnanlysis extends React.Component {
         }
 
         this.state = {
-            datefrom: '',
-            dateto: '',
+            datefrom: '',           
             store: '',
-            errordatefrom: '',
-            errordateto: '',
+            errordatefrom: '',         
             errorstore: '',
             submitted: false,
             screen_id: ScreenIDReportRestaurantPettyCashAnanlysis
         }
 
-        this.handleDateFrom = this.handleDateFrom.bind(this)
-        this.handleDateTo = this.handleDateTo.bind(this)
+        this.handleDateFrom = this.handleDateFrom.bind(this)    
 
         this.handleReset = this.handleReset.bind(this)
         this.handleSubmit = this.handleSubmit.bind(this)
@@ -51,13 +51,7 @@ class RestaurantPettyCashAnanlysis extends React.Component {
             datefrom: data, dateto: data
         });
     }
-
-    handleDateTo(data) {
-        this.setState({
-            dateto: data
-        });
-    }
-
+    
     handleChangesStore = (store) => {
         this.setState({
             store: (store == null) ? '' : store
@@ -67,8 +61,8 @@ class RestaurantPettyCashAnanlysis extends React.Component {
     handleReset(e) {
         e.preventDefault();
 
-        this.setState({ datefrom: '', dateto: '', store: '', submitted: false })
-        this.setState({ errordatefrom: '', errordateto: '', errorstore: '' })
+        this.setState({ datefrom: '', store: '', submitted: false, parameters: null })
+        this.setState({ errordatefrom: '', errorstore: '' })
     }
 
     handleSubmit(e) {
@@ -79,33 +73,30 @@ class RestaurantPettyCashAnanlysis extends React.Component {
         const selft = this
 
         this.setState({
-            errordatefrom: (datefrom) ? '' : 'The From Date is required',
-            errordateto: (dateto) ? '' : 'The To Date is required',
+            errordatefrom: (datefrom) ? '' : 'The Date is required',         
             errorstore: (store) ? '' : 'The Store is required',
             submitted: false
         })
 
-        // if (datefrom && dateto && from_store && to_store && screen_id) {
-        //     let datePartsfrom = datefrom.split("/");
-        //     let dateObjectfrom = `${datePartsfrom[2]}/${datePartsfrom[1]}/${datePartsfrom[0]}`
+        if (datefrom && store && screen_id) {
+            let datePartsfrom = datefrom.split("/");
+            let dateObjectfrom = `${datePartsfrom[2]}/${datePartsfrom[1]}/${datePartsfrom[0]}`
 
-        //     let datePartsto = dateto.split("/");
-        //     let dateObjectto = `${datePartsto[2]}/${datePartsto[1]}/${datePartsto[0]}`
+            const prm = {
+                screen_id: screen_id
+            }
+            dispatch(reportsdc.generatetokentableau(prm))
+            this.setState({
+                parameters: {
+                    p_date: dateObjectfrom,                   
+                    p_store: store
+                }
+            })
 
-
-        //     const prm = {
-        //         datefrom: dateObjectfrom,
-        //         dateto: dateObjectto,
-        //         from_store: from_store.value,
-        //         to_store: to_store.value,
-        //         stamp: stamp,
-        //         screen_id: screen_id
-        //     }
-        //     // dispatch(reportsdc.exportdailyflashsales(prm))            
-        //     setTimeout(function () {
-        //         selft.setState({ submitted: true })
-        //     }, 500)
-        // }
+            setTimeout(function () {
+                selft.setState({ submitted: true })
+            }, 500)
+        }
     }
 
     componentDidMount() {
@@ -118,15 +109,14 @@ class RestaurantPettyCashAnanlysis extends React.Component {
                     return data
                 });
         }, 300)
-
-
     }
 
     render() {
-        const { datefrom, dateto, store, optionstore, submitted } = this.state;
-        const { errordatefrom, errordateto, errorstore } = this.state;
+        const { datefrom, store, optionstore, submitted, parameters } = this.state;
+        const { errordatefrom, errorstore } = this.state;
         const { modify, screen_name, report } = this.props;
-        const seft = this
+        
+        const tokentableau = report.data
 
         return (
             <div id="content">
@@ -138,39 +128,22 @@ class RestaurantPettyCashAnanlysis extends React.Component {
                                 {modify && <div className="widget-body ">
                                     <br />
                                     <fieldset>
-                                        <div className="form-group row">
+                                    <div className="form-group row">
                                             <div className="col-md-6 form-group">
-                                                <div className="col-md-4 control-label"><label > From Store</label><span class="text-danger">*</span></div>
+                                                <div className="col-md-4 control-label"><label > Date</label><span class="text-danger">*</span></div>
                                                 <div className="col-md-6">
-                                                    {optionstore &&
-                                                        <Select options={optionstore} placeholder='Store' name="store" value={store} onChange={this.handleChangesStore} />
-                                                    }
-                                                    <span className="text-danger">{errorstore}</span>
-                                                </div>
-                                            </div>
-                                            <div className="col-md-6 form-group">
-                                                <div className="col-md-4 control-label">
-                                                </div>
-                                                <div className="col-md-6">
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div className="form-group row">
-                                            <div className="col-md-6 form-group">
-                                                <div className="col-md-4 control-label"><label > From Date</label><span class="text-danger">*</span></div>
-                                                <div className="col-md-6">
-                                                    {/* <UiDatepicker type="text" name="startdate" id="startdate" changeMonth="true" changeYear="true" dateFormat="dd/mm/yy" addday="7" datefrom="#startdate" dateto="#finishdate" onInputChange={this.handleDateFrom} value={datefrom}
-                                                        placeholder="Start date" /> */}
-                                                    <UiDatepicker type="text" name="startdate" id="startdate" onInputChange={this.handleDateFrom} value={datefrom}
+                                                    <UiDatepicker type="text" name="startdate" id="startdate" changeMonth="true" changeYear="true" dateFormat="dd/mm/yy" addday="120" datefrom="#startdate" dateto="#finishdate" onInputChange={this.handleDateFrom} value={datefrom}
                                                         placeholder="Start date" />
                                                     <span className="text-danger">{errordatefrom}</span>
                                                 </div>
                                             </div>
                                             <div className="col-md-6 form-group">
-                                                <div className="col-md-4 control-label"><label > To Date</label><span class="text-danger">*</span></div>
+                                                <div className="col-md-4 control-label"><label > Store</label><span class="text-danger">*</span></div>
                                                 <div className="col-md-6">
-                                                    <UiDatepicker type="text" name="finishdate" id="finishdate" changeMonth="true" changeYear="true" dateFormat="dd/mm/yy" addday="7" onInputChange={this.handleDateTo} value={dateto} disabled={!datefrom} placeholder="Finish date" />
-                                                    <span className="text-danger">{errordateto}</span>
+                                                    {optionstore &&
+                                                        <Select options={optionstore} placeholder='Store' name="store" value={store} onChange={this.handleChangesStore} />
+                                                    }
+                                                    <span className="text-danger">{errorstore}</span>
                                                 </div>
                                             </div>
                                         </div>
@@ -198,11 +171,14 @@ class RestaurantPettyCashAnanlysis extends React.Component {
                                                 </div>
                                             </div>
                                             <div className="col-md-12">
-                                                {submitted && <TableauReport
-                                                    url="http://public.tableau.com/views/RegionalSampleWorkbook/Storms"
+                                                {submitted && tokentableau && parameters && <TableauReport
+                                                    url={TableauReportRestaurantPettyCashAnanlysis}
+                                                    token={tokentableau}
+                                                    parameters={parameters}
+                                                    options={optiontableau}
                                                 />
                                                 }
-                                            </div>                                            
+                                            </div>
                                         </div>
                                     </fieldset>
                                 </div>

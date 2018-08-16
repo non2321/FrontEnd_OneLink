@@ -8,7 +8,7 @@ import { Stats, BigBreadcrumbs, WidgetGrid, JarvisWidget } from '../../../../../
 import { smallBox, bigBox, SmartMessageBox } from '../../../../../components/utils/actions/MessageActions'
 
 import UiDatepicker from '../../../../../components/forms/inputs/UiDatepicker'
-import { ScreenIDReportBankInSummaryByBank, PathBackEnd } from '../../../../../../../settings'
+import { ScreenIDReportBankInSummaryByBank, PathBackEnd, TableauBankInSummaryByBank } from '../../../../../../../settings'
 
 import Delay from 'react-delay'
 
@@ -17,13 +17,9 @@ import 'react-select/dist/react-select.css'
 
 import TableauReport from 'react-tableau-report'
 
-const getOptionsStore = () => {
-    return fetch(`${PathBackEnd}/api/report/storeall`)
-        .then((response) => {
-            return response.json();
-        }).then((json) => {
-            return { options: json };
-        });
+const optiontableau = {
+    hideTabs: true,
+    // hideToolbar: true
 }
 
 class BankInSummaryByBank extends React.Component {
@@ -76,7 +72,7 @@ class BankInSummaryByBank extends React.Component {
     handleReset(e) {
         e.preventDefault();
 
-        this.setState({ datefrom: '', dateto: '', bank: '', submitted: false })
+        this.setState({ datefrom: '', dateto: '', bank: '', submitted: false, parameters: null })
         this.setState({ errordatefrom: '', errordateto: '', errorbank: '' })
     }
 
@@ -101,16 +97,18 @@ class BankInSummaryByBank extends React.Component {
             let datePartsto = dateto.split("/");
             let dateObjectto = `${datePartsto[2]}/${datePartsto[1]}/${datePartsto[0]}`
 
+            const prm = {
+                screen_id: screen_id
+            }
+            dispatch(reportsdc.generatetokentableau(prm))
+            this.setState({
+                parameters: {
+                    p_from_date: dateObjectfrom,
+                    p_to_date: dateObjectto,
+                    p_bank: bank
+                }
+            })
 
-            // const prm = {
-            //     datefrom: dateObjectfrom,
-            //     dateto: dateObjectto,
-            //     from_store: from_store.value,
-            //     to_store: to_store.value,
-            //     stamp: stamp,
-            //     screen_id: screen_id
-            // }
-            // dispatch(reportsdc.exportdailyflashsales(prm))            
             setTimeout(function () {
                 selft.setState({ submitted: true })
             }, 500)
@@ -132,9 +130,11 @@ class BankInSummaryByBank extends React.Component {
 
 
     render() {
-        const { datefrom, dateto, bank, optionbank, submitted } = this.state;
+        const { datefrom, dateto, bank, optionbank, submitted, parameters } = this.state;
         const { errordatefrom, errordateto, errorbank } = this.state;
         const { modify, screen_name, report } = this.props;
+
+        const tokentableau = report.data
 
         return (
             <div id="content">
@@ -150,7 +150,7 @@ class BankInSummaryByBank extends React.Component {
                                             <div className="col-md-6 form-group">
                                                 <div className="col-md-4 control-label"><label > From Date</label><span class="text-danger">*</span></div>
                                                 <div className="col-md-6">
-                                                    <UiDatepicker type="text" name="startdate" id="startdate" changeMonth="true" changeYear="true" dateFormat="dd/mm/yy" addday="7" datefrom="#startdate" dateto="#finishdate" onInputChange={this.handleDateFrom} value={datefrom}
+                                                    <UiDatepicker type="text" name="startdate" id="startdate" changeMonth="true" changeYear="true" dateFormat="dd/mm/yy" addday="120" datefrom="#startdate" dateto="#finishdate" onInputChange={this.handleDateFrom} value={datefrom}
                                                         placeholder="Start date" />
                                                     <span className="text-danger">{errordatefrom}</span>
                                                 </div>
@@ -158,7 +158,7 @@ class BankInSummaryByBank extends React.Component {
                                             <div className="col-md-6 form-group">
                                                 <div className="col-md-4 control-label"><label > To Date</label><span class="text-danger">*</span></div>
                                                 <div className="col-md-6">
-                                                    <UiDatepicker type="text" name="finishdate" id="finishdate" changeMonth="true" changeYear="true" dateFormat="dd/mm/yy" addday="7" onInputChange={this.handleDateTo} value={dateto} disabled={!datefrom} placeholder="Finish date" />
+                                                    <UiDatepicker type="text" name="finishdate" id="finishdate" changeMonth="true" changeYear="true" dateFormat="dd/mm/yy" addday="120" onInputChange={this.handleDateTo} value={dateto} disabled={!datefrom} placeholder="Finish date" />
                                                     <span className="text-danger">{errordateto}</span>
                                                 </div>
                                             </div>
@@ -203,12 +203,11 @@ class BankInSummaryByBank extends React.Component {
                                                 </div>
                                             </div>
                                             <div className="col-md-12">
-                                                {submitted && <TableauReport
-                                                    //url="http://192.168.151.31/#/server/analysis/BackgroundTasksforNonExtracts"
-                                                    url="http://192.168.151.31/views/PH_RDS_Financial/1_PettyCash?iframeSizedToWindow=true&:embed=y&:showAppBanner=false&:display_count=no&:showVizHome=no"
-                                                //token="Im5HrBCYRpu2V99Md4FyeQ|02srsjoFujVvxX9iSRAawsdlr2lGeWKe"
-                                                // url="http://public.tableau.com/views/RegionalSampleWorkbook/Storms"
-                                                // options={option}
+                                                {submitted && tokentableau && parameters && <TableauReport
+                                                    url={TableauBankInSummaryByBank}
+                                                    token={tokentableau}
+                                                    parameters={parameters}
+                                                    options={optiontableau}
                                                 />
                                                 }
                                             </div>

@@ -28,3 +28,16 @@ exports.ScreenIDReportCashSalesReconcilationByStore  ='S0022'
 exports.ScreenIDReportDailyFlashSales = 'S0023'
 exports.ScreenIDReportCashSalesReconciliation = 'S0024'
 
+
+
+
+//Path Tableau
+exports.TableauDailyFlashSales = 'http://192.168.151.31/views/PH_RDS_Financial/1_PettyCash?iframeSizedToWindow=true&:embed=y&:showAppBanner=false&:display_count=no&:showVizHome=no'
+exports.TableauCashSalesReconciliation = 'http://192.168.151.31/views/PH_RDS_Financial/1_PettyCash?iframeSizedToWindow=true&:embed=y&:showAppBanner=false&:display_count=no&:showVizHome=no'
+exports.TableauBankInSummaryByBank = 'http://192.168.151.31/views/PH_RDS_Financial/1_PettyCash?iframeSizedToWindow=true&:embed=y&:showAppBanner=false&:display_count=no&:showVizHome=no'
+exports.TableauCashSalesReconcilationByStore = 'http://192.168.151.31/views/PH_RDS_Financial/1_PettyCash?iframeSizedToWindow=true&:embed=y&:showAppBanner=false&:display_count=no&:showVizHome=no'
+exports.TableauTotalPettyCashReimbursementByStore = 'http://192.168.151.31/views/PH_RDS_Financial/1_PettyCash?iframeSizedToWindow=true&:embed=y&:showAppBanner=false&:display_count=no&:showVizHome=no'
+exports.TableauReportRestaurantDataAnalysisForMonth = 'http://192.168.151.31/views/PH_RDS_Financial/1_PettyCash?iframeSizedToWindow=true&:embed=y&:showAppBanner=false&:display_count=no&:showVizHome=no'
+exports.TableauReportRestaurantPettyCashAnanlysis = 'http://192.168.151.31/views/PH_RDS_Financial/1_PettyCash?iframeSizedToWindow=true&:embed=y&:showAppBanner=false&:display_count=no&:showVizHome=no'
+exports.TableauReportSummaryCashReconciliation = 'http://192.168.151.31/views/PH_RDS_Financial/1_PettyCash?iframeSizedToWindow=true&:embed=y&:showAppBanner=false&:display_count=no&:showVizHome=no'
+
