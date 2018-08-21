@@ -6,7 +6,7 @@ exports.PathBackEnd = 'http://localhost:3000'
 
 exports.ScreenIDLOGIN = 'LOGIN'
 exports.ScreenIDHomePage = 'HomePage'
-//SDC
+//SDC Sales
 exports.ScreenIDSetupBankAccount = 'S0001'
 exports.ScreenIDSetupCompanyAccount = 'S0002'
 exports.ScreenIDSetupCompany = 'S0003'
@@ -15,7 +15,8 @@ exports.ScreenIDSetupStore = 'S0006'
 exports.ScreenIDAccountCodeSetupForSale = 'S0007'
 exports.ScreenIDBankInAdjustment = 'S0008'
 exports.ScreenIDSteampCloseDailyFins = 'S0009'
-
+//SDC Inventory
+exports.ScreenIDAccountCodeForInventory = 'S0010'
 
 //Report
 //SDC

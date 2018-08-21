@@ -81,7 +81,7 @@
           "items": [
             {
               "title": "Account Code For Inventory",
-              "route": "/views/forum-general",
+              "route": "/SDC/AccountCodeForInventory",
               "comment": "Account Code For Inventory",
               "screen_id": "S0010"
             },

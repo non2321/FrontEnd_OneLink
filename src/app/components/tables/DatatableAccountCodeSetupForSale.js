@@ -250,7 +250,7 @@ class DatatableAccountCodeSetupForSale extends React.Component {
             {children}
           </table>
           <div>
-            {/* Modal Add */}
+            {/* Modal Edit */}
             <div className="modal fade" id="myModalEdit" tabIndex="-1" role="dialog" aria-labelledby="myModalLabel"
               aria-hidden="true">
               <form id="edit-form" onSubmit={this.handleEditSubmit}>
@@ -260,7 +260,7 @@ class DatatableAccountCodeSetupForSale extends React.Component {
                       <button type="button" className="close" data-dismiss="modal" aria-hidden="true">
                         &times;
                       </button>
-                      <h4 className="modal-title" id="myModalLabel">Add {this.props.screen_name}</h4>
+                      <h4 className="modal-title" id="myModalLabel">Edit {this.props.screen_name}</h4>
                     </div>
                     <div className="modal-body">
                       <div class="form-group">
