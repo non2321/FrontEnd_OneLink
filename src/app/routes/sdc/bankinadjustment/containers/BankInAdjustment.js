@@ -254,7 +254,7 @@ class BankInAdjustment extends React.Component {
         e.preventDefault()
         const selft = this
         this.setState({ submitted: false, daysOfStore: [] })
-        const { store_id, datefrom, dateto } = this.state
+        const { store_id, datefrom, dateto } = this.state     
 
         this.setState({
             store_id_temp: store_id,
@@ -317,16 +317,16 @@ class BankInAdjustment extends React.Component {
                             status = false
                         }
                     }
-                    
+
                     let checkduplicate = 0
-                    for (let subitem in obj) {                                 
+                    for (let subitem in obj) {
                         if (obj[item]['Store ID'].trim() == obj[subitem]['Store ID'].trim() &&
                             obj[item]['Financial Code'].trim() == obj[subitem]['Financial Code'].trim() &&
                             obj[item]['Financial Date'].trim() == obj[subitem]['Financial Date'].trim()) {
                             checkduplicate = checkduplicate + 1
-                        }         
+                        }
                     }
-                    if(checkduplicate > 1) status = false
+                    if (checkduplicate > 1) status = false
 
                     if (obj[item]['Account Daily Fins'].trim() == '') status = false
                     let val = parseFloat(parseFloat(obj[item]['Account Daily Fins'].trim()))
@@ -416,7 +416,7 @@ class BankInAdjustment extends React.Component {
                     self.setState({ validationstore: data })
                     return data
                 });
-        }, 250)
+        }, 350)
 
         let apiRequest2 = setTimeout(function () {
             fetch(`${PathBackEnd}/api/bankinadjustment/validationfinancialcode`)
@@ -425,7 +425,7 @@ class BankInAdjustment extends React.Component {
                     self.setState({ validationfinancialcode: data })
                     return data
                 });
-        }, 500)
+        }, 600)
     }
 
     render() {
@@ -874,7 +874,7 @@ class BankInAdjustment extends React.Component {
                                             </div>
                                         </div>
                                         <div className="modal-footer">
-                                            <button type="button" className="btn btn-primary" onClick={this.handleGLSubmit} >
+                                            <button id="btnGengl" type="button" className="btn btn-primary" onClick={this.handleGLSubmit} data-loading-text="<i class='fa fa-spinner fa-spin '></i> Processing">
                                                 Process
                                         </button>
                                             <button type="button" className="btn btn-default" data-dismiss="modal">

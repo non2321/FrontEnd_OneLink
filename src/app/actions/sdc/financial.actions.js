@@ -371,19 +371,22 @@ function glprocessbankinadjustment(prm) {
     const glto_store = prm.glto_store
     const screen_id = prm.screen_id
 
-    return dispatch => {
+    return dispatch => {       
+        $('#btnGengl').button('loading');
         dispatch(request({ gldoc_type }));
         financialService.glprocessbankinadjustment(prm)
             .then(
                 financial => {                   
-                    if (financial > 0) {
+                    if (financial > 0) {  
+                        $('#btnGengl').button('reset');                    
                         $('#myModalGL').modal('hide');
                         dispatch(success(financial));
                         dispatch(alertActions.success("Generate Success"));
                     } else if (financial == 0) {
+                        $('#btnGengl').button('reset');     
                         dispatch(failure(financial));
                         dispatch(alertActions.error("Generate Fail"));
-                    } else {
+                    } else {                       
                         $('#myModalGL').modal('hide');
                         dispatch(alertActions.error(financial.message));
                         dispatch(failure(financial.message));
@@ -391,6 +394,7 @@ function glprocessbankinadjustment(prm) {
                     }                    
                 },
                 error => {
+                    $('#btnGengl').button('reset');     
                     // dispatch(failure(error));
                     // dispatch(alertActions.error(error));
                 }
