@@ -17,6 +17,7 @@ exports.ScreenIDBankInAdjustment = 'S0008'
 exports.ScreenIDSteampCloseDailyFins = 'S0009'
 //SDC Inventory
 exports.ScreenIDAccountCodeForInventory = 'S0010'
+exports.ScreenIDEndingInventory = 'S0011'
 
 //Report
 //SDC

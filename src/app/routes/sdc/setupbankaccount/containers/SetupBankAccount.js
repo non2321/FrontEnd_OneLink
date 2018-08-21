@@ -214,9 +214,7 @@ class SetupBankAccount extends React.Component {
                 </div>
                 }
               </JarvisWidget>
-
             </article>
-
           </div>
         </WidgetGrid>
 

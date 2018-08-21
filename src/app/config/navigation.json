@@ -87,7 +87,7 @@
             },
             {
               "title": "Ending Inventory",
-              "route": "/views/forum-topic",
+              "route": "/SDC/EndingInventory",
               "comment": "Ending Inventory",
               "screen_id": "S0011"
             },
