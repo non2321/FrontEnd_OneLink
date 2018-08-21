@@ -13,6 +13,8 @@ import { ScreenIDAccountCodeForInventory, PathBackEnd } from '../../../../../../
 import Select from 'react-select'
 import 'react-select/dist/react-select.css';
 
+import './AccountCodeForInventory.css'
+
 class AccountCodeForInventory extends React.Component {
   constructor(props) {
     super(props)
@@ -53,7 +55,7 @@ class AccountCodeForInventory extends React.Component {
     const { action_code, inv_class, action, obj_account, subsidary, grp_by, cat_code, acc_type, doc_no, remark, screen_id } = this.state
     const { dispatch } = this.props
     const selft = this
-   
+
     this.setState({
       erroraction_code: (action_code) ? '' : 'The action code is required',
       errorinv_class: (inv_class) ? (inv_class.length <= 10) ? '' : 'The inv class be less than 10 characters long' : 'The inv class is required',
@@ -162,7 +164,17 @@ class AccountCodeForInventory extends React.Component {
                       options={{
                         colReorder: true,
                         ajax: `${PathBackEnd}/api/accountcodeforinventory`,
-                        columns: [{ data: "ACTIONCODE", "width": "10%" }, { data: "INV_CLASS", "width": "8%" }, { data: "ACTION", "width": "8%" }, { data: "OBJACCOUT", "width": "10%" }, { data: "SUBSIDARY", "width": "8%" }, { data: "GRPBY_DESC", "width": "9%" }, { data: "CATCODE_DESC", "width": "10%" }, { data: "ACCTYPE", "width": "8%" }, { data: "DOCNO", "width": "7%" }, { data: "REMARK" },
+                        columns: [{ data: "ACTIONCODE", "width": "10%" }, { data: "INV_CLASS", "width": "8%" }, { data: "ACTION", "width": "12%" }, { data: "OBJACCOUT", "width": "10%" }, { data: "SUBSIDARY", "width": "8%" }, { data: "GRPBY_DESC", "width": "12%" }, { data: "CATCODE_DESC", "width": "12%" }, { data: "ACCTYPE", "width": "8%" }, { data: "DOCNO", "width": "7%" },
+                        {
+                          "mData": "REMARK",
+                          "mRender": function (data, type, full) {
+                           
+                            // return '<span data-toggle="tooltip" title="' + data + '" class="tooltiptext">' + (data.length > 30)?data.substr( 0,20 ) + '...': data; + '</span>'; 
+                            const datasub = (data.length > 17) ? data.substr(0, 17) + '...' : data
+                            return '<span data-toggle="tooltip" title="' + data + '" class="tooltiptext">' + datasub + '</span>';
+                          }
+                        },
+
                         {
                           searchable: false,
                           visible: (modify.can_edit == "Y" || modify.can_delete == "Y") ? true : false,
