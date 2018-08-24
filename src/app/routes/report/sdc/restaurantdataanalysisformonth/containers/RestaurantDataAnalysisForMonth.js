@@ -71,7 +71,7 @@ class RestaurantDataAnalysisForMonth extends React.Component {
 
         const { dispatch } = this.props
         const { datefrom, dateto, store, screen_id } = this.state
-        const selft = this
+        const self = this
 
         this.setState({
             errordatefrom: (datefrom) ? '' : 'The Date is required',          
@@ -95,7 +95,7 @@ class RestaurantDataAnalysisForMonth extends React.Component {
             })
 
             setTimeout(function () {
-                selft.setState({ submitted: true })
+                self.setState({ submitted: true })
             }, 500)
         }
     }

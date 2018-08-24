@@ -54,7 +54,7 @@ class AccountCodeForInventory extends React.Component {
     e.preventDefault()
     const { action_code, inv_class, action, obj_account, subsidary, grp_by, cat_code, acc_type, doc_no, remark, screen_id } = this.state
     const { dispatch } = this.props
-    const selft = this
+    const self = this
 
     this.setState({
       erroraction_code: (action_code) ? '' : 'The action code is required',
@@ -88,7 +88,7 @@ class AccountCodeForInventory extends React.Component {
       }
       dispatch(inventoryActions.addaccountcodeforinventory(prm))
       setTimeout(function () {
-        selft.setState({ submitted: true })
+        self.setState({ submitted: true })
       }, 500)
     }
   }

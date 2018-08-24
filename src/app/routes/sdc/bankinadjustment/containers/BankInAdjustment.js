@@ -252,9 +252,9 @@ class BankInAdjustment extends React.Component {
 
     handleSearchSubmit(e) {
         e.preventDefault()
-        const selft = this
+        const self = this
         this.setState({ submitted: false, daysOfStore: [] })
-        const { store_id, datefrom, dateto } = this.state     
+        const { store_id, datefrom, dateto } = this.state
 
         this.setState({
             store_id_temp: store_id,
@@ -278,7 +278,7 @@ class BankInAdjustment extends React.Component {
             }
             this.setState({ daysOfStore: days, tabIndex: 0 })
             setTimeout(function () {
-                selft.setState({ submitted: true })
+                self.setState({ submitted: true })
             }, 500)
         }
     }
@@ -443,8 +443,17 @@ class BankInAdjustment extends React.Component {
                 <WidgetGrid>
                     <div className="row">
                         <article className="col-sm-12">
-                            <JarvisWidget editbutton={false} colorbutton={false} deletebutton={false} togglebutton={false} color="darken">
-                                <header><h2>{screen_name}</h2></header>
+                            <JarvisWidget editbutton={false} colorbutton={false} deletebutton={false} togglebutton={false} color="darken" custombutton={true}>
+                                <header>
+                                    <h2>{screen_name}</h2>
+                                    {modify && modify.can_edit == "Y" && <div className="jarviswidget-ctrls" >
+                                        <a style={{ "padding-left": "10px", "padding-right": "10px" }} title="Import" className="button-icon form-group" data-toggle="modal" data-target="#myModalUpload">
+                                            <span > Import</span></a>
+                                        <a style={{ "padding-left": "10px", "padding-right": "10px" }} title="Gen GL To E1" className="button-icon form-group" data-toggle="modal" data-target="#myModalGL">
+                                            <span > Gen GL To E1</span></a>
+                                    </div>
+                                    }
+                                </header>
                                 {modify && <div className="widget-body ">
                                     <br />
                                     <form onSubmit={this.handleSearchSubmit}>
@@ -509,8 +518,7 @@ class BankInAdjustment extends React.Component {
                                             </fieldset>
                                         </div>
                                         {submitted &&
-                                            <div className="widget-body no-padding">
-                                                <br />
+                                            <div className="widget-body no-padding">                                             
                                                 <hr />
                                                 <Tabs selectedIndex={this.state.tabIndex} onSelect={tabIndex => this.setState({ tabIndex, edit: false })}>
                                                     <TabList>
@@ -574,14 +582,14 @@ class BankInAdjustment extends React.Component {
                                                                                         self.setState({ edit: true })
                                                                                     }
                                                                                 },
-                                                                                {
-                                                                                    text: `<span ><i class="fa fa-mail-reply"  /><span class="hidden-mobile"> Import</span></span>`,
-                                                                                    className: `btn btn-default btn-sm ${(modify.can_edit == "Y") ? '' : 'hidden'}`,
-                                                                                    action: function (e, dt, node, config) {
-                                                                                        self.setState({ file: null, filename: 'Choose a file...', uploading: false, upload: null, obj: null })
-                                                                                        $('#myModalUpload').modal('show')
-                                                                                    }
-                                                                                },
+                                                                                // {
+                                                                                //     text: `<span ><i class="fa fa-mail-reply"  /><span class="hidden-mobile"> Import</span></span>`,
+                                                                                //     className: `btn btn-default btn-sm ${(modify.can_edit == "Y") ? '' : 'hidden'}`,
+                                                                                //     action: function (e, dt, node, config) {
+                                                                                //         self.setState({ file: null, filename: 'Choose a file...', uploading: false, upload: null, obj: null })
+                                                                                //         $('#myModalUpload').modal('show')
+                                                                                //     }
+                                                                                // },
                                                                                 {
                                                                                     extend: 'excel',
                                                                                     title: `Bankin_${store_id_temp}_${dtforback}`,
@@ -591,14 +599,14 @@ class BankInAdjustment extends React.Component {
                                                                                         columns: [0, 1, 2, 3]
                                                                                     }
                                                                                 },
-                                                                                {
-                                                                                    text: `<span ><i class="fa fa-mail-reply" /><span class="hidden-mobile"> Gen GL To E1</span></span>`,
-                                                                                    className: `btn btn-default btn-sm ${(modify.can_edit == "Y") ? '' : 'hidden'}`,
-                                                                                    action: function (e, dt, node, config) {
-                                                                                        self.setState({ gldoc_type: '', glledger_type: '', glfrom_date: '', glto_date: '', glfrom_store: '', glto_store: '' })
-                                                                                        $('#myModalGL').modal('show')
-                                                                                    }
-                                                                                },
+                                                                                // {
+                                                                                //     text: `<span ><i class="fa fa-mail-reply" /><span class="hidden-mobile"> Gen GL To E1</span></span>`,
+                                                                                //     className: `btn btn-default btn-sm ${(modify.can_edit == "Y") ? '' : 'hidden'}`,
+                                                                                //     action: function (e, dt, node, config) {
+                                                                                //         self.setState({ gldoc_type: '', glledger_type: '', glfrom_date: '', glto_date: '', glfrom_store: '', glto_store: '' })
+                                                                                //         $('#myModalGL').modal('show')
+                                                                                //     }
+                                                                                // },
                                                                             ],
                                                                         }}
                                                                         paginationLength={true} className="table table-striped table-bordered table-hover"

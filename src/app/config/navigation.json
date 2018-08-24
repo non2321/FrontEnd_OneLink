@@ -117,7 +117,7 @@
             },
             {
               "title": "Stamp Inventory",
-              "route": "/views/forum-post",
+              "route": "/SDC/SteampInventory",
               "comment": "Stamp Inventory",
               "screen_id": "S0016"
             }

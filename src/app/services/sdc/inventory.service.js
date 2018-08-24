@@ -6,6 +6,8 @@ import 'isomorphic-fetch'
 export const inventoryService = {
     addaccountcodeforinventory,   
     editaccountcodeforinventory,   
+
+    stampinventory,
 }
 
 function addaccountcodeforinventory(prm) {
@@ -63,6 +65,31 @@ function editaccountcodeforinventory(prm) {
             return handleResponse(response)
         })
         .then(user => { 
+            if (user && user.status == 'Y') {               
+                localStorage.setItem(localStorageAuth, JSON.stringify(user.user));
+            }
+            return user;
+        });
+}
+
+function stampinventory(prm) {
+    const stamp = prm.stamp
+    const post_date_type = prm.post_date_type
+    const datefrom = prm.datefrom
+    const dateto = prm.dateto   
+    const screen_id = prm.screen_id
+   
+    const requestOptions = {
+        method: 'POST',
+        headers: { ...authHeader(), 'Content-Type': 'application/json' },
+        body: JSON.stringify({ stamp, post_date_type, datefrom, dateto, screen_id })
+    };
+
+    return fetch(`${PathBackEnd}/api/stampinventory`, requestOptions)
+        .then(response => {
+            return handleResponse(response)
+        })
+        .then(user => {
             if (user && user.status == 'Y') {               
                 localStorage.setItem(localStorageAuth, JSON.stringify(user.user));
             }

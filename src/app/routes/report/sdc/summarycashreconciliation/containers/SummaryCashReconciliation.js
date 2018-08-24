@@ -86,7 +86,7 @@ class SummaryCashReconciliation extends React.Component {
 
         const { dispatch } = this.props
         const { datefrom, dateto, from_store, to_store, screen_id } = this.state
-        const selft = this
+        const self = this
 
         this.setState({
             errordatefrom: (datefrom) ? '' : 'The From Date is required',
@@ -117,7 +117,7 @@ class SummaryCashReconciliation extends React.Component {
             })
 
             setTimeout(function () {
-                selft.setState({ submitted: true })
+                self.setState({ submitted: true })
             }, 500)
         }
     }

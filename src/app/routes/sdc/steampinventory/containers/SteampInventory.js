@@ -1,34 +1,26 @@
 import React from 'react'
-import { connect } from 'react-redux';
-import Delay from 'react-delay'
-import XLSX from 'xlsx';
-import fetch from 'isomorphic-fetch'
-import dateFormat from 'dateformat';
+import { connect } from 'react-redux'
 
-import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
-import 'react-tabs/style/react-tabs.css';
-
-import { userAuth } from '../../../../actions/auth';
-import { financialActions } from '../../../../actions/sdc'
+import { userAuth } from '../../../../actions/auth'
+import { inventoryActions } from '../../../../actions/sdc'
 import { alertActions } from '../../../../actions/alert/alert.actions';
 
 import { WidgetGrid, JarvisWidget } from '../../../../components'
-import DatatableBankInAdjustment from '../../../../components/tables/DatatableBankInAdjustment'
 import UiDatepicker from '../../../../components/forms/inputs/UiDatepicker'
-import PopupStore from '../../../../components/tables-popup/PopupStore'
-import PopupBankInAdjustmentUpload from '../../../../components/tables-popup/PopupBankInAdjustmentUpload'
 import { utils } from '../../../../services'
 
-import { ScreenIDSteampCloseDailyFins, PathBackEnd } from '../../../../../../settings'
+import { ScreenIDSteampInventory, DropdownPostDataType } from '../../../../../../settings'
 
+import Select from 'react-select'
+import 'react-select/dist/react-select.css'
 
-class SteampCloseDailyFins extends React.Component {
+class SteampInventory extends React.Component {
     constructor(props) {
         super(props)
 
         if (this.state === undefined) {
             const prm = {
-                screen_id: ScreenIDSteampCloseDailyFins,
+                screen_id: ScreenIDSteampInventory,
             }
             this.props.dispatch(userAuth.loadpage(prm))
         }
@@ -40,7 +32,7 @@ class SteampCloseDailyFins extends React.Component {
             errordatefrom: '',
             errordateto: '',
             submitted: false,
-            screen_id: ScreenIDSteampCloseDailyFins
+            screen_id: ScreenIDSteampInventory
         }
 
         this.handleChange = this.handleChange.bind(this)
@@ -73,29 +65,38 @@ class SteampCloseDailyFins extends React.Component {
         });
     }
 
+    handleChangesPostDataType = (post_date_type) => {
+        this.setState({
+            post_date_type: (post_date_type == null) ? '' : post_date_type
+        })
+    }
+
     handleSubmit(e) {
         e.preventDefault()
+        const self = this
         const { dispatch } = this.props
         this.setState({ submitted: false })
-        const { stamp, datefrom, dateto, screen_id } = this.state
+        const { stamp, post_date_type, datefrom, dateto, screen_id } = this.state
 
         this.setState({
+            errorpost_date_type: (post_date_type) ? '' : 'The Post Data Type is required',
             errordatefrom: (datefrom) ? '' : 'The Financial Date From is required',
             errordateto: (dateto) ? '' : 'The Financial Date To is required',
             submitted: false
         })
 
-        if (stamp && datefrom && dateto) {
+        if (stamp && post_date_type && datefrom && dateto) {
             const prm = {
                 stamp: stamp,
+                post_date_type: post_date_type.value.toString(),
                 datefrom: utils.convertdateformatString(datefrom),
                 dateto: utils.convertdateformatString(dateto),
                 screen_id: screen_id
             }
-            dispatch(financialActions.stampclosedailyfins(prm));
-
-            this.setState({ submitted: true })
-
+            dispatch(inventoryActions.stampinventory(prm));
+            setTimeout(function () {
+                self.setState({ submitted: true })
+            }, 500)
         }
     }
 
@@ -115,20 +116,9 @@ class SteampCloseDailyFins extends React.Component {
 
 
     render() {
-        const { stamp, datefrom, dateto, alertall } = this.state
-        const { errordatefrom, errordateto } = this.state
-        const { modify, screen_name } = this.props;
-
-        // $('#ModalAlert').modal({ show: true });
-        // $('#ModalAlert').modal('show');
-
-        // if (alert.type == 'bigalert-success') {
-        //     $('#myModal').modal('show')
-        // }
-        //    if(alert.type == 'bigalert-success') {
-
-        //   $('#ModalAlert').modal({ show: true });
-        // }
+        const { stamp, post_date_type, datefrom, dateto, alertall } = this.state
+        const { errorpost_date_type, errordatefrom, errordateto } = this.state
+        const { modify, screen_name } = this.props
 
         return (
             <div id="content">
@@ -158,7 +148,23 @@ class SteampCloseDailyFins extends React.Component {
                                                 <div className="col-md-6">
                                                 </div>
                                             </div>
-                                            <div className="form-group">
+                                            <div className="row form-group">
+                                                <div className="col-md-6">
+                                                    <div className="col-md-4 control-label"><label > Post Data Type</label><span class="text-danger">*</span></div>
+                                                    <div className="col-md-6">
+                                                        {DropdownPostDataType &&
+                                                            <Select options={DropdownPostDataType} placeholder='Post Data Type' name="post_date_type" value={post_date_type} onChange={this.handleChangesPostDataType} />
+                                                        }
+                                                        <span className="text-danger">{errorpost_date_type}</span>
+                                                    </div>
+                                                </div>
+                                                <div className="col-md-6 form-group">
+                                                    <div className="col-md-4 control-label"></div>
+                                                    <div className="col-md-6">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div className="row form-group">
                                                 <div className="col-md-6">
                                                     <div className="col-md-4 control-label"><label > Financial Date From</label><span class="text-danger">*</span></div>
                                                     <div className="col-md-6">
@@ -178,7 +184,7 @@ class SteampCloseDailyFins extends React.Component {
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div className="form-group">
+                                            <div className="row">
                                                 <div className="col-md-6">
                                                 </div>
                                                 <div className="col-md-6">
@@ -194,7 +200,7 @@ class SteampCloseDailyFins extends React.Component {
                                                 </div>
                                             </div>
                                         </fieldset>
-                                    </div>
+                                    </div>                                  
                                 </div>
                                 }
                             </JarvisWidget>
@@ -218,7 +224,7 @@ class SteampCloseDailyFins extends React.Component {
                                 <div className="modal-footer">
                                     <button type="button" className="btn btn-default" data-dismiss="modal">
                                         Cancel
-                                    </button>
+                            </button>
                                 </div>
                             </div>
                             }
@@ -242,5 +248,5 @@ function mapStateToProps(state) {
     };
 }
 
-const connectedSteampCloseDailyFins = connect(mapStateToProps)(SteampCloseDailyFins);
-export default connectedSteampCloseDailyFins
+const connectedSteampInventory = connect(mapStateToProps)(SteampInventory);
+export default connectedSteampInventory

@@ -60,7 +60,7 @@ class SetupCompanyAccount extends React.Component {
 
   handleSubmit(e) {
     e.preventDefault();
-    let selft = this
+    let self = this
     const { dispatch } = this.props
     const { screen_id } = this.state
 

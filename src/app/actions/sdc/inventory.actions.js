@@ -5,7 +5,9 @@ import { hashHistory } from 'react-router'
 
 export const inventoryActions = {
     addaccountcodeforinventory,   
-    editaccountcodeforinventory
+    editaccountcodeforinventory,
+
+    stampinventory
 }
 
 function addaccountcodeforinventory(prm) {
@@ -94,6 +96,42 @@ function editaccountcodeforinventory(prm) {
                 error => {
                     dispatch(failure(error));
                     dispatch(alertActions.error(error));
+                }
+            )
+    }
+
+    function request(inventory) { return { type: inventoryConstants.ADD_REQUEST, inventory } }
+    function success(inventory) { return { type: inventoryConstants.ADD_SUCCESS, inventory } }
+    function failure(error) { return { type: inventoryConstants.ADD_FAILURE, error } }
+}
+
+function stampinventory(prm) {
+    const stamp = prm.stamp
+    const post_date_type = prm.post_date_type
+    const datefrom = prm.datefrom
+    const dateto = prm.dateto   
+    const screen_id = prm.screen_id
+
+    return dispatch => {
+        dispatch(request({ stamp }));
+        inventoryService.stampinventory(prm)
+            .then(
+                inventory => {                   
+                    if (inventory.status == 'Y') {          
+                        dispatch(success(inventory));
+                        dispatch(alertActions.bigsuccess(inventory.message));
+                    } else if (inventory.status == 'NA') {
+                        dispatch(failure(inventory));
+                        dispatch(alertActions.error(inventory.message));
+                        hashHistory.push('/Login');
+                    } else {
+                        dispatch(alertActions.bigerror(inventory.message));
+                        dispatch(failure(inventory.message));                        
+                    }                    
+                },
+                error => {
+                    // dispatch(failure(error));
+                    // dispatch(alertActions.error(error));
                 }
             )
     }

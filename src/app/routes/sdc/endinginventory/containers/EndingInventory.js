@@ -2,16 +2,15 @@ import React from 'react'
 import { connect } from 'react-redux'
 import Delay from 'react-delay'
 
-import { userAuth } from '../../../../actions/auth';
-import { inventoryActions } from '../../../../actions/sdc'
+import { userAuth } from '../../../../actions/auth'
 
 import { Stats, BigBreadcrumbs, WidgetGrid, JarvisWidget } from '../../../../components'
 import PopupStore from '../../../../components/tables-popup/PopupStore'
 
-import { ScreenIDEndingInventory, PathBackEnd } from '../../../../../../settings'
+import { ScreenIDEndingInventory, PathBackEnd, DropdownMonth } from '../../../../../../settings'
 
 import Select from 'react-select'
-import 'react-select/dist/react-select.css';
+import 'react-select/dist/react-select.css'
 
 class EndingInventory extends React.Component {
     constructor(props) {
@@ -24,8 +23,21 @@ class EndingInventory extends React.Component {
             this.props.dispatch(userAuth.loadpage(prm))
         }
 
+        const datenow = new Date()
+        const monthnow = datenow.getMonth()
+        const yearnow = datenow.getFullYear()
+        let optionyear = []
+        const yearago = yearnow - 10
+        for (let year = yearago; year <= yearnow; year++) {
+            const item = { "value": year, "label": year }
+            optionyear.push(item)
+        }
+
         this.state = {
             stamp: 'option1',
+            month: monthnow,
+            year: yearnow,
+            optionyear: optionyear.sort((a, b) => b.value - a.value),
             submitted: false,
             screen_id: ScreenIDEndingInventory
         }
@@ -35,26 +47,28 @@ class EndingInventory extends React.Component {
         this.handleData = this.handleData.bind(this)
         this.handlePopSubmit = this.handlePopSubmit.bind(this)
 
+        this.handleChangesMonth = this.handleChangesMonth.bind(this)
+
         this.onStampChanged = this.onStampChanged.bind(this)
         this.handleSearchSubmit = this.handleSearchSubmit.bind(this)
     }
 
     handleChange(e) {
         const { name, value } = e.target;
-        this.setState({ [name]: value });
+        this.setState({ [name]: value })
     }
 
     handleData(data) {
         this.setState({
             fromChild: data
-        });
+        })
     }
 
     handlePopSubmit(e) {
         e.preventDefault()
         const data = this.state.fromChild
         this.setState({ store_id: data['store_id'], store_name: data['store_name'], fromChild: '' })
-        $('#myModalStore').modal('hide');
+        $('#myModalStore').modal('hide')
     }
 
     onStampChanged(e) {
@@ -63,47 +77,42 @@ class EndingInventory extends React.Component {
         });
     }
 
-    handleSearchSubmit(e) {
-        e.preventDefault()
-        // const selft = this
-        // this.setState({ submitted: false, daysOfStore: [] })
-        // const { store_id, datefrom, dateto } = this.state     
-
-        // this.setState({
-        //     store_id_temp: store_id,
-        //     errorstore_id: (store_id) ? '' : 'The store id is required',
-        //     errordatefrom: (datefrom) ? '' : 'The Financial Date From is required',
-        //     errordateto: (dateto) ? '' : 'The Financial Date To is required',
-        //     submitted: false
-        // })
-
-        // if (store_id && datefrom && dateto) {
-
-        //     let datePartsfrom = datefrom.split("/");
-        //     let dateObjectfrom = new Date(datePartsfrom[2], datePartsfrom[1] - 1, datePartsfrom[0])
-
-        //     let datePartsto = dateto.split("/");
-        //     let dateObjectto = new Date(datePartsto[2], datePartsto[1] - 1, datePartsto[0])
-
-        //     let days = [];
-        //     for (let d = dateObjectfrom; d <= dateObjectto; d.setDate(d.getDate() + 1)) {
-        //         days.push(new Date(d));
-        //     }
-        //     this.setState({ daysOfStore: days, tabIndex: 0 })
-        //     setTimeout(function () {
-        //         selft.setState({ submitted: true })
-        //     }, 500)
-        // }
+    handleChangesMonth = (month) => {
+        this.setState({
+            month: (month == null) ? '' : month
+        })
     }
 
+    handleChangesYear = (year) => {
+        this.setState({
+            year: (year == null) ? '' : year
+        })
+    }
 
+    handleSearchSubmit(e) {
+        e.preventDefault()
+        const self = this
+        const { store_id, stamp, diff_more_than, year, month, period } = this.state
 
+        this.setState({
+            errorstore_id: (store_id) ? '' : 'The store id is required',
+            errordiff_more_than: (diff_more_than) ? '' : 'The diif more than is required',
+            erroryear: (year) ? '' : 'The year is required',
+            errormonth: (month) ? '' : 'The month is required',
+            errorperiod: (period) ? '' : 'The period is required',
+            submitted: false
+        })
+
+        if (stamp, store_id, diff_more_than, year, month, period) {
+            setTimeout(function () {
+                self.setState({ submitted: true })
+            }, 500)
+        }        
+    }
 
     render() {
-        // const { action_code, inv_class, action, obj_account, subsidary, grp_by, cat_code, acc_type, doc_no, remark, submitted, screen_id } = this.state;
-        // const { optiongrp_by, optioncat_code, optionacc_type } = this.state
-        const { errorstore_id } = this.state
-        const { store_id, store_name, stamp } = this.state
+        const { errorstore_id, errordiff_more_than, erroryear, errormonth, errorperiod } = this.state
+        const { store_id, store_name, stamp, diff_more_than, year, month, period, optionyear } = this.state
         const { modify, screen_name } = this.props;
         const seft = this
 
@@ -118,75 +127,104 @@ class EndingInventory extends React.Component {
                                     <br />
                                     <form onSubmit={this.handleSearchSubmit}>
                                         <div className="form-horizontal">
-                                            <fieldset>
-                                                <div className="form-group">
-                                                    <div className="col-md-6 smart-form">
-                                                        <div className="inline-group">
-                                                            <label className="radio">
-                                                                <input type="radio" name="radio-inline" value="option1" checked={stamp === 'option1'} onChange={this.onStampChanged} />
-                                                                <i />Summary</label>
-                                                            <label className="radio">
-                                                                <input type="radio" name="radio-inline" value="option2" checked={stamp === 'option2'} onChange={this.onStampChanged} />
-                                                                <i />Detail</label>
-                                                        </div>
+                                            <div className="form-group">
+                                                <div className="col-md-4 ">
+                                                    <div className="col-md-4 control-label"><label > Type</label><span class="text-danger">*</span></div>
+                                                    <div className="col-md-4 smart-form">
+                                                        <label className="radio align-top">
+                                                            <input type="radio" name="radio-inline" value="option1" checked={stamp === 'option1'} onChange={this.onStampChanged} />
+                                                            <i />Summary</label>
+                                                    </div>
+                                                    <div className="col-md-4 smart-form ">
+                                                        <label className="radio align-top">
+                                                            <input type="radio" name="radio-inline" value="option2" checked={stamp === 'option2'} onChange={this.onStampChanged} />
+                                                            <i />Detail</label>
                                                     </div>
                                                 </div>
-                                                <div className="form-group">
-                                                    <div className="col-md-6">
-                                                        <div className="col-md-3 control-label"><label > Store ID</label><span class="text-danger">*</span></div>
-                                                        <div className="col-md-4">
-                                                            <div class="input-group">
-                                                                <span className="input-group-btn">
-                                                                    <input type="text" name="store_id" value={store_id} onChange={this.handleChange} className="form-control" id="txtStoreId" placeholder="Store ID" disabled={true} />
-                                                                    <a className="btn btn-primary" id="btn-chat" data-toggle="modal" data-target="#myModalStore">
-                                                                        <i className="fa fa-user-md"></i>
-                                                                    </a>
-                                                                </span>
-                                                            </div>
-                                                            <span className="text-danger">{errorstore_id}</span>
-                                                        </div>
-                                                    </div>
-                                                    <div className="col-md-6">
-                                                        <div className="col-md-4 control-label"><label >Store Name</label><span class="text-danger">*</span></div>
-                                                        <div className="col-md-6">
-                                                            <input type="text" name="store_name" value={store_name} onChange={this.handleChange} className="form-control" placeholder="Store Name" disabled={true} />
-                                                        </div>
+                                                <div className="col-md-4">
+                                                    <div className="col-md-4 control-label"></div>
+                                                    <div className="col-md-7">
                                                     </div>
                                                 </div>
-                                                <div className="form-group">
-                                                    <div className="col-md-6">
-                                                        <div className="col-md-3 control-label"><label > Store Name</label><span class="text-danger">*</span></div>
-                                                        <div className="col-md-6">
-                                                            {/* <UiDatepicker type="text" name="startdate" id="startdate" changeMonth="true" changeYear="true" dateFormat="dd/mm/yy" addday="7" datefrom="#startdate" dateto="#finishdate" onInputChange={this.handleDateFrom} value={datefrom}
-                                                                placeholder="Start date" />
-                                                            <span className="text-danger">{errordatefrom}</span> */}
-                                                        </div>
-                                                    </div>
-                                                    <div className="col-md-6">
-                                                        <div className="col-md-4 control-label"><label >Financial Date To</label><span class="text-danger">*</span></div>
-                                                        <div className="col-md-6">
-                                                            {/* <UiDatepicker type="text" name="finishdate" id="finishdate" changeMonth="true" changeYear="true" dateFormat="dd/mm/yy" addday="7" onInputChange={this.handleDateTo} value={dateto} disabled={!datefrom}                                                              
-                                                                placeholder="Finish date" />
-                                                            <span className="text-danger">{errordateto}</span> */}
-                                                        </div>
+                                                <div className="col-md-4">
+                                                    <div className="col-md-4 control-label"></div>
+                                                    <div className="col-md-7">
                                                     </div>
                                                 </div>
-                                                <div className="row">
+                                            </div>
+                                            <div className="form-group">
+                                                <div className="col-md-4">
+                                                    <div className="col-md-4 control-label"><label > Store ID</label><span class="text-danger">*</span></div>
                                                     <div className="col-md-6">
-                                                    </div>
-                                                    <div className="col-md-6">
-                                                        <div className="col-md-5">
+                                                        <div class="input-group">
+                                                            <span className="input-group-btn">
+                                                                <input type="text" name="store_id" value={store_id} onChange={this.handleChange} className="form-control" id="txtStoreId" placeholder="Store ID" disabled={true} />
+                                                                <a className="btn btn-primary" id="btn-chat" data-toggle="modal" data-target="#myModalStore">
+                                                                    <i className="fa fa-user-md"></i>
+                                                                </a>
+                                                            </span>
                                                         </div>
-                                                        <div className="col-md-5">
-                                                            <div className="btn-header transparent pull-right">
-                                                                <button className="btn btn-primary btn-default">
-                                                                    <i className="fa  fa-search"></i> Search
+                                                        <span className="text-danger">{errorstore_id}</span>
+                                                    </div>
+                                                </div>
+                                                <div className="col-md-4">
+                                                    <div className="col-md-4 control-label"><label >Store Name</label><span class="text-danger">*</span></div>
+                                                    <div className="col-md-7">
+                                                        <input type="text" name="store_name" value={store_name} onChange={this.handleChange} className="form-control" placeholder="Store Name" disabled={true} />
+                                                    </div>
+                                                </div>
+                                                <div className="col-md-4">
+                                                    <div className="col-md-4 control-label"><label >Diff More than</label><span class="text-danger">*</span></div>
+                                                    <div className="col-md-7">
+                                                        <input type="number" name="diff_more_than" value={diff_more_than} onChange={this.handleChange} className="form-control" placeholder="Diff More than" />
+                                                        <span className="text-danger">{errordiff_more_than}</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div className="form-group">
+                                                <div className="col-md-4">
+                                                    <div className="col-md-4 control-label"><label > Year</label><span class="text-danger">*</span></div>
+                                                    <div className="col-md-7">
+                                                        {optionyear &&
+                                                            <Select options={optionyear} placeholder='Year' name="year" value={year} onChange={this.handleChangesYear} />
+                                                        }
+                                                        <span className="text-danger">{erroryear}</span>
+                                                    </div>
+                                                </div>
+                                                <div className="col-md-4">
+                                                    <div className="col-md-4 control-label"><label >Month</label><span class="text-danger">*</span></div>
+                                                    <div className="col-md-7">
+                                                        {DropdownMonth &&
+                                                            <Select options={DropdownMonth} placeholder='Month' name="month" value={month} onChange={this.handleChangesMonth} />
+                                                        }
+                                                        <span className="text-danger">{errormonth}</span>
+                                                    </div>
+                                                </div>
+                                                <div className="col-md-4">
+                                                    <div className="col-md-4 control-label"><label >Period</label><span class="text-danger">*</span></div>
+                                                    <div className="col-md-7">
+                                                        <input type="text" name="period" value={period} onChange={this.handleChange} className="form-control" placeholder="Period" disabled={true} />
+                                                        <span className="text-danger">{errorperiod}</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div className="row">
+                                                <div className="col-md-4">
+                                                </div>
+                                                <div className="col-md-4">
+                                                </div>
+                                                <div className="col-md-4">
+                                                    <div className="col-md-4">
+                                                    </div>
+                                                    <div className="col-md-7">
+                                                        <div className="btn-header transparent pull-right">
+                                                            <button className="btn btn-primary btn-default">
+                                                                <i className="fa  fa-search"></i> Search
                                                                 </button>
-                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
-                                            </fieldset>
+                                            </div>
                                         </div>
                                     </form>
                                 </div>

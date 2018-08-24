@@ -30,6 +30,8 @@ const routes = {
 
     require('./routes/sdc/accountcodeforinventory').default,
     require('./routes/sdc/endinginventory').default,
+
+    require('./routes/sdc/steampinventory').default,
    
     
     //Report
