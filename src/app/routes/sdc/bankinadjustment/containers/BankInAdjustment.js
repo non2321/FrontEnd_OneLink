@@ -8,6 +8,9 @@ import dateFormat from 'dateformat';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import 'react-tabs/style/react-tabs.css';
 
+import Select from 'react-select'
+import 'react-select/dist/react-select.css'
+
 import { userAuth } from '../../../../actions/auth';
 import { financialActions } from '../../../../actions/sdc'
 import { alertActions } from '../../../../actions/alert/alert.actions';
@@ -376,6 +379,7 @@ class BankInAdjustment extends React.Component {
 
         const { dispatch } = this.props
         const { gldoc_type, glledger_type, glfrom_date, glto_date, glfrom_store, glto_store, screen_id } = this.state
+        const { optionstore } = this.state
 
         this.setState({
             errorgldoc_type: (gldoc_type) ? '' : 'The doc type is required',
@@ -405,6 +409,36 @@ class BankInAdjustment extends React.Component {
         }
     }
 
+    handleChangesGLFromStore = (glfrom_store) => {
+        this.setState({
+            glfrom_store: (glfrom_store == null) ? '' : glfrom_store, glto_store: '',
+            glto_store: (glfrom_store == null) ? '' : glfrom_store
+        });
+    }
+
+    handleChangesGLToStore = (glto_store) => {
+        this.setState({ glto_store: (glto_store == null) ? '' : glto_store });
+    }
+
+    handleGenGL = () => {
+        this.setState({
+            gldoc_type: '',
+            glledger_type: '',
+            glfrom_date: '',
+            glto_date: '',
+            glfrom_store: '',
+            glto_store: ''
+        })
+    }
+
+    handleImport = () => {
+        this.setState({
+            filename: '',
+            obj: null ,
+            upload: null
+        })
+    }
+
 
     componentDidMount() {
         let self = this
@@ -426,10 +460,19 @@ class BankInAdjustment extends React.Component {
                     return data
                 });
         }, 600)
+
+        let apiRequest3 = setTimeout(function () {
+            fetch(`${PathBackEnd}/api/report/storeall`)
+                .then(response => response.json())
+                .then(data => {
+                    self.setState({ optionstore: data })
+                    return data
+                });
+        }, 850)
     }
 
     render() {
-        const { store_id, store_id_temp, store_name, datefrom, dateto, daysOfStore, submitted, edit } = this.state
+        const { store_id, store_id_temp, store_name, datefrom, dateto, daysOfStore, submitted, edit, optionstore } = this.state
         const { errorstore_id, errordatefrom, errordateto } = this.state
         const { gldoc_type, glledger_type, glfrom_date, glto_date, glfrom_store, glto_store, glsubmitted } = this.state
         const { errorgldoc_type, errorglledger_type, errorglfrom_date, errorglto_date, errorglfrom_store, errorglto_store } = this.state
@@ -447,9 +490,9 @@ class BankInAdjustment extends React.Component {
                                 <header>
                                     <h2>{screen_name}</h2>
                                     {modify && modify.can_edit == "Y" && <div className="jarviswidget-ctrls" >
-                                        <a style={{ "padding-left": "10px", "padding-right": "10px" }} title="Import" className="button-icon form-group" data-toggle="modal" data-target="#myModalUpload">
+                                        <a style={{ "padding-left": "10px", "padding-right": "10px" }} onClick={this.handleImport} title="Import" className="button-icon form-group" data-toggle="modal" data-target="#myModalUpload">
                                             <span > Import</span></a>
-                                        <a style={{ "padding-left": "10px", "padding-right": "10px" }} title="Gen GL To E1" className="button-icon form-group" data-toggle="modal" data-target="#myModalGL">
+                                        <a style={{ "padding-left": "10px", "padding-right": "10px" }} onClick={this.handleGenGL} title="Gen GL To E1" className="button-icon form-group" data-toggle="modal" data-target="#myModalGL">
                                             <span > Gen GL To E1</span></a>
                                     </div>
                                     }
@@ -518,7 +561,7 @@ class BankInAdjustment extends React.Component {
                                             </fieldset>
                                         </div>
                                         {submitted &&
-                                            <div className="widget-body no-padding">                                             
+                                            <div className="widget-body no-padding">
                                                 <hr />
                                                 <Tabs selectedIndex={this.state.tabIndex} onSelect={tabIndex => this.setState({ tabIndex, edit: false })}>
                                                     <TabList>
@@ -819,7 +862,7 @@ class BankInAdjustment extends React.Component {
                             id="myModalGL" tabIndex="-1" role="dialog" aria-labelledby="myModalLabel"
                             aria-hidden="true">
                             <form id="pop-gl" >
-                                <div className="modal-dialog">
+                                <div className="modal-dialog modal-lg">
                                     <div className="modal-content">
                                         <div className="modal-header">
                                             <button type="button" className="close" data-dismiss="modal" aria-hidden="true">
@@ -867,14 +910,20 @@ class BankInAdjustment extends React.Component {
                                                     <div className="col-md-6 form-group">
                                                         <div className="col-md-5 control-label"><label > From Store</label><span class="text-danger">*</span></div>
                                                         <div className="col-md-7">
-                                                            <input type="text" name="glfrom_store" value={glfrom_store} onChange={this.handleChange} className="form-control" placeholder="From Store" />
+                                                            {optionstore &&
+                                                                <Select options={optionstore} placeholder='Store' name="glfrom_store" value={glfrom_store} onChange={this.handleChangesGLFromStore} />
+                                                            }
+                                                            {/* <input type="text" name="glfrom_store" value={glfrom_store} onChange={this.handleChange} className="form-control" placeholder="From Store" /> */}
                                                             <span className="text-danger">{errorglfrom_store}</span>
                                                         </div>
                                                     </div>
                                                     <div className="col-md-6 form-group">
                                                         <div className="col-md-5 control-label"><label > To Store</label><span class="text-danger">*</span></div>
                                                         <div className="col-md-7">
-                                                            <input type="text" name="glto_store" value={glto_store} onChange={this.handleChange} className="form-control" placeholder="To Store" />
+                                                            {optionstore &&
+                                                                <Select options={optionstore.filter((option) => { return option.value >= parseInt(glfrom_store.value) })} disabled={!glfrom_store} placeholder='To Store' name="glto_store" value={glto_store} onChange={this.handleChangesGLToStore} />
+                                                            }
+                                                            {/* <input type="text" name="glto_store" value={glto_store} onChange={this.handleChange} className="form-control" placeholder="To Store" /> */}
                                                             <span className="text-danger">{errorglto_store}</span>
                                                         </div>
                                                     </div>
