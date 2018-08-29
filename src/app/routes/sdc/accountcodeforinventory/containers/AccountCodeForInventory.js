@@ -174,7 +174,6 @@ class AccountCodeForInventory extends React.Component {
                             return '<span data-toggle="tooltip" title="' + data + '" class="tooltiptext">' + datasub + '</span>';
                           }
                         },
-
                         {
                           searchable: false,
                           visible: (modify.can_edit == "Y" || modify.can_delete == "Y") ? true : false,

@@ -29,8 +29,8 @@ function loadpage(prm) {
                     }       
                 },
                 error => { 
-                    dispatch(failure(error));                   
-                    dispatch(alertActions.error(error));                  
+                    // dispatch(failure(error));                   
+                    // dispatch(alertActions.error(error));                  
                 }
             );
     }

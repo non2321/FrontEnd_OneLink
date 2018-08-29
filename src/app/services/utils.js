@@ -11,6 +11,6 @@ function convertdateformat(prm) {
 
 function convertdateformatString(prm) {
     let data = prm.split("/")
-    let dt = `${data[2]}/${data[1]}/${data[0]}`
+    let dt = `${data[2]}-${data[1]}-${data[0]}`
     return dt
 }

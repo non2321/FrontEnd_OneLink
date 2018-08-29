@@ -93,7 +93,7 @@
             },
             {
               "title": "Receipts",
-              "route": "/views/forum-post",
+              "route": "/SDC/Receipts",
               "comment": "Receipts",
               "screen_id": "S0012"
             },
@@ -111,7 +111,7 @@
             },
             {
               "title": "Unit Cost",
-              "route": "/views/forum-post",
+              "route": "/SDC/ImportToJDE",
               "comment": "Unit Cost",
               "screen_id": "S0015"
             },
