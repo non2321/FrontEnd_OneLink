@@ -93,7 +93,7 @@ export default class UiDatepicker extends React.Component {
 
     return (
 
-      <label className="input input-group date" >
+      <label className="input input-group date" style={{"margin-bottom": "0px"}}>
         <input type="text" {...props} ref="input" className="form-control" autoComplete="off" />
         <span className="input-group-addon">
           <span className="icon-append fa fa-calendar"></span>
