@@ -400,8 +400,7 @@ class BankInAdjustment extends React.Component {
                 glfrom_store: glfrom_store.value.toString(),
                 glto_store: glto_store.value.toString(),
                 screen_id: screen_id
-            }
-            console.log(prm)
+            }          
             dispatch(financialActions.glprocessbankinadjustment(prm));
 
             this.setState({
