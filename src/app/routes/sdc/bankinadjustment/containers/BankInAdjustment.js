@@ -397,10 +397,11 @@ class BankInAdjustment extends React.Component {
                 glledger_type: glledger_type,
                 glfrom_date: glfrom_date,
                 glto_date: glto_date,
-                glfrom_store: glfrom_store,
-                glto_store: glto_store,
+                glfrom_store: glfrom_store.value.toString(),
+                glto_store: glto_store.value.toString(),
                 screen_id: screen_id
             }
+            console.log(prm)
             dispatch(financialActions.glprocessbankinadjustment(prm));
 
             this.setState({
@@ -911,7 +912,7 @@ class BankInAdjustment extends React.Component {
                                                         <div className="col-md-5 control-label"><label > From Store</label><span class="text-danger">*</span></div>
                                                         <div className="col-md-7">
                                                             {optionstore &&
-                                                                <Select options={optionstore} placeholder='Store' name="glfrom_store" value={glfrom_store} onChange={this.handleChangesGLFromStore} />
+                                                                <Select options={optionstore} placeholder='From Store' name="glfrom_store" value={glfrom_store} onChange={this.handleChangesGLFromStore} />
                                                             }
                                                             {/* <input type="text" name="glfrom_store" value={glfrom_store} onChange={this.handleChange} className="form-control" placeholder="From Store" /> */}
                                                             <span className="text-danger">{errorglfrom_store}</span>

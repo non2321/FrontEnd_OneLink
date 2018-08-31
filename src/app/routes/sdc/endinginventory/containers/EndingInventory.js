@@ -9,12 +9,14 @@ import PopupStore from '../../../../components/tables-popup/PopupStore'
 
 import { ScreenIDEndingInventory, PathBackEnd, DropdownMonth } from '../../../../../../settings'
 
+import DatatableEndingInventory from '../../../../components/tables/DatatableEndingInventory'
 import Select from 'react-select'
 import 'react-select/dist/react-select.css'
 
 class EndingInventory extends React.Component {
     constructor(props) {
         super(props)
+        const self = this
 
         if (this.state === undefined) {
             const prm = {
@@ -78,15 +80,49 @@ class EndingInventory extends React.Component {
     }
 
     handleChangesMonth = (month) => {
+        const { year } = this.state
+        const self = this
+
         this.setState({
             month: (month == null) ? '' : month
         })
+        if (month && year) {
+            const prm_year = (year.value) ? year.value : year
+            const prm_month = (month.value) ? month.value : month
+
+            const apiRequest = setTimeout(function () {
+                fetch(`${PathBackEnd}/api/endinginventory/getperiod/${prm_year}/${prm_month}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        self.setState({ period: data[0].value })
+                        return data
+                    });
+            }, 200)
+        }
+
     }
 
     handleChangesYear = (year) => {
+        const { month } = this.state
+        const self = this
+
         this.setState({
             year: (year == null) ? '' : year
         })
+
+        if (month && year) {
+            const prm_year = (year.value) ? year.value : year
+            const prm_month = (month.value) ? month.value : month
+
+            const apiRequest = setTimeout(function () {
+                fetch(`${PathBackEnd}/api/endinginventory/getperiod/${prm_year}/${prm_month}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        self.setState({ period: data[0].value })
+                        return data
+                    });
+            }, 200)
+        }
     }
 
     handleSearchSubmit(e) {
@@ -96,25 +132,52 @@ class EndingInventory extends React.Component {
 
         this.setState({
             errorstore_id: (store_id) ? '' : 'The store id is required',
-            errordiff_more_than: (diff_more_than) ? '' : 'The diif more than is required',
+            // errordiff_more_than: (diff_more_than) ? '' : 'The diif more than is required',
             erroryear: (year) ? '' : 'The year is required',
             errormonth: (month) ? '' : 'The month is required',
             errorperiod: (period) ? '' : 'The period is required',
             submitted: false
         })
 
-        if (stamp, store_id, diff_more_than, year, month, period) {
-            setTimeout(function () {
-                self.setState({ submitted: true })
+        if (stamp, store_id, year, month, period) {
+            setTimeout(() => {
+                self.setState({
+                    datastamp: stamp,
+                    datastore_id: store_id,
+                    datadiff_more_than: (diff_more_than) ? diff_more_than : 0,
+                    dataperiod: period,
+                    submitted: true
+                })
             }, 500)
-        }        
+        }
+    }
+
+    componentDidMount() {
+        const { year, month } = this.state
+        const self = this
+
+        if (month && year) {
+
+            const prm_year = (year.value) ? year.value : year
+            const prm_month = (month.value) ? month.value : month
+            const apiRequest = setTimeout(function () {
+                fetch(`${PathBackEnd}/api/endinginventory/getperiod/${prm_year}/${prm_month}`)
+                    .then(response => response.json())
+                    .then(data => {                       
+                        self.setState({ period: data[0].value })
+                        return data
+                    });
+            }, 300)
+        }
     }
 
     render() {
         const { errorstore_id, errordiff_more_than, erroryear, errormonth, errorperiod } = this.state
-        const { store_id, store_name, stamp, diff_more_than, year, month, period, optionyear } = this.state
+        const { store_id, store_name, stamp, diff_more_than, year, month, period, optionyear, submitted } = this.state
+        const { datastamp, datastore_id, datadiff_more_than, dataperiod } = this.state
         const { modify, screen_name } = this.props;
         const seft = this
+
 
         return (
             <div id="content">
@@ -227,6 +290,99 @@ class EndingInventory extends React.Component {
                                             </div>
                                         </div>
                                     </form>
+                                    {submitted && 
+                                        <div className="widget-body no-padding">
+                                            <hr />
+                                            {datastamp == 'option1' &&
+                                                <DatatableEndingInventory
+                                                    options={{
+                                                        colReorder: true,
+                                                        ajax: `${PathBackEnd}/api/endinginventory/${datastamp}/${datastore_id}/${datadiff_more_than}/${period}`,
+                                                        columns: [{ data: "STORE_ID" }, { data: "store_name" }, { data: "ACC" }, { data: "STR" }],
+                                                        buttons: [
+                                                        ],
+                                                    }}
+                                                    paginationLength={true} className="table table-striped table-bordered table-hover"
+                                                    width="100%">
+                                                    <thead>
+                                                        <tr>
+                                                            <th data-class="expand"><i
+                                                                className="text-muted hidden-md hidden-sm hidden-xs" />
+                                                                Store
+                                                            </th>
+                                                            <th data-hide="user"><i
+                                                                className="text-muted hidden-md hidden-sm hidden-xs" />
+                                                                Store Name
+                                                            </th>
+                                                            <th data-hide="user"><i
+                                                                className="text-muted hidden-md hidden-sm hidden-xs" />
+                                                                Acc
+                                                            </th>
+                                                            <th data-hide="user"><i
+                                                                className="text-muted hidden-md hidden-sm hidden-xs" />
+                                                                Str
+                                                            </th>
+                                                        </tr>
+                                                    </thead>
+                                                </DatatableEndingInventory>
+                                            }
+                                            {datastamp == 'option2' &&
+                                                <DatatableEndingInventory
+                                                    options={{
+                                                        colReorder: true,
+                                                        ajax: `${PathBackEnd}/api/endinginventory/${datastamp}/${datastore_id}/${datadiff_more_than}/${period}`,
+                                                        columns: [{ data: "store" },
+                                                        { data: "store_name" }, { data: "stock_num" }, { data: "inv_item" }, { data: "inv_item_desc" }, { data: "uom" }, { data: "s_p_ending_inv" }, { data: "p_ending_inv" }, { data: "diff" }
+                                                        ],
+                                                        buttons: [
+                                                        ],
+                                                    }}
+                                                    paginationLength={true} className="table table-striped table-bordered table-hover"
+                                                    width="100%">
+                                                    <thead>
+                                                        <tr>
+                                                            <th data-class="expand"><i
+                                                                className="text-muted hidden-md hidden-sm hidden-xs" />
+                                                                Store
+                                                            </th>
+                                                            <th data-hide="user"><i
+                                                                className="text-muted hidden-md hidden-sm hidden-xs" />
+                                                                Store Name
+                                                            </th>
+                                                            <th data-hide="user"><i
+                                                                className="text-muted hidden-md hidden-sm hidden-xs" />
+                                                                Stock No.
+                                                            </th>
+                                                            <th data-hide="user"><i
+                                                                className="text-muted hidden-md hidden-sm hidden-xs" />
+                                                                Inv Item
+                                                            </th>
+                                                            <th data-hide="user"><i
+                                                                className="text-muted hidden-md hidden-sm hidden-xs" />
+                                                                Description
+                                                            </th>
+                                                            <th data-hide="user"><i
+                                                                className="text-muted hidden-md hidden-sm hidden-xs" />
+                                                                UOM
+                                                            </th>
+                                                            <th data-hide="user"><i
+                                                                className="text-muted hidden-md hidden-sm hidden-xs" />
+                                                                Store End Inv
+                                                            </th>
+                                                            <th data-hide="user"><i
+                                                                className="text-muted hidden-md hidden-sm hidden-xs" />
+                                                                Acc End Inv
+                                                            </th>
+                                                            <th data-hide="user"><i
+                                                                className="text-muted hidden-md hidden-sm hidden-xs" />
+                                                                Absolute Diff
+                                                            </th>
+                                                        </tr>
+                                                    </thead>
+                                                </DatatableEndingInventory>
+                                            }
+                                        </div>
+                                    }                                    
                                 </div>
                                 }
                             </JarvisWidget>
@@ -289,7 +445,6 @@ class EndingInventory extends React.Component {
         )
     }
 }
-
 
 function mapStateToProps(state) {
     const { loadpage } = state;
