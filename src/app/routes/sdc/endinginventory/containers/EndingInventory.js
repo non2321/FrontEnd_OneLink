@@ -80,11 +80,12 @@ class EndingInventory extends React.Component {
     }
 
     handleChangesMonth = (month) => {
-        const { year } = this.state
+        const { year, period } = this.state
         const self = this
 
         this.setState({
-            month: (month == null) ? '' : month
+            month: (month == null) ? '' : month,
+            period: (month == null) ? '': period
         })
         if (month && year) {
             const prm_year = (year.value) ? year.value : year
@@ -103,11 +104,12 @@ class EndingInventory extends React.Component {
     }
 
     handleChangesYear = (year) => {
-        const { month } = this.state
+        const { month, period } = this.state
         const self = this
 
         this.setState({
-            year: (year == null) ? '' : year
+            year: (year == null) ? '' : year,
+            period: (year == null) ? '': period
         })
 
         if (month && year) {
