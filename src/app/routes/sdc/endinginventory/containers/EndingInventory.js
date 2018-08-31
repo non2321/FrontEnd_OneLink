@@ -167,7 +167,7 @@ class EndingInventory extends React.Component {
                         self.setState({ period: data[0].value })
                         return data
                     });
-            }, 300)
+            }, 500)
         }
     }
 
@@ -290,7 +290,7 @@ class EndingInventory extends React.Component {
                                             </div>
                                         </div>
                                     </form>
-                                    {submitted && 
+                                    {submitted && datastore_id &&
                                         <div className="widget-body no-padding">
                                             <hr />
                                             {datastamp == 'option1' &&
