@@ -105,7 +105,7 @@
             },
             {
               "title": "Transfer Inventory",
-              "route": "/views/forum-post",
+              "route": "/SDC/TransferInventory",
               "comment": "Transfer Inventory",
               "screen_id": "S0014"
             },

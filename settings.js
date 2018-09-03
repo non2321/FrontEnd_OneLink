@@ -20,6 +20,7 @@ exports.ScreenIDAccountCodeForInventory = 'S0010'
 exports.ScreenIDEndingInventory = 'S0011'
 exports.ScreenIDReceipts = 'S0012'
 
+exports.ScreenIDTransferInventory = 'S0014'
 exports.ScreenIDImportToJDE = 'S0015'
 exports.ScreenIDSteampInventory = 'S0016'
 

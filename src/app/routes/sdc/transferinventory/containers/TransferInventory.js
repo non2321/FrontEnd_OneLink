@@ -6,42 +6,31 @@ import { userAuth } from '../../../../actions/auth'
 
 import { Stats, BigBreadcrumbs, WidgetGrid, JarvisWidget } from '../../../../components'
 import PopupStore from '../../../../components/tables-popup/PopupStore'
+import UiDatepicker from '../../../../components/forms/inputs/UiDatepicker'
 
-import { ScreenIDEndingInventory, PathBackEnd, DropdownMonth } from '../../../../../../settings'
+import { utils } from '../../../../services'
 
-import DatatableEndingInventory from '../../../../components/tables/DatatableEndingInventory'
-import Select from 'react-select'
-import 'react-select/dist/react-select.css'
+import { ScreenIDTransferInventory, PathBackEnd, DropdownMonth } from '../../../../../../settings'
 
-class EndingInventory extends React.Component {
+import DatatableTransferInventory from '../../../../components/tables/DatatableTransferInventory'
+
+
+class TransferInventory extends React.Component {
     constructor(props) {
         super(props)
         const self = this
 
         if (this.state === undefined) {
             const prm = {
-                screen_id: ScreenIDEndingInventory,
+                screen_id: ScreenIDTransferInventory,
             }
             this.props.dispatch(userAuth.loadpage(prm))
         }
 
-        const datenow = new Date()
-        const monthnow = datenow.getMonth()
-        const yearnow = datenow.getFullYear()
-        let optionyear = []
-        const yearago = yearnow - 10
-        for (let year = yearago; year <= yearnow; year++) {
-            const item = { "value": year, "label": year }
-            optionyear.push(item)
-        }
-
         this.state = {
             stamp: 'option1',
-            month: monthnow,
-            year: yearnow,
-            optionyear: optionyear.sort((a, b) => b.value - a.value),
             submitted: false,
-            screen_id: ScreenIDEndingInventory
+            screen_id: ScreenIDTransferInventory
         }
 
         this.handleChange = this.handleChange.bind(this)
@@ -49,7 +38,8 @@ class EndingInventory extends React.Component {
         this.handleData = this.handleData.bind(this)
         this.handlePopSubmit = this.handlePopSubmit.bind(this)
 
-        this.handleChangesMonth = this.handleChangesMonth.bind(this)
+        this.handleDateFrom = this.handleDateFrom.bind(this)
+        this.handleDateTo = this.handleDateTo.bind(this)
 
         this.onStampChanged = this.onStampChanged.bind(this)
         this.handleSearchSubmit = this.handleSearchSubmit.bind(this)
@@ -79,75 +69,37 @@ class EndingInventory extends React.Component {
         });
     }
 
-    handleChangesMonth = (month) => {
-        const { year, period } = this.state
-        const self = this
-
+    handleDateFrom(data) {
         this.setState({
-            month: (month == null) ? '' : month,
-            period: (month == null) ? '': period
-        })
-        if (month && year) {
-            const prm_year = (year.value) ? year.value : year
-            const prm_month = (month.value) ? month.value : month
-
-            const apiRequest = setTimeout(function () {
-                fetch(`${PathBackEnd}/api/endinginventory/getperiod/${prm_year}/${prm_month}`)
-                    .then(response => response.json())
-                    .then(data => {
-                        self.setState({ period: data[0].value })
-                        return data
-                    });
-            }, 200)
-        }
-
+            datefrom: data, dateto: data
+        });
     }
 
-    handleChangesYear = (year) => {
-        const { month, period } = this.state
-        const self = this
-        
+    handleDateTo(data) {
         this.setState({
-            year: (year == null) ? '' : year,
-            period: (year == null) ? '': period
-        })
-
-        if (month && year) {
-            const prm_year = (year.value) ? year.value : year
-            const prm_month = (month.value) ? month.value : month
-
-            const apiRequest = setTimeout(function () {
-                fetch(`${PathBackEnd}/api/endinginventory/getperiod/${prm_year}/${prm_month}`)
-                    .then(response => response.json())
-                    .then(data => {
-                        self.setState({ period: data[0].value })
-                        return data
-                    });
-            }, 200)
-        }
+            dateto: data
+        });
     }
+
+
 
     handleSearchSubmit(e) {
         e.preventDefault()
         const self = this
-        const { store_id, stamp, diff_more_than, year, month, period } = this.state
+        const { store_id, stamp, datefrom, dateto } = this.state
 
         this.setState({
-            errorstore_id: (store_id) ? '' : 'The store id is required',
-            // errordiff_more_than: (diff_more_than) ? '' : 'The diif more than is required',
-            erroryear: (year) ? '' : 'The year is required',
-            errormonth: (month) ? '' : 'The month is required',
-            errorperiod: (period) ? '' : 'The period is required',
+            errorstore_id: (store_id) ? '' : 'The store id is required',   
             submitted: false
         })
 
-        if (stamp, store_id, year, month, period) {
+        if (stamp, store_id) {
             setTimeout(() => {
                 self.setState({
                     datastamp: stamp,
                     datastore_id: store_id,
-                    datadiff_more_than: (diff_more_than) ? diff_more_than : 0,
-                    dataperiod: period,
+                    datadatefrom: (datefrom)? utils.convertdateformatString(datefrom): undefined,
+                    datadateto: (dateto)?utils.convertdateformatString(dateto): undefined,
                     submitted: true
                 })
             }, 500)
@@ -155,32 +107,17 @@ class EndingInventory extends React.Component {
     }
 
     componentDidMount() {
-        const { year, month } = this.state
-        const self = this
 
-        if (month && year) {
-
-            const prm_year = (year.value) ? year.value : year
-            const prm_month = (month.value) ? month.value : month
-            const apiRequest = setTimeout(function () {
-                fetch(`${PathBackEnd}/api/endinginventory/getperiod/${prm_year}/${prm_month}`)
-                    .then(response => response.json())
-                    .then(data => {                       
-                        self.setState({ period: data[0].value })
-                        return data
-                    });
-            }, 500)
-        }
     }
 
     render() {
-        const { errorstore_id, errordiff_more_than, erroryear, errormonth, errorperiod } = this.state
-        const { store_id, store_name, stamp, diff_more_than, year, month, period, optionyear, submitted } = this.state
-        const { datastamp, datastore_id, datadiff_more_than, dataperiod } = this.state
+        const { errorstore_id, errordatefrom, errordateto } = this.state
+        const { store_id, store_name, stamp, datefrom, dateto, submitted  } = this.state
+        const { datastamp, datastore_id, datadatefrom, datadateto } = this.state
         const { modify, screen_name } = this.props;
         const seft = this
 
-
+        console.log(`${PathBackEnd}/api/transferinventory/${datastamp}/${datastore_id}/${datadatefrom}/${datadateto}`)
         return (
             <div id="content">
                 <WidgetGrid>
@@ -193,34 +130,29 @@ class EndingInventory extends React.Component {
                                     <form onSubmit={this.handleSearchSubmit}>
                                         <div className="form-horizontal">
                                             <div className="form-group">
-                                                <div className="col-md-4 ">
+                                                <div className="col-md-6 ">
                                                     <div className="col-md-4 control-label"><label > Type</label><span class="text-danger">*</span></div>
                                                     <div className="col-md-4 smart-form">
                                                         <label className="radio align-top">
                                                             <input type="radio" name="radio-inline" value="option1" checked={stamp === 'option1'} onChange={this.onStampChanged} />
-                                                            <i />Summary</label>
+                                                            <i />Transfer Out</label>
                                                     </div>
                                                     <div className="col-md-4 smart-form ">
                                                         <label className="radio align-top">
                                                             <input type="radio" name="radio-inline" value="option2" checked={stamp === 'option2'} onChange={this.onStampChanged} />
-                                                            <i />Detail</label>
+                                                            <i />Transfer In</label>
                                                     </div>
                                                 </div>
-                                                <div className="col-md-4">
+                                                <div className="col-md-6">
                                                     <div className="col-md-4 control-label"></div>
-                                                    <div className="col-md-7">
-                                                    </div>
-                                                </div>
-                                                <div className="col-md-4">
-                                                    <div className="col-md-4 control-label"></div>
-                                                    <div className="col-md-7">
+                                                    <div className="col-md-6">
                                                     </div>
                                                 </div>
                                             </div>
                                             <div className="form-group">
-                                                <div className="col-md-4">
+                                                <div className="col-md-6">
                                                     <div className="col-md-4 control-label"><label > Store ID</label><span class="text-danger">*</span></div>
-                                                    <div className="col-md-6">
+                                                    <div className="col-md-4">
                                                         <div class="input-group">
                                                             <span className="input-group-btn">
                                                                 <input type="text" name="store_id" value={store_id} onChange={this.handleChange} className="form-control" id="txtStoreId" placeholder="Store ID" disabled={true} />
@@ -232,56 +164,42 @@ class EndingInventory extends React.Component {
                                                         <span className="text-danger">{errorstore_id}</span>
                                                     </div>
                                                 </div>
-                                                <div className="col-md-4">
-                                                    <div className="col-md-4 control-label"><label >Store Name</label><span class="text-danger">*</span></div>
-                                                    <div className="col-md-7">
-                                                        <input type="text" name="store_name" value={store_name} onChange={this.handleChange} className="form-control" placeholder="Store Name" disabled={true} />
-                                                    </div>
-                                                </div>
-                                                <div className="col-md-4">
-                                                    <div className="col-md-4 control-label"><label >Diff More than</label><span class="text-danger">*</span></div>
-                                                    <div className="col-md-7">
-                                                        <input type="number" name="diff_more_than" value={diff_more_than} onChange={this.handleChange} className="form-control" placeholder="Diff More than" />
-                                                        <span className="text-danger">{errordiff_more_than}</span>
+                                                <div className="col-md-6">
+                                                    <div className="col-md-4 control-label"><label >Transfer Data From</label><span class="text-danger">*</span></div>
+                                                    <div className="col-md-6">
+                                                        <UiDatepicker type="text" name="datefrom" id="datefrom" changeMonth="true" changeYear="true" dateFormat="dd/mm/yy"
+                                                            addday="120" datefrom="#datefrom" dateto="#dateto" onInputChange={this.handleDateFrom} value={datefrom}
+                                                            placeholder="Start date" />
+                                                        <span className="text-danger">{errordatefrom}</span>
                                                     </div>
                                                 </div>
                                             </div>
                                             <div className="form-group">
-                                                <div className="col-md-4">
-                                                    <div className="col-md-4 control-label"><label > Year</label><span class="text-danger">*</span></div>
-                                                    <div className="col-md-7">
-                                                        {optionyear &&
-                                                            <Select options={optionyear} placeholder='Year' name="year" value={year} onChange={this.handleChangesYear} />
-                                                        }
-                                                        <span className="text-danger">{erroryear}</span>
+                                                <div className="col-md-6">
+                                                    <div className="col-md-4 control-label"><label > Store Name</label><span class="text-danger">*</span></div>
+                                                    <div className="col-md-6">
+                                                        <input type="text" name="store_name" value={store_name} onChange={this.handleChange} className="form-control" placeholder="Store Name" disabled={true} />
                                                     </div>
                                                 </div>
-                                                <div className="col-md-4">
-                                                    <div className="col-md-4 control-label"><label >Month</label><span class="text-danger">*</span></div>
-                                                    <div className="col-md-7">
-                                                        {DropdownMonth &&
-                                                            <Select options={DropdownMonth} placeholder='Month' name="month" value={month} onChange={this.handleChangesMonth} />
-                                                        }
-                                                        <span className="text-danger">{errormonth}</span>
-                                                    </div>
-                                                </div>
-                                                <div className="col-md-4">
-                                                    <div className="col-md-4 control-label"><label >Period</label><span class="text-danger">*</span></div>
-                                                    <div className="col-md-7">
-                                                        <input type="text" name="period" value={period} onChange={this.handleChange} className="form-control" placeholder="Period" disabled={true} />
-                                                        <span className="text-danger">{errorperiod}</span>
+                                                <div className="col-md-6">
+                                                    <div className="col-md-4 control-label"><label >Transfer Data To</label><span class="text-danger">*</span></div>
+                                                    <div className="col-md-6">
+                                                        <UiDatepicker type="text" name="dateto" id="dateto" changeMonth="true" changeYear="true" dateFormat="dd/mm/yy"
+                                                            onInputChange={this.handleDateTo} value={dateto} disabled={!dateto}
+                                                            placeholder="Finish date" />
+                                                        <span className="text-danger">{errordateto}</span>
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div className="row">
-                                                <div className="col-md-4">
-                                                </div>
-                                                <div className="col-md-4">
-                                                </div>
-                                                <div className="col-md-4">
-                                                    <div className="col-md-4">
+                                            <div className="form-group">
+                                                <div className="col-md-6">
+                                                    <div className="col-md-4 control-label"></div>
+                                                    <div className="col-md-6">
                                                     </div>
-                                                    <div className="col-md-7">
+                                                </div>
+                                                <div className="col-md-6">
+                                                    <div className="col-md-4 control-label"></div>
+                                                    <div className="col-md-6">
                                                         <div className="btn-header transparent pull-right">
                                                             <button className="btn btn-primary btn-default">
                                                                 <i className="fa  fa-search"></i> Search
@@ -289,18 +207,18 @@ class EndingInventory extends React.Component {
                                                         </div>
                                                     </div>
                                                 </div>
-                                            </div>
+                                            </div>                                            
                                         </div>
                                     </form>
                                     {submitted && datastore_id &&
                                         <div className="widget-body no-padding">
                                             <hr />
                                             {datastamp == 'option1' &&
-                                                <DatatableEndingInventory
+                                                <DatatableTransferInventory
                                                     options={{
                                                         colReorder: true,
-                                                        ajax: `${PathBackEnd}/api/endinginventory/${datastamp}/${datastore_id}/${datadiff_more_than}/${period}`,
-                                                        columns: [{ data: "STORE_ID" }, { data: "store_name" }, { data: "ACC" }, { data: "STR" }],
+                                                        ajax: `${PathBackEnd}/api/transferinventory/${datastamp}/${datastore_id}/${datadatefrom}/${datadateto}`,
+                                                        columns: [{ data: "STOCK_NUM" }, { data: "INV_ITEM_DESC" }, { data: "DESTINATION" }, { data: "COUNT_DESC" }, { data: "S_NUM_TRANSFERRED" }, { data: "NUM_TRANSFERRED" }, { data: "COST_PER_COUNT" }, { data: "TRANSFER_DATE" }],
                                                         buttons: [
                                                         ],
                                                     }}
@@ -309,82 +227,92 @@ class EndingInventory extends React.Component {
                                                     <thead>
                                                         <tr>
                                                             <th data-class="expand"><i
-                                                                className="text-muted hidden-md hidden-sm hidden-xs" />
-                                                                Store
-                                                            </th>
-                                                            <th data-hide="user"><i
-                                                                className="text-muted hidden-md hidden-sm hidden-xs" />
-                                                                Store Name
-                                                            </th>
-                                                            <th data-hide="user"><i
-                                                                className="text-muted hidden-md hidden-sm hidden-xs" />
-                                                                Acc
-                                                            </th>
-                                                            <th data-hide="user"><i
-                                                                className="text-muted hidden-md hidden-sm hidden-xs" />
-                                                                Str
-                                                            </th>
-                                                        </tr>
-                                                    </thead>
-                                                </DatatableEndingInventory>
-                                            }
-                                            {datastamp == 'option2' &&
-                                                <DatatableEndingInventory
-                                                    options={{
-                                                        colReorder: true,
-                                                        ajax: `${PathBackEnd}/api/endinginventory/${datastamp}/${datastore_id}/${datadiff_more_than}/${period}`,
-                                                        columns: [{ data: "store" },
-                                                        { data: "store_name" }, { data: "stock_num" }, { data: "inv_item" }, { data: "inv_item_desc" }, { data: "uom" }, { data: "s_p_ending_inv" }, { data: "p_ending_inv" }, { data: "diff" }
-                                                        ],
-                                                        buttons: [
-                                                        ],
-                                                    }}
-                                                    paginationLength={true} className="table table-striped table-bordered table-hover"
-                                                    width="100%">
-                                                    <thead>
-                                                        <tr>
-                                                            <th data-class="expand"><i
-                                                                className="text-muted hidden-md hidden-sm hidden-xs" />
-                                                                Store
-                                                            </th>
-                                                            <th data-hide="user"><i
-                                                                className="text-muted hidden-md hidden-sm hidden-xs" />
-                                                                Store Name
-                                                            </th>
-                                                            <th data-hide="user"><i
                                                                 className="text-muted hidden-md hidden-sm hidden-xs" />
                                                                 Stock No.
                                                             </th>
                                                             <th data-hide="user"><i
                                                                 className="text-muted hidden-md hidden-sm hidden-xs" />
-                                                                Inv Item
+                                                                Inv Item Description
                                                             </th>
                                                             <th data-hide="user"><i
                                                                 className="text-muted hidden-md hidden-sm hidden-xs" />
-                                                                Description
+                                                                Destination
                                                             </th>
                                                             <th data-hide="user"><i
                                                                 className="text-muted hidden-md hidden-sm hidden-xs" />
-                                                                UOM
+                                                                Uom
                                                             </th>
                                                             <th data-hide="user"><i
                                                                 className="text-muted hidden-md hidden-sm hidden-xs" />
-                                                                Store End Inv
+                                                                Store Qty
                                                             </th>
                                                             <th data-hide="user"><i
                                                                 className="text-muted hidden-md hidden-sm hidden-xs" />
-                                                                Acc End Inv
+                                                                Acc Qty
                                                             </th>
                                                             <th data-hide="user"><i
                                                                 className="text-muted hidden-md hidden-sm hidden-xs" />
-                                                                Absolute Diff
+                                                                Cost Per Count
+                                                            </th>
+                                                            <th data-hide="user"><i
+                                                                className="text-muted hidden-md hidden-sm hidden-xs" />
+                                                                Transfer Date
                                                             </th>
                                                         </tr>
                                                     </thead>
-                                                </DatatableEndingInventory>
+                                                </DatatableTransferInventory>
+                                            }
+                                            {datastamp == 'option2' &&
+                                                <DatatableTransferInventory
+                                                    options={{
+                                                        colReorder: true,
+                                                        ajax: `${PathBackEnd}/api/transferinventory/${datastamp}/${datastore_id}/${datadatefrom}/${datadateto}`,
+                                                        columns: [{ data: "STOCK_NUM" }, { data: "INV_ITEM_DESC" }, { data: "SOURCE" }, { data: "COUNT_DESC" }, { data: "S_NUM_TRANSFERRED" }, { data: "NUM_TRANSFERRED" }, { data: "COST_PER_COUNT" }, { data: "TRANSFER_DATE" }],
+                                                        buttons: [
+                                                        ],
+                                                    }}
+                                                    paginationLength={true} className="table table-striped table-bordered table-hover"
+                                                    width="100%">
+                                                    <thead>
+                                                        <tr>
+                                                        <th data-class="expand"><i
+                                                                className="text-muted hidden-md hidden-sm hidden-xs" />
+                                                                Stock No.
+                                                            </th>
+                                                            <th data-hide="user"><i
+                                                                className="text-muted hidden-md hidden-sm hidden-xs" />
+                                                                Inv Item Description
+                                                            </th>
+                                                            <th data-hide="user"><i
+                                                                className="text-muted hidden-md hidden-sm hidden-xs" />
+                                                                Source
+                                                            </th>
+                                                            <th data-hide="user"><i
+                                                                className="text-muted hidden-md hidden-sm hidden-xs" />
+                                                                Uom
+                                                            </th>
+                                                            <th data-hide="user"><i
+                                                                className="text-muted hidden-md hidden-sm hidden-xs" />
+                                                                Store Qty
+                                                            </th>
+                                                            <th data-hide="user"><i
+                                                                className="text-muted hidden-md hidden-sm hidden-xs" />
+                                                                Acc Qty
+                                                            </th>
+                                                            <th data-hide="user"><i
+                                                                className="text-muted hidden-md hidden-sm hidden-xs" />
+                                                                Cost Per Count
+                                                            </th>
+                                                            <th data-hide="user"><i
+                                                                className="text-muted hidden-md hidden-sm hidden-xs" />
+                                                                Transfer Date
+                                                            </th>
+                                                        </tr>
+                                                    </thead>
+                                                </DatatableTransferInventory>
                                             }
                                         </div>
-                                    }                                    
+                                    }
                                 </div>
                                 }
                             </JarvisWidget>
@@ -458,5 +386,5 @@ function mapStateToProps(state) {
     };
 }
 
-const connectedEndingInventory = connect(mapStateToProps)(EndingInventory);
-export default connectedEndingInventory
+const connectedTransferInventory = connect(mapStateToProps)(TransferInventory);
+export default connectedTransferInventory
