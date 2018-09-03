@@ -36,12 +36,12 @@ class SetupStore extends React.Component {
   constructor(props) {
     super(props)
 
-    if(this.state === undefined){
+    if (this.state === undefined) {
       const prm = {
         screen_id: ScreenIDSetupStore,
       }
       this.props.dispatch(userAuth.loadpage(prm))
-    }  
+    }
 
     this.state = {
       store_id: '',
@@ -51,7 +51,7 @@ class SetupStore extends React.Component {
       errorbank_code: '',
       submitted: false,
       screen_id: ScreenIDSetupStore
-    }    
+    }
 
     this.handleChange = this.handleChange.bind(this)
     this.handleAddSubmit = this.handleAddSubmit.bind(this)
@@ -201,9 +201,9 @@ class SetupStore extends React.Component {
                           </div>                           */}
                           <div className="col-md-4">
                             <label htmlFor="store_id"> Store ID</label>
-                            <div class="input-group">
-                              <span className="input-group-btn">
-                                <input type="text" name="store_id" value={store_id} onChange={this.handleChange} className="form-control" id="txtStoreId" placeholder="Store ID" disabled={true} />
+                            <div className="input-group">
+                              <input type="text" name="store_id" value={store_id} onChange={this.handleChange} className="form-control" id="txtStoreId" placeholder="Store ID" disabled={true} />
+                              <span class="input-group-btn">
                                 <a className="btn btn-primary" id="btn-chat" data-toggle="modal" data-target="#myModalStore">
                                   <i className="fa fa-user-md"></i>
                                 </a>

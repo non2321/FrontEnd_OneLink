@@ -89,7 +89,7 @@ class TransferInventory extends React.Component {
         const { store_id, stamp, datefrom, dateto } = this.state
 
         this.setState({
-            errorstore_id: (store_id) ? '' : 'The store id is required',   
+            errorstore_id: (store_id) ? '' : 'The store id is required',
             submitted: false
         })
 
@@ -98,8 +98,8 @@ class TransferInventory extends React.Component {
                 self.setState({
                     datastamp: stamp,
                     datastore_id: store_id,
-                    datadatefrom: (datefrom)? utils.convertdateformatString(datefrom): undefined,
-                    datadateto: (dateto)?utils.convertdateformatString(dateto): undefined,
+                    datadatefrom: (datefrom) ? utils.convertdateformatString(datefrom) : undefined,
+                    datadateto: (dateto) ? utils.convertdateformatString(dateto) : undefined,
                     submitted: true
                 })
             }, 500)
@@ -112,7 +112,7 @@ class TransferInventory extends React.Component {
 
     render() {
         const { errorstore_id, errordatefrom, errordateto } = this.state
-        const { store_id, store_name, stamp, datefrom, dateto, submitted  } = this.state
+        const { store_id, store_name, stamp, datefrom, dateto, submitted } = this.state
         const { datastamp, datastore_id, datadatefrom, datadateto } = this.state
         const { modify, screen_name } = this.props;
         const seft = this
@@ -152,15 +152,15 @@ class TransferInventory extends React.Component {
                                             <div className="form-group">
                                                 <div className="col-md-6">
                                                     <div className="col-md-4 control-label"><label > Store ID</label><span class="text-danger">*</span></div>
-                                                    <div className="col-md-4">
-                                                        <div class="input-group">
-                                                            <span className="input-group-btn">
-                                                                <input type="text" name="store_id" value={store_id} onChange={this.handleChange} className="form-control" id="txtStoreId" placeholder="Store ID" disabled={true} />
+                                                    <div className="col-md-4 ">
+                                                        <div className="input-group">
+                                                            <input type="text" name="store_id" value={store_id} onChange={this.handleChange} className="form-control" id="txtStoreId" placeholder="Store ID" disabled={true} />
+                                                            <span class="input-group-btn">
                                                                 <a className="btn btn-primary" id="btn-chat" data-toggle="modal" data-target="#myModalStore">
                                                                     <i className="fa fa-user-md"></i>
                                                                 </a>
                                                             </span>
-                                                        </div>
+                                                        </div>                                                       
                                                         <span className="text-danger">{errorstore_id}</span>
                                                     </div>
                                                 </div>
@@ -207,7 +207,7 @@ class TransferInventory extends React.Component {
                                                         </div>
                                                     </div>
                                                 </div>
-                                            </div>                                            
+                                            </div>
                                         </div>
                                     </form>
                                     {submitted && datastore_id &&
@@ -275,7 +275,7 @@ class TransferInventory extends React.Component {
                                                     width="100%">
                                                     <thead>
                                                         <tr>
-                                                        <th data-class="expand"><i
+                                                            <th data-class="expand"><i
                                                                 className="text-muted hidden-md hidden-sm hidden-xs" />
                                                                 Stock No.
                                                             </th>

@@ -101,7 +101,7 @@ class Receipts extends React.Component {
         const { store_id, store_name, datefrom, dateto, invoice_no, screen_id } = this.state
         const { datastore_id, datadatefrom, datadateto, datainvoice_no, submitted } = this.state
         const { errorstore_id, errordatefrom, errordateto, errorinvoice_no } = this.state
-        const { modify, screen_name } = this.props       
+        const { modify, screen_name } = this.props
         return (
             <div id="content">
                 <WidgetGrid>
@@ -118,9 +118,9 @@ class Receipts extends React.Component {
                                                     <div className="col-md-6 ">
                                                         <div className="col-md-3 control-label"><label > Store ID</label><span class="text-danger">*</span></div>
                                                         <div className="col-md-4">
-                                                            <div class="input-group">
-                                                                <span className="input-group-btn">
-                                                                    <input type="text" name="store_id" value={store_id} onChange={this.handleChange} className="form-control" id="txtStoreId" placeholder="Store ID" disabled={true} />
+                                                            <div className="input-group">
+                                                                <input type="text" name="store_id" value={store_id} onChange={this.handleChange} className="form-control" id="txtStoreId" placeholder="Store ID" disabled={true} />
+                                                                <span class="input-group-btn">
                                                                     <a className="btn btn-primary" id="btn-chat" data-toggle="modal" data-target="#myModalStore">
                                                                         <i className="fa fa-user-md"></i>
                                                                     </a>

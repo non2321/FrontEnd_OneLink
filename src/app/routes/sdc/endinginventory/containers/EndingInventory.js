@@ -85,7 +85,7 @@ class EndingInventory extends React.Component {
 
         this.setState({
             month: (month == null) ? '' : month,
-            period: (month == null) ? '': period
+            period: (month == null) ? '' : period
         })
         if (month && year) {
             const prm_year = (year.value) ? year.value : year
@@ -106,10 +106,10 @@ class EndingInventory extends React.Component {
     handleChangesYear = (year) => {
         const { month, period } = this.state
         const self = this
-        
+
         this.setState({
             year: (year == null) ? '' : year,
-            period: (year == null) ? '': period
+            period: (year == null) ? '' : period
         })
 
         if (month && year) {
@@ -165,7 +165,7 @@ class EndingInventory extends React.Component {
             const apiRequest = setTimeout(function () {
                 fetch(`${PathBackEnd}/api/endinginventory/getperiod/${prm_year}/${prm_month}`)
                     .then(response => response.json())
-                    .then(data => {                       
+                    .then(data => {
                         self.setState({ period: data[0].value })
                         return data
                     });
@@ -221,9 +221,9 @@ class EndingInventory extends React.Component {
                                                 <div className="col-md-4">
                                                     <div className="col-md-4 control-label"><label > Store ID</label><span class="text-danger">*</span></div>
                                                     <div className="col-md-6">
-                                                        <div class="input-group">
-                                                            <span className="input-group-btn">
-                                                                <input type="text" name="store_id" value={store_id} onChange={this.handleChange} className="form-control" id="txtStoreId" placeholder="Store ID" disabled={true} />
+                                                        <div className="input-group">
+                                                            <input type="text" name="store_id" value={store_id} onChange={this.handleChange} className="form-control" id="txtStoreId" placeholder="Store ID" disabled={true} />
+                                                            <span class="input-group-btn">
                                                                 <a className="btn btn-primary" id="btn-chat" data-toggle="modal" data-target="#myModalStore">
                                                                     <i className="fa fa-user-md"></i>
                                                                 </a>
@@ -384,7 +384,7 @@ class EndingInventory extends React.Component {
                                                 </DatatableEndingInventory>
                                             }
                                         </div>
-                                    }                                    
+                                    }
                                 </div>
                                 }
                             </JarvisWidget>
