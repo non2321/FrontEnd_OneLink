@@ -148,7 +148,7 @@ class SteampInventory extends React.Component {
                                                 <div className="col-md-6">
                                                 </div>
                                             </div>
-                                            <div className="row form-group">
+                                            <div className="form-group">
                                                 <div className="col-md-6">
                                                     <div className="col-md-4 control-label"><label > Post Data Type</label><span class="text-danger">*</span></div>
                                                     <div className="col-md-6">
@@ -164,7 +164,7 @@ class SteampInventory extends React.Component {
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div className="row form-group">
+                                            <div className="form-group">
                                                 <div className="col-md-6">
                                                     <div className="col-md-4 control-label"><label > Financial Date From</label><span class="text-danger">*</span></div>
                                                     <div className="col-md-6">
@@ -174,7 +174,7 @@ class SteampInventory extends React.Component {
                                                         <span className="text-danger">{errordatefrom}</span>
                                                     </div>
                                                 </div>
-                                                <div className="col-md-6 form-group">
+                                                <div className="col-md-6">
                                                     <div className="col-md-4 control-label"><label > Financial Date To</label><span class="text-danger">*</span></div>
                                                     <div className="col-md-6">
                                                         <UiDatepicker type="text" name="dateto" id="dateto" changeMonth="true" changeYear="true" dateFormat="dd/mm/yy"
