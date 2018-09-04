@@ -31,12 +31,11 @@ const routes = {
     require('./routes/sdc/accountcodeforinventory').default,
     require('./routes/sdc/endinginventory').default,
     require('./routes/sdc/receipts').default,
-
+    require('./routes/sdc/termclosing').default,
     require('./routes/sdc/transferinventory').default,
     require('./routes/sdc/importtojde').default,
     require('./routes/sdc/steampinventory').default,
-   
-    
+       
     //Report
     require('./routes/report/sdc/dailyflashsales').default,
     require('./routes/report/sdc/cashsalesreconciliation').default,
@@ -46,7 +45,7 @@ const routes = {
     require('./routes/report/sdc/restaurantdataanalysisformonth').default,
     require('./routes/report/sdc/restaurantpettycashananlysis').default,
     require('./routes/report/sdc/summarycashreconciliation').default,
-    // require('./routes/notfound').default,
+    require('./routes/notfound').default,
     // comment unused routes
     // this will speed up builds
   ]

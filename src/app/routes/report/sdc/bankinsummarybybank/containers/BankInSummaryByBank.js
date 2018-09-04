@@ -115,7 +115,7 @@ class BankInSummaryByBank extends React.Component {
         }
     }
 
-    componentDidMount() {
+    componentDidMount() {         
         const self = this
         let apiRequest1 = setTimeout(function () {
             fetch(`${PathBackEnd}/api/report/bankall`)
@@ -127,14 +127,12 @@ class BankInSummaryByBank extends React.Component {
         }, 300)
     }
 
-
-
     render() {
         const { datefrom, dateto, bank, optionbank, submitted, parameters } = this.state;
         const { errordatefrom, errordateto, errorbank } = this.state;
         const { modify, screen_name, report } = this.props;
 
-        const tokentableau = report.data
+        let tokentableau = report.data        
 
         return (
             <div id="content">
@@ -146,7 +144,7 @@ class BankInSummaryByBank extends React.Component {
                                 {modify && <div className="widget-body ">
                                     <br />
                                     <fieldset>
-                                        <div className="form-group">
+                                        <div className="row">
                                             <div className="col-md-6 form-group">
                                                 <div className="col-md-4 control-label"><label > From Date</label><span class="text-danger">*</span></div>
                                                 <div className="col-md-6">
@@ -163,7 +161,7 @@ class BankInSummaryByBank extends React.Component {
                                                 </div>
                                             </div>
                                         </div>
-                                        <div className="form-group">
+                                        <div className="row">
                                             <div className="col-md-6 form-group">
                                                 <div className="col-md-4 control-label"><label > Bank</label><span class="text-danger">*</span></div>
                                                 <div className="col-md-6">
@@ -179,7 +177,7 @@ class BankInSummaryByBank extends React.Component {
                                                 </div>
                                             </div>
                                         </div>
-                                        <div className="form-group">
+                                        <div className="row">
                                             <div className="col-md-6 form-group">
                                                 <div className="col-md-4 control-label">
                                                 </div>
@@ -202,17 +200,22 @@ class BankInSummaryByBank extends React.Component {
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div className="col-md-12">
-                                                {submitted && tokentableau && parameters && <TableauReport
-                                                    url={TableauBankInSummaryByBank}
-                                                    token={tokentableau}
-                                                    parameters={parameters}
-                                                    options={optiontableau}
-                                                />
-                                                }
-                                            </div>
-
                                         </div>
+                                        {submitted && tokentableau && parameters && <div className="row">
+                                            <div className="col-md-12">
+                                                <hr />
+                                                <div style={{ minwidth: '800px', minheight: '573px', overflow: 'scroll' }}>
+                                                    <TableauReport
+                                                        url={TableauBankInSummaryByBank}
+                                                        token={tokentableau}
+                                                        parameters={parameters}
+                                                        options={optiontableau}
+                                                    />
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                        }
                                     </fieldset>
                                 </div>
                                 }

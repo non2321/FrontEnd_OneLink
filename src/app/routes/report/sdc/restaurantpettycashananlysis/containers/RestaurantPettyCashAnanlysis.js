@@ -128,7 +128,7 @@ class RestaurantPettyCashAnanlysis extends React.Component {
                                 {modify && <div className="widget-body ">
                                     <br />
                                     <fieldset>
-                                    <div className="form-group row">
+                                    <div className="row">
                                             <div className="col-md-6 form-group">
                                                 <div className="col-md-4 control-label"><label > Date</label><span class="text-danger">*</span></div>
                                                 <div className="col-md-6">
@@ -147,7 +147,7 @@ class RestaurantPettyCashAnanlysis extends React.Component {
                                                 </div>
                                             </div>
                                         </div>
-                                        <div className="form-group">
+                                        <div className="row">
                                             <div className="col-md-6 form-group">
                                                 <div className="col-md-4 control-label">
                                                 </div>
@@ -169,17 +169,23 @@ class RestaurantPettyCashAnanlysis extends React.Component {
                                                             </button>
                                                     </div>
                                                 </div>
-                                            </div>
+                                            </div>                                            
+                                        </div>
+                                        {submitted && tokentableau && parameters && <div className="row">
                                             <div className="col-md-12">
-                                                {submitted && tokentableau && parameters && <TableauReport
-                                                    url={TableauReportRestaurantPettyCashAnanlysis}
-                                                    token={tokentableau}
-                                                    parameters={parameters}
-                                                    options={optiontableau}
-                                                />
-                                                }
+                                                <hr />
+                                                <div style={{ minwidth: '800px', minheight: '573px', overflow: 'scroll' }}>
+                                                    <TableauReport
+                                                       url={TableauReportRestaurantPettyCashAnanlysis}
+                                                       token={tokentableau}
+                                                       parameters={parameters}
+                                                       options={optiontableau}
+                                                    />
+                                                </div>
+
                                             </div>
                                         </div>
+                                        }
                                     </fieldset>
                                 </div>
                                 }

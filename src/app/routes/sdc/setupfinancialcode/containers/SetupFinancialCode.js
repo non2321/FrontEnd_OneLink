@@ -65,7 +65,7 @@ class SetupCompanyAccount extends React.Component {
     const { screen_id } = this.state
 
     const table = $('#table').DataTable()
-    
+
 
     //check required
     let check_required = true
@@ -81,7 +81,7 @@ class SetupCompanyAccount extends React.Component {
 
     if (check_required == true) {
       table.page.len(10).draw();
-      
+
       this.setState({
         edit: false,
         submitted: true
@@ -129,16 +129,16 @@ class SetupCompanyAccount extends React.Component {
     const { edit, submitted, modifydata } = this.state;
     const { modify, screen_name } = this.props;
     const self = this
-    return (    
-        <div id="content">
-          <WidgetGrid>
-            <div className="row">
-              <form onSubmit={this.handleSubmit}>
-                <article className="col-sm-12">
-                  <JarvisWidget editbutton={false} colorbutton={false} deletebutton={false} togglebutton={false} color="darken">
-                    <header><h2>{screen_name}</h2></header>
-                    {modify && <div className="widget-body">
-                      {/* {modify.can_edit == 'Y' &&
+    return (
+      <div id="content">
+        <WidgetGrid>
+          <div className="row">
+            <form onSubmit={this.handleSubmit}>
+              <article className="col-sm-12">
+                <JarvisWidget editbutton={false} colorbutton={false} deletebutton={false} togglebutton={false} color="darken">
+                  <header><h2>{screen_name}</h2></header>
+                  {modify && <div className="widget-body">
+                    {/* {modify.can_edit == 'Y' &&
                         <div className="widget-body-toolbar">
                           <div className="row">
                             <div className="col-xs-9 col-sm-5 col-md-5 col-lg-5 pull-right">
@@ -151,94 +151,93 @@ class SetupCompanyAccount extends React.Component {
                           </div>
                         </div>
                       } */}
-                      <div className="widget-body no-padding">
-                        <DatatableFinancialCode actions={edit}
-                          options={{
-                            fixedHeader: true,
-                            ajax: `${PathBackEnd}/api/financialcodeconfig`,
-                            columns: [{ data: "FINANCIAL_CODE" }, { data: "FINANCIAL_DESC", "visible": false },
+                    <div className="widget-body no-padding">
+                      <DatatableFinancialCode actions={edit}
+                        options={{
+                          fixedHeader: true,
+                          ajax: `${PathBackEnd}/api/financialcodeconfig`,
+                          columns: [{ data: "FINANCIAL_CODE" }, { data: "FINANCIAL_DESC", "visible": false },
+                          {
+                            data: "FINANCIAL_DESC",
+                            render: function (data, type, row) {
+                              return `<input type="text"  name="txtfinname" class="form-control input-xs" disabled="disabled" value=${data}></div><label class="text-danger"></label>`;
+                            }
+                          },
+                          {
+                            searchable: false,
+                            data: null,
+                            width: "10%",
+                            render: function (data, type, row) {
+                              if (row.FIXFLAG == "1") {
+                                return '<div class="smart-form checkbox "><label name="lblcheck"  class="checkbox state-disabled"><input type="checkbox" name="checkbox" disabled="disabled" checked/><i name="chklist"/></label></div>'
+                              } else {
+                                return '<div class="smart-form checkbox "><label name="lblcheck"  class="checkbox state-disabled"><input type="checkbox" name="checkbox" disabled="disabled"/><i name="chklist"/></label></div>'
+                              }
+                              return data;
+                            }
+                          }
+                          ],
+                          buttons: [
                             {
-                              data: "FINANCIAL_DESC",
-                              render: function (data, type, row) {
-                                return `<input type="text"  name="txtfinname" class="form-control input-xs" disabled="disabled" value=${data}></div><label class="text-danger"></label>`;
+                              text: `<span ><i class="fa fa-edit" /><span class="hidden-mobile"> Edit</span></span>`,
+                              className: `btn btn-primary btn-sm ${(modify.can_edit == "Y") ? '' : 'hidden'}`,
+                              action: function (e, dt, node, config) {
+                                const table = $('#table').DataTable()
+                                table.page.len(10000).draw();
+                                $('input[type="checkbox"]').prop('disabled', false);
+                                $('input[type="text"]').prop('disabled', false);
+                                $('label[name="lblcheck"]').removeClass("state-disabled");
+                                table.buttons().disable();
+                                // (self.state.edit)? 'disabled': ''
+                                // $('button[name="text"]').prop('disabled', false);
+                                self.setState({ edit: true })
                               }
                             },
-                            {
-                              searchable: false,
-                              data: null,
-                              width: "10%",
-                              render: function (data, type, row) {
-                                if (row.FIXFLAG == "1") {
-                                  return '<div class="smart-form checkbox "><label name="lblcheck"  class="checkbox state-disabled"><input type="checkbox" name="checkbox" disabled="disabled" checked/><i name="chklist"/></label></div>'
-                                } else {
-                                  return '<div class="smart-form checkbox "><label name="lblcheck"  class="checkbox state-disabled"><input type="checkbox" name="checkbox" disabled="disabled"/><i name="chklist"/></label></div>'
-                                }
-                                return data;
-                              }
-                            }
-                            ],
-                            buttons: [
-                              {
-                                text: `<span ><i class="fa fa-edit" /><span class="hidden-mobile"> Edit</span></span>`,
-                                className: `btn btn-primary btn-sm ${(modify.can_edit == "Y") ? '' : 'hidden'}`,
-                                action: function (e, dt, node, config) {
-                                  const table = $('#table').DataTable()
-                                  table.page.len(10000).draw();
-                                  $('input[type="checkbox"]').prop('disabled', false);
-                                  $('input[type="text"]').prop('disabled', false);
-                                  $('label[name="lblcheck"]').removeClass("state-disabled");
-                                  table.buttons().disable();
-                                  // (self.state.edit)? 'disabled': ''
-                                  // $('button[name="text"]').prop('disabled', false);
-                                  self.setState({ edit: true })
-                                }
-                              },
-                            ],
-                          }}
-                          paginationLength={true} className="table table-striped table-bordered table-hover"
-                          width="100%">
-                          <thead>
-                            <tr>
-                              <th data-class="expand"><i
-                                className="text-muted hidden-md hidden-sm hidden-xs" />
-                                Financial Code
+                          ],
+                        }}
+                        paginationLength={true} className="table table-striped table-bordered table-hover"
+                        width="100%">
+                        <thead>
+                          <tr>
+                            <th data-class="expand"><i
+                              className="text-muted hidden-md hidden-sm hidden-xs" />
+                              Financial Code
                               </th>
-                              <th data-hide="user"><i
-                                className="text-muted hidden-md hidden-sm hidden-xs" />
-                                Financial Name
+                            <th data-hide="user"><i
+                              className="text-muted hidden-md hidden-sm hidden-xs" />
+                              Financial Name
                               </th>
-                              <th data-hide="user"><i
-                                className="text-muted hidden-md hidden-sm hidden-xs" />
-                                Financial Name
+                            <th data-hide="user"><i
+                              className="text-muted hidden-md hidden-sm hidden-xs" />
+                              Financial Name
                               </th>
-                              <th data-hide="user">
-                                Active
+                            <th data-hide="user">
+                              Active
                               </th>
-                            </tr>
-                          </thead>
-                        </DatatableFinancialCode>
-                      </div>
-                      {edit && <div className="smart-form">
+                          </tr>
+                        </thead>
+                      </DatatableFinancialCode>
+                    </div>
+                    {edit &&
+                      <div className="smart-form">
                         <footer>
-                          <div class="row">
-                            <button type="button" type="submit" className="btn btn-primary btn-sm">
-                              <i className="fa fa-save"></i> Save
-                              </button>
-                            <button type="button" className="btn btn-default btn-sm" onClick={this.handleCancel}>
-                              Cancel
-                              </button>
-                          </div>
+                          <button type="button" className="btn btn-primary btn-sm" onClick={self.handleSubmit}>
+                            <i className="fa fa-save"></i> Save
+                           </button>
+                          <button type="button" className="btn btn-default btn-sm" onClick={self.handleCancel}>
+                            Cancel
+                          </button>
                         </footer>
                       </div>
-                      }
-                    </div>
                     }
-                  </JarvisWidget>
-                </article>
-              </form>
-            </div>
-          </WidgetGrid>
-        </div>     
+                  </div>
+                  }
+                </JarvisWidget>
+              </article>
+            </form>
+          </div>
+        </WidgetGrid>
+      </div>
     )
   }
 }

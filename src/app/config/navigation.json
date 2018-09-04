@@ -99,7 +99,7 @@
             },
             {
               "title": "Term Closing",
-              "route": "/views/forum-post",
+              "route": "/SDC/TermClosing",
               "comment": "Term Closing",
               "screen_id": "S0013"
             },

@@ -146,7 +146,7 @@ class CashSalesReconciliation extends React.Component {
                                 {modify && <div className="widget-body ">
                                     <br />
                                     <fieldset>
-                                        <div className="form-group">
+                                        <div className="row">
                                             <div className="col-md-6 form-group">
                                                 <div className="col-md-4 control-label"><label > From Date</label><span class="text-danger">*</span></div>
                                                 <div className="col-md-6">
@@ -163,7 +163,7 @@ class CashSalesReconciliation extends React.Component {
                                                 </div>
                                             </div>
                                         </div>
-                                        <div className="form-group">
+                                        <div className="row">
                                             <div className="col-md-6 form-group">
                                                 <div className="col-md-4 control-label"><label > Store</label><span class="text-danger">*</span></div>
                                                 <div className="col-md-6">
@@ -180,7 +180,7 @@ class CashSalesReconciliation extends React.Component {
                                                 </div>
                                             </div>
                                         </div>
-                                        <div className="form-group">
+                                        <div className="row">
                                             <div className="col-md-6 form-group">
                                                 <div className="col-md-4 control-label">
                                                 </div>
@@ -203,17 +203,22 @@ class CashSalesReconciliation extends React.Component {
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div className="col-md-12">
-                                                {submitted && tokentableau && parameters && <TableauReport
-                                                    url={TableauCashSalesReconciliation}
-                                                    token={tokentableau}
-                                                    parameters={parameters}
-                                                    options={optiontableau}
-                                                />
-                                                }
-                                            </div>
-
                                         </div>
+                                        {submitted && tokentableau && parameters && <div className="row">
+                                            <div className="col-md-12">
+                                                <hr />
+                                                <div style={{ minwidth: '800px', minheight: '573px', overflow: 'scroll' }}>
+                                                    <TableauReport
+                                                         url={TableauCashSalesReconciliation}
+                                                         token={tokentableau}
+                                                         parameters={parameters}
+                                                         options={optiontableau}
+                                                    />
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                        }
                                     </fieldset>
                                 </div>
                                 }
