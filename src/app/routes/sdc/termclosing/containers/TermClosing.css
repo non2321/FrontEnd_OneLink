@@ -1,12 +1,12 @@
-.form-control.hasDatepicker {
+td>label.input.input-group.date>.form-control.hasDatepicker {
   height: 25px;
 }
 
-.input-group-addon {
+td>label.input.input-group.date>span.input-group-addon {
   padding: 2px 7px;
 }
   
-span.icon-append.fa.fa-calendar {
+td>label.input.input-group.date>span.input-group-addon>span.icon-append.fa.fa-calendar {
    font-size: 13px;  
 }
 
