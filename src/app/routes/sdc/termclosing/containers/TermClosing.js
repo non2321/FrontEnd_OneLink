@@ -1,14 +1,22 @@
 import React from 'react'
+import ReactDOM from 'react-dom'
 import { connect } from 'react-redux';
 
 import { userAuth } from '../../../../actions/auth';
-import { financialActions } from '../../../../actions/sdc'
+import { inventoryActions } from '../../../../actions/sdc'
+import { utils } from '../../../../services/utils'
 
 import { Stats, BigBreadcrumbs, WidgetGrid, JarvisWidget } from '../../../../components'
 
 import DatatableTermClosing from '../../../../components/tables/DatatableTermClosing'
+import UiDatepicker from '../../../../components/forms/inputs/UiDatepicker'
 
 import { ScreenIDTermClosing, PathBackEnd } from '../../../../../../settings'
+
+import Select from 'react-select'
+import 'react-select/dist/react-select.css'
+
+import './TermClosing.css'
 
 
 class TermClosing extends React.Component {
@@ -22,9 +30,21 @@ class TermClosing extends React.Component {
             this.props.dispatch(userAuth.loadpage(prm))
         }
 
+        const datenow = new Date()
+        const yearnow = datenow.getFullYear()
+
+        let optionyear = []
+        const yearago = yearnow - 10
+        const yearfuture = yearnow + 10
+        for (let year = yearago; year <= yearfuture; year++) {
+            const item = { "value": year, "label": year }
+            optionyear.push(item)
+        }
+
         this.state = {
-            account_code: '',
+            year: { value: yearnow, label: yearnow },
             edit: false,
+            optionyear: optionyear.sort((a, b) => b.value - a.value),
             submitted: true,
             screen_id: ScreenIDTermClosing
         }
@@ -39,7 +59,27 @@ class TermClosing extends React.Component {
     }
 
     handleAddSubmits(e) {
-        e.preventDefault();
+        e.preventDefault()
+        const self = this
+        const { dispatch } = this.props
+        const { year, screen_id } = this.state
+
+        this.setState({
+            erroryear: (year) ? '' : 'The year is required',
+            submitted: false
+        })
+
+        if (year) {
+            const prm = {
+                year: year.value,
+                screen_id: screen_id,
+            }
+            dispatch(inventoryActions.addtermclosing(prm));
+
+            setTimeout(function () {
+                self.setState({ submitted: true });
+            }, 200)
+        }
     }
 
     handleAdd(e) {
@@ -66,49 +106,37 @@ class TermClosing extends React.Component {
 
         const table = $('#table').DataTable()
 
+        table.page.len(10).draw();
 
-        //check required
-        let check_required = true
-        table.rows().eq(0).each(function (index) {
-            let inputtxt = table.cell(index, 2).nodes().to$().find('input').val()
-            if (inputtxt.toString().trim() == '') {
-                table.cell(index, 2).nodes().to$().find('label').text('required')
-                check_required = false
-            } else {
-                table.cell(index, 2).nodes().to$().find('label').text('')
-            }
+        this.setState({
+            edit: false,
+            submitted: true
         })
 
-        if (check_required == true) {
-            table.page.len(10).draw();
+        $('input[type="checkbox"]').prop('disabled', true);
+        $('input[type="text"]').prop('disabled', true);
+        $('input[name="checkbox]').prop("disabled", true);
 
-            this.setState({
-                edit: false,
-                submitted: true
-            })
-
-            $('input[type="checkbox"]').prop('disabled', true);
-            $('input[type="text"]').prop('disabled', true);
-            $('input[name="checkbox]').prop("disabled", true);
-
-            let objectitem = []
-            table.rows().eq(0).each(function (index) {
-                let row = table.row(index)
-                let data = row.data()
-
-                let inputtxt = table.cell(index, 2).nodes().to$().find('input').val()
-                let inputchk = table.cell(index, 3).nodes().to$().find('input').prop('checked')
-                let Flag = (inputchk == true) ? '1' : '0'
-                if (inputtxt != data['FINANCIAL_DESC'].toString() || Flag != data['FIXFLAG'].toString()) {
-                    if (data['FINANCIAL_CODE'] && Flag) {
-                        const temp = { fin_code: data['FINANCIAL_CODE'].toString(), fin_desc: inputtxt, fin_flag: Flag, screen_id: screen_id }
-                        objectitem.push(temp)
+        let objectitem = []
+        table.rows().eq(0).each(function (index) {
+            let row = table.row(index)
+            let data = row.data()
+            let inputBeginDate = table.cell(index, 4).nodes().to$().find('input').val()
+            let inputEndDate = table.cell(index, 5).nodes().to$().find('input').val()
+            if (inputBeginDate != data['PB_DATE_DESC'].toString() || inputEndDate != data['PE_DATE_DESC'].toString()) {
+                if (data['TERM_ID'] && inputBeginDate && inputEndDate) {
+                    const temp = {
+                        term_id: data['TERM_ID'].toString(),
+                        pb_date: utils.convertdateformatString(inputBeginDate),
+                        pe_date: utils.convertdateformatString(inputEndDate),
+                        screen_id: screen_id
                     }
+                    objectitem.push(temp)
                 }
-            })
-            table.buttons().enable();
-            dispatch(financialActions.editfinancialcode(objectitem));
-        }
+            }
+        })
+        table.buttons().enable();      
+        dispatch(inventoryActions.edittermclosing(objectitem));
     }
 
 
@@ -124,9 +152,15 @@ class TermClosing extends React.Component {
         $('#table').DataTable().ajax.reload();
     }
 
+    handleChangesYear = (year) => {
+        this.setState({
+            year: (year == null) ? '' : year,
+        })
+    }
 
     render() {
-        const { edit, submitted, modifydata } = this.state;
+        const { edit, year, optionyear, submitted, modifydata } = this.state
+        const { erroryear } = this.state
         const { modify, screen_name } = this.props;
         const self = this
         return (
@@ -143,26 +177,22 @@ class TermClosing extends React.Component {
                                                 options={{
                                                     fixedHeader: true,
                                                     ajax: `${PathBackEnd}/api/termclosing`,
-                                                    columns: [{ data: "TERM_ID" }, { data: "PERIOD_ID" }, { data: "PB_DATE", "visible": true }, { data: "PE_DATE", "visible": true },
-                                                        // {
-                                                        //     data: "FINANCIAL_DESC",
-                                                        //     render: function (data, type, row) {
-                                                        //         return `<input type="text"  name="txtfinname" class="form-control input-xs" disabled="disabled" value=${data}></div><label class="text-danger"></label>`;
-                                                        //     }
-                                                        // },
-                                                        // {
-                                                        //     searchable: false,
-                                                        //     data: null,
-                                                        //     width: "10%",
-                                                        //     render: function (data, type, row) {
-                                                        //         if (row.FIXFLAG == "1") {
-                                                        //             return '<div class="smart-form checkbox "><label name="lblcheck"  class="checkbox state-disabled"><input type="checkbox" name="checkbox" disabled="disabled" checked/><i name="chklist"/></label></div>'
-                                                        //         } else {
-                                                        //             return '<div class="smart-form checkbox "><label name="lblcheck"  class="checkbox state-disabled"><input type="checkbox" name="checkbox" disabled="disabled"/><i name="chklist"/></label></div>'
-                                                        //         }
-                                                        //         return data;
-                                                        //     }
-                                                        // }
+                                                    order: [[1, "desc"]],
+                                                    columns: [{ data: "TERM_ID" }, { data: "PERIOD_ID" }, { data: "PB_DATE_DESC", "visible": false }, { data: "PE_DATE_DESC", "visible": false },
+                                                    {
+                                                        data: "PB_DATE_DESC", "width": "25%",
+                                                        createdCell: (td, cellData, rowData, row, col) =>
+                                                            ReactDOM.render(
+                                                                <UiDatepicker type="text" name={`begindate${row}`} id={`begindate${row}`} datefrom={`#begindate${row}`} dateto={`#enddate${row}`} changeMonth="true" changeYear="true" dateFormat="dd/mm/yy" addday="90" value={cellData} disabled
+                                                                    placeholder="Begin date" />, td)
+                                                    },
+                                                    {
+                                                        data: "PE_DATE_DESC", "width": "25%",
+                                                        createdCell: (td, cellData, rowData, row, col) =>
+                                                            ReactDOM.render(
+                                                                <UiDatepicker type="text" name={`enddate${row}`} id={`enddate${row}`} changeMonth="true" changeYear="true" dateFormat="dd/mm/yy" addday="90" value={cellData} disabled
+                                                                    placeholder="End date" />, td)
+                                                    }
                                                     ],
                                                     buttons: [
                                                         {
@@ -170,7 +200,9 @@ class TermClosing extends React.Component {
                                                             className: `btn btn-primary btn-sm ${(modify.can_add == "Y") ? '' : 'hidden'}`,
                                                             action: function (e, dt, node, config) {
                                                                 $("#myModalAdd").modal()
-                                                                // seft.setState({ action_code: '', inv_class: '', action: '', obj_account: '', subsidary: '', grp_by: '', cat_code: '', acc_type: '', doc_no: '', remark: '', submitted: false });
+                                                                const datenow = new Date()
+                                                                const yearnow = datenow.getFullYear()
+                                                                seft.setState({ year: { value: yearnow, label: yearnow } });
                                                             }
                                                         },
                                                         {
@@ -207,6 +239,13 @@ class TermClosing extends React.Component {
                                                         <th data-hide="user">
                                                             End Date
                                                         </th>
+                                                        <th data-hide="user"><i
+                                                            className="text-muted hidden-md hidden-sm hidden-xs" />
+                                                            Begin Date
+                                                        </th>
+                                                        <th data-hide="user">
+                                                            End Date
+                                                        </th>
                                                     </tr>
                                                 </thead>
                                             </DatatableTermClosing>
@@ -235,7 +274,7 @@ class TermClosing extends React.Component {
                 {modify &&
                     <div className="modal fade" id="myModalAdd" tabIndex="-1" role="dialog" aria-labelledby="myModalLabel"
                         aria-hidden="true">
-                        <form id="add-form" >
+                        <form id="add-form" onSubmit={this.handleAddSubmits}>
                             <div className="modal-dialog modal-sm">
                                 <div className="modal-content">
                                     <div className="modal-header">
@@ -247,17 +286,18 @@ class TermClosing extends React.Component {
                                     <div className="modal-body">
                                         <div class="form-group">
                                             <div className="row">
-                                                <div className="col-md-6 form-group">
-                                                    <label htmlFor="action_code"> Year</label><span class="text-danger">*</span>
+                                                <div className="col-md-12">
+                                                    <label htmlFor="bank_code"> Year</label><span class="text-danger">*</span>
+                                                    {optionyear &&
+                                                        <Select options={optionyear} placeholder='Year' name="year" value={year} onChange={this.handleChangesYear} />
+                                                    }
+                                                    <span className="text-danger">{erroryear}</span>
                                                 </div>
-                                                <div className="col-md-6 form-group">
-                                                    <label htmlFor="inv_class"> Inv Class</label><span class="text-danger">*</span>
-                                                </div>                                               
-                                            </div>                                            
+                                            </div>
                                         </div>
                                     </div>
                                     <div className="modal-footer">
-                                        <button type="button" type="submit" className="btn btn-primary">
+                                        <button id="btnsubmit" type="button" type="submit" className="btn btn-primary" data-loading-text="<i class='fa fa-spinner fa-spin '></i> Processing">
                                             Save
                                         </button>
                                         <button type="button" className="btn btn-default" data-dismiss="modal">

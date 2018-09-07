@@ -7,6 +7,9 @@ export const inventoryService = {
     addaccountcodeforinventory,   
     editaccountcodeforinventory,   
 
+    addtermclosing,
+    edittermclosing,
+
     stampinventory,
 }
 
@@ -65,6 +68,47 @@ function editaccountcodeforinventory(prm) {
             return handleResponse(response)
         })
         .then(user => { 
+            if (user && user.status == 'Y') {               
+                localStorage.setItem(localStorageAuth, JSON.stringify(user.user));
+            }
+            return user;
+        });
+}
+
+function addtermclosing(prm) {
+    const year = prm.year   
+    const screen_id = prm.screen_id
+
+    const requestOptions = {
+        method: 'POST',
+        headers: { ...authHeader(), 'Content-Type': 'application/json' },
+        body: JSON.stringify({ year: year, screen_id: screen_id})
+    };
+
+    return fetch(`${PathBackEnd}/api/termclosing`, requestOptions)
+        .then(response => {
+            return handleResponse(response)
+        })
+        .then(user => { 
+            if (user && user.status == 'Y') {               
+                localStorage.setItem(localStorageAuth, JSON.stringify(user.user));
+            }
+            return user;
+        });
+}
+
+function edittermclosing(obj) {
+    const requestOptions = {
+        method: 'PUT',
+        headers: { ...authHeader(), 'Content-Type': 'application/json' },
+        body: JSON.stringify({ obj })
+    };
+
+    return fetch(`${PathBackEnd}/api/termclosing`, requestOptions)
+        .then(response => {
+            return handleResponse(response)
+        })
+        .then(user => {
             if (user && user.status == 'Y') {               
                 localStorage.setItem(localStorageAuth, JSON.stringify(user.user));
             }

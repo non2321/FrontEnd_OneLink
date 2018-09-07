@@ -52,36 +52,37 @@ function editfinancialcode(obj) {
 
     function request(financial) { return { type: financialConstants.ADD_REQUEST, financial } }
     function success(financial) { return { type: financialConstants.ADD_SUCCESS, financial } }
-    function failure(error) { return { type: financialConstants.ADD_FAILURE, error } } return dispatch => {
-        dispatch(request({ obj }));
-        financialService.editfinancialcode(obj)
-            .then(
-                financial => {
-                    if (financial.status == 'Y') {
-                        $('#table').DataTable().ajax.reload();
-                        dispatch(success(financial));
-                        dispatch(alertActions.success(financial.message));
-                    } else if (financial.status == 'NA') {
+    function failure(error) { return { type: financialConstants.ADD_FAILURE, error } } 
+    // return dispatch => {
+    //     dispatch(request({ obj }));
+    //     financialService.editfinancialcode(obj)
+    //         .then(
+    //             financial => {
+    //                 if (financial.status == 'Y') {
+    //                     $('#table').DataTable().ajax.reload();
+    //                     dispatch(success(financial));
+    //                     dispatch(alertActions.success(financial.message));
+    //                 } else if (financial.status == 'NA') {
 
-                        dispatch(failure(financial.message));
-                        dispatch(alertActions.error(financial.message));
-                        hashHistory.push('/Login');
-                    } else {
-                        $('#table').DataTable().ajax.reload();
-                        dispatch(failure(financial.message));
-                        dispatch(alertActions.error(financial.message));
-                    }
-                },
-                error => {
-                    // dispatch(failure(error));
-                    // dispatch(alertActions.error(error));
-                }
-            )
-    }
+    //                     dispatch(failure(financial.message));
+    //                     dispatch(alertActions.error(financial.message));
+    //                     hashHistory.push('/Login');
+    //                 } else {
+    //                     $('#table').DataTable().ajax.reload();
+    //                     dispatch(failure(financial.message));
+    //                     dispatch(alertActions.error(financial.message));
+    //                 }
+    //             },
+    //             error => {
+    //                 // dispatch(failure(error));
+    //                 // dispatch(alertActions.error(error));
+    //             }
+    //         )
+    // }
 
-    function request(financial) { return { type: financialConstants.ADD_REQUEST, financial } }
-    function success(financial) { return { type: financialConstants.ADD_SUCCESS, financial } }
-    function failure(error) { return { type: financialConstants.ADD_FAILURE, error } }
+    // function request(financial) { return { type: financialConstants.ADD_REQUEST, financial } }
+    // function success(financial) { return { type: financialConstants.ADD_SUCCESS, financial } }
+    // function failure(error) { return { type: financialConstants.ADD_FAILURE, error } }
 }
 
 function addbankaccount(prm) {

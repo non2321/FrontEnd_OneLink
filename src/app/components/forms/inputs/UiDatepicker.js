@@ -30,13 +30,14 @@ export default class UiDatepicker extends React.Component {
           date.setDate(date.getDate() + parseInt(props.addday));
           $(props.dateto).datepicker("option", "minDate", selectedDate);
           $(props.dateto).datepicker("option", "maxDate", date);
-          self.props.onInputChange(selectedDate)
+          if(self.props.onInputChange) self.props.onInputChange(selectedDate)
+          
         }
       })
 
       onSelectCallbacks.push((selectedDate, instance) => {
         // $(props.datefrom).datepicker("option", "maxDate", selectedDate);
-        self.props.onInputChange(selectedDate)
+        if(self.props.onInputChange) self.props.onInputChange(selectedDate)
       })
     }
 
