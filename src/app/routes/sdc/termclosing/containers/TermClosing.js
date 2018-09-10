@@ -135,7 +135,7 @@ class TermClosing extends React.Component {
                 }
             }
         })
-        table.buttons().enable();      
+        table.buttons().enable();
         dispatch(inventoryActions.edittermclosing(objectitem));
     }
 
@@ -180,14 +180,14 @@ class TermClosing extends React.Component {
                                                     order: [[1, "desc"]],
                                                     columns: [{ data: "TERM_ID" }, { data: "PERIOD_ID" }, { data: "PB_DATE_DESC", "visible": false }, { data: "PE_DATE_DESC", "visible": false },
                                                     {
-                                                        data: "PB_DATE_DESC", "width": "25%",
+                                                        data: "PB_DATE_DESC",
                                                         createdCell: (td, cellData, rowData, row, col) =>
                                                             ReactDOM.render(
                                                                 <UiDatepicker type="text" name={`begindate${row}`} id={`begindate${row}`} datefrom={`#begindate${row}`} dateto={`#enddate${row}`} changeMonth="true" changeYear="true" dateFormat="dd/mm/yy" addday="90" value={cellData} disabled
                                                                     placeholder="Begin date" />, td)
                                                     },
                                                     {
-                                                        data: "PE_DATE_DESC", "width": "25%",
+                                                        data: "PE_DATE_DESC",
                                                         createdCell: (td, cellData, rowData, row, col) =>
                                                             ReactDOM.render(
                                                                 <UiDatepicker type="text" name={`enddate${row}`} id={`enddate${row}`} changeMonth="true" changeYear="true" dateFormat="dd/mm/yy" addday="90" value={cellData} disabled
