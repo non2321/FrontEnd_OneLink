@@ -33,7 +33,7 @@ const routes = {
     require('./routes/sdc/receipts').default,
     require('./routes/sdc/termclosing').default,
     require('./routes/sdc/transferinventory').default,
-    require('./routes/sdc/importtojde').default,
+    require('./routes/sdc/unitcost').default,
     require('./routes/sdc/steampinventory').default,
        
     //Report

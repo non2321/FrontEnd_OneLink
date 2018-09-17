@@ -42,7 +42,7 @@ class Layout extends React.Component {
 
   componentDidUpdate() {
     const { alert } = this.props;
- 
+
     if (alert.type == 'alert-success') {
       smallBox({
         title: "Alert Success",
@@ -92,7 +92,7 @@ class Layout extends React.Component {
     if (modify != undefined) {
       loading = false
     } else if (location == '/home' || location == '/Home') {
-      loading = false
+      loading = false    
     }
 
     return (

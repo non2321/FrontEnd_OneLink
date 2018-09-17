@@ -1,17 +1,16 @@
 import React from 'react'
 import { connect } from 'react-redux';
 
-
-
 import _ from 'lodash'
+import $ from 'jquery';
 
 
-class PopupBankInAdjustmentUpload extends React.Component {
+class DatatableUnitCost extends React.Component {
 
-  componentDidMount() {  
-      System.import('script-loader!smartadmin-plugins/datatables-bundle/datatables.min.js').then(() => {
-        this.datatable(this.props.data)
-      })  
+  componentDidMount() {
+    System.import('script-loader!smartadmin-plugins/datatables-bundle/datatables.min.js').then(() => {
+      this.datatable(this.props.data)
+    })
   }
 
   datatable() {
@@ -39,7 +38,8 @@ class PopupBankInAdjustmentUpload extends React.Component {
     }
 
     options = _.extend(options, {
-      "dom": "<'dt-toolbar'<'col-xs-12 col-sm-8'><'pull-right hidden-xs' ><'pull-right' >r >" +
+
+      "dom": "<'dt-toolbar '<'col-md-4' B><'pull-right hidden-xs' l><'pull-right' f>r >" +
         "t" +
         "<'dt-toolbar-footer' <'col-sm-6 col-xs-12 hidden-xs'i>p<'col-xs-12 col-sm-6'>>",
       oLanguage: {
@@ -51,9 +51,8 @@ class PopupBankInAdjustmentUpload extends React.Component {
       responsive: true
     });
 
-    const _dataTable = element.DataTable(options);
-
-    _dataTable.order( [ 4, 'asc' ] ).draw();
+    const _dataTable = element.DataTable(options); 
+   
 
     if (this.props.filter) {
       // Apply the filter
@@ -62,7 +61,6 @@ class PopupBankInAdjustmentUpload extends React.Component {
           .column($(this).parent().index() + ':visible')
           .search(this.value)
           .draw();
-
       });
     }
 
@@ -85,18 +83,13 @@ class PopupBankInAdjustmentUpload extends React.Component {
         }
       })
     }
-
-    // element.on('click', 'th', function () {
-    //   $('#poptable').DataTable().ajax.reload();
-    // })    
-
   }
 
   render() {
-    let { children, options, detailsFormat, paginationLength, dispatch , ...props } = this.props;
+    let { children, options, detailsFormat, paginationLength, dispatch, ...props } = this.props;
     return (
       <div>
-        <table id="popbankintable" {...props} ref="table">
+        <table id="table" name="tables" {...props} ref="table">
           {children}
         </table>
       </div>
@@ -104,5 +97,6 @@ class PopupBankInAdjustmentUpload extends React.Component {
   }
 }
 
-const connectedPopupBankInAdjustmentUpload = connect(null)(PopupBankInAdjustmentUpload);
-export default connectedPopupBankInAdjustmentUpload
+
+const connectedDatatableUnitCost = connect(null)(DatatableUnitCost);
+export default connectedDatatableUnitCost

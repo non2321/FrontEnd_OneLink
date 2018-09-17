@@ -5,9 +5,9 @@ export default {
 
   childRoutes: [
     {
-      path: '/SDC/ImportToJDE',
+      path: '/SDC/UnitCost',
       getComponent(nextState, cb) {
-        System.import('./containers/ImportToJDE').then((m) => {
+        System.import('./containers/UnitCost').then((m) => {
           cb(null, m.default)
         })
       }

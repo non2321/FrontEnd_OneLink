@@ -10,6 +10,11 @@ export const inventoryService = {
     addtermclosing,
     edittermclosing,
 
+    editunitcost,
+    downloadtemplateunitcost,
+    importunitcost,
+    genunitcost,
+
     stampinventory,
 }
 
@@ -114,6 +119,104 @@ function edittermclosing(obj) {
             }
             return user;
         });
+}
+
+
+function editunitcost(obj) {
+    const requestOptions = {
+        method: 'PUT',
+        headers: { ...authHeader(), 'Content-Type': 'application/json' },
+        body: JSON.stringify({ obj })
+    };
+
+    return fetch(`${PathBackEnd}/api/unitcost`, requestOptions)
+        .then(response => {
+            return handleResponse(response)
+        })
+        .then(user => {
+            if (user && user.status == 'Y') {               
+                localStorage.setItem(localStorageAuth, JSON.stringify(user.user));
+            }
+            return user;
+        });
+}
+
+function downloadtemplateunitcost() {
+
+    const requestOptions = {
+        method: 'GET',
+        headers: { ...authHeader(), 'Content-Type': 'application/json' }
+    };
+
+    return fetch(`${PathBackEnd}/api/upload/unitcost_template`, requestOptions)
+        .then(function (res) {
+            return res.blob()
+        })
+        .then(function (blob) {
+            const url = window.URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.setAttribute('download', 'TemplateUnitCost.xlsx');
+            document.body.appendChild(link);
+            link.click();
+        })    
+}
+
+function importunitcost(obj, screen_id) {
+    const requestOptions = {
+        method: 'PUT',
+        headers: { ...authHeader(), 'Content-Type': 'application/json' },
+        body: JSON.stringify({ obj, screen_id })
+    };
+
+    return fetch(`${PathBackEnd}/api/unitcost/import`, requestOptions)
+        .then(response => {
+            return handleResponse(response)
+        })
+        .then(user => {
+            if (user && user.status == 'Y') {               
+                localStorage.setItem(localStorageAuth, JSON.stringify(user.user));
+            }
+            return user;
+        });
+}
+
+function genunitcost(prm) {
+
+    const period = prm.period   
+    const screen_id = prm.screen_id
+
+    const requestOptions = {
+        method: 'POST',
+        headers: { ...authHeader(), 'Content-Type': 'application/json' },
+        body: JSON.stringify({ period, screen_id })
+    };
+
+    return fetch(`${PathBackEnd}/api/genunitocst`, requestOptions)
+        .then(response => {
+            let header = response.headers.get('Content-Type').split(';')
+            if (header[0] == 'application/json') {               
+                return response.json()              
+            } else {               
+                return response.blob()               
+            }
+        })
+        .then(blob => {           
+            if (blob.size === undefined) {
+                return blob;
+            } else if (blob.size > 0) {               
+                const url = window.URL.createObjectURL(blob);
+                const link = document.createElement('a');
+                link.href = url;
+                link.setAttribute('download', 'GLSALES_PH.txt');
+                document.body.appendChild(link);
+                link.click();
+
+                return blob.size
+            } else {
+                return blob.size
+            }            
+        })
 }
 
 function stampinventory(prm) {

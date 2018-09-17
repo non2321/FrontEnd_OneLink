@@ -47,9 +47,7 @@ class EndingInventory extends React.Component {
         this.handleChange = this.handleChange.bind(this)
 
         this.handleData = this.handleData.bind(this)
-        this.handlePopSubmit = this.handlePopSubmit.bind(this)
-
-        this.handleChangesMonth = this.handleChangesMonth.bind(this)
+        this.handlePopSubmit = this.handlePopSubmit.bind(this)  
 
         this.onStampChanged = this.onStampChanged.bind(this)
         this.handleSearchSubmit = this.handleSearchSubmit.bind(this)

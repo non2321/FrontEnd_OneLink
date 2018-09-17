@@ -111,7 +111,7 @@
             },
             {
               "title": "Unit Cost",
-              "route": "/SDC/ImportToJDE",
+              "route": "/SDC/UnitCost",
               "comment": "Unit Cost",
               "screen_id": "S0015"
             },

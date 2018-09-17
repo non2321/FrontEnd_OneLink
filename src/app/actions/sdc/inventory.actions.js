@@ -10,6 +10,11 @@ export const inventoryActions = {
     addtermclosing,
     edittermclosing,
 
+    editunitcost,
+    downloadtemplateunitcost,
+    importunitcost,
+    genunitcost,
+
     stampinventory
 }
 
@@ -183,6 +188,111 @@ function edittermclosing(obj) {
     function request(inventory) { return { type: inventoryConstants.ADD_REQUEST, inventory } }
     function success(inventory) { return { type: inventoryConstants.ADD_SUCCESS, inventory } }
     function failure(error) { return { type: inventoryConstants.ADD_FAILURE, error } } 
+}
+
+function editunitcost(obj) {
+    return dispatch => {
+        dispatch(request({ obj }));
+        inventoryService.editunitcost(obj)
+            .then(
+                inventory => {
+                    if (inventory.status == 'Y') {
+                        $('#table').DataTable().ajax.reload();
+                        dispatch(success(inventory));
+                        dispatch(alertActions.success(inventory.message));
+                    } else if (inventory.status == 'NA') {
+
+                        dispatch(failure(inventory.message));
+                        dispatch(alertActions.error(inventory.message));
+                        hashHistory.push('/Login');
+                    } else {
+                        $('#table').DataTable().ajax.reload();
+                        dispatch(failure(inventory.message));
+                        dispatch(alertActions.error(inventory.message));
+                    }
+                },
+                error => {
+                    // dispatch(failure(error));
+                    // dispatch(alertActions.error(error));
+                }
+            )
+    }
+
+    function request(inventory) { return { type: inventoryConstants.ADD_REQUEST, inventory } }
+    function success(inventory) { return { type: inventoryConstants.ADD_SUCCESS, inventory } }
+    function failure(error) { return { type: inventoryConstants.ADD_FAILURE, error } }
+}
+
+function downloadtemplateunitcost() {
+    inventoryService.downloadtemplateunitcost()
+}
+
+function importunitcost(obj, screen_id) {
+    return dispatch => {
+        dispatch(request({ obj }));
+        inventoryService.importunitcost(obj, screen_id)
+            .then(
+                inventory => {
+                    if (inventory.status == 'Y') {
+                        $('#table').DataTable().ajax.reload();
+                        dispatch(success(inventory));
+                        dispatch(alertActions.success(inventory.message));                        
+                    } else if (inventory.status == 'NA') {
+                        dispatch(failure(inventory.message));
+                        dispatch(alertActions.error(inventory.message));
+                        hashHistory.push('/Login');
+                    } else {
+                        $('#table').DataTable().ajax.reload();
+                        dispatch(failure(inventory.message));
+                        dispatch(alertActions.error(inventory.message));
+                    }
+                },
+                error => {
+                }
+            )
+    }
+    function request(inventory) { return { type: inventoryConstants.ADD_REQUEST, inventory } }
+    function success(inventory) { return { type: inventoryConstants.ADD_SUCCESS, inventory } }
+    function failure(error) { return { type: inventoryConstants.ADD_FAILURE, error } }
+}
+
+function genunitcost(prm) {
+    const period = prm.period    
+    const screen_id = prm.screen_id
+
+    return dispatch => {       
+        $('#btnGen').button('loading');
+        dispatch(request({ period }));
+        inventoryService.genunitcost(prm)
+            .then(
+                inventory => {                   
+                    if (inventory > 0) {  
+                        $('#btnGen').button('reset');                    
+                        $('#myModalGenPHInventory').modal('hide');
+                        dispatch(success(inventory));
+                        dispatch(alertActions.success("Generate Success"));
+                    } else if (inventory == 0) {
+                        $('#btnGen').button('reset');     
+                        dispatch(failure(inventory));
+                        dispatch(alertActions.error("Generate Fail"));
+                    } else {                       
+                        $('#myModalGenPHInventory').modal('hide');
+                        dispatch(alertActions.error(inventory.message));
+                        dispatch(failure(inventory.message));
+                        hashHistory.push('/Login');
+                    }                    
+                },
+                error => {
+                    $('#btnGen').button('reset');     
+                    // dispatch(failure(error));
+                    // dispatch(alertActions.error(error));
+                }
+            )
+    }
+
+    function request(inventory) { return { type: inventoryConstants.ADD_REQUEST, inventory } }
+    function success(inventory) { return { type: inventoryConstants.ADD_SUCCESS, inventory } }
+    function failure(error) { return { type: inventoryConstants.ADD_FAILURE, error } }
 }
 
 function stampinventory(prm) {

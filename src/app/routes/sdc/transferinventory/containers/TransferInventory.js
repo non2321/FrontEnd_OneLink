@@ -92,7 +92,10 @@ class TransferInventory extends React.Component {
             errorstore_id: (store_id) ? '' : 'The store id is required',
             submitted: false
         })
-
+        console.log(store_id)
+        console.log(stamp)
+        console.log(datefrom)
+        console.log(dateto)
         if (stamp, store_id) {
             setTimeout(() => {
                 self.setState({
@@ -117,7 +120,6 @@ class TransferInventory extends React.Component {
         const { modify, screen_name } = this.props;
         const seft = this
 
-        console.log(`${PathBackEnd}/api/transferinventory/${datastamp}/${datastore_id}/${datadatefrom}/${datadateto}`)
         return (
             <div id="content">
                 <WidgetGrid>
@@ -160,15 +162,14 @@ class TransferInventory extends React.Component {
                                                                     <i className="fa fa-user-md"></i>
                                                                 </a>
                                                             </span>
-                                                        </div>                                                       
+                                                        </div>
                                                         <span className="text-danger">{errorstore_id}</span>
                                                     </div>
                                                 </div>
                                                 <div className="col-md-6">
                                                     <div className="col-md-4 control-label"><label >Transfer Data From</label><span class="text-danger">*</span></div>
                                                     <div className="col-md-6">
-                                                        <UiDatepicker type="text" name="datefrom" id="datefrom" changeMonth="true" changeYear="true" dateFormat="dd/mm/yy"
-                                                            addday="120" datefrom="#datefrom" dateto="#dateto" onInputChange={this.handleDateFrom} value={datefrom}
+                                                        <UiDatepicker type="text" name="datefrom" id="startdate" changeMonth="true" changeYear="true" dateFormat="dd/mm/yy" addday="120" datefrom="#startdate" dateto="#finishdate" onInputChange={this.handleDateFrom} value={datefrom}
                                                             placeholder="Start date" />
                                                         <span className="text-danger">{errordatefrom}</span>
                                                     </div>
@@ -184,8 +185,8 @@ class TransferInventory extends React.Component {
                                                 <div className="col-md-6">
                                                     <div className="col-md-4 control-label"><label >Transfer Data To</label><span class="text-danger">*</span></div>
                                                     <div className="col-md-6">
-                                                        <UiDatepicker type="text" name="dateto" id="dateto" changeMonth="true" changeYear="true" dateFormat="dd/mm/yy"
-                                                            onInputChange={this.handleDateTo} value={dateto} disabled={!dateto}
+                                                        <UiDatepicker type="text" name="dateto" id="finishdate" changeMonth="true" changeYear="true" dateFormat="dd/mm/yy" addday="120" onInputChange={this.handleDateTo} value={dateto} disabled={!datefrom}
+                                                            // datefrom="#startdate" dateto="#finishdate" 
                                                             placeholder="Finish date" />
                                                         <span className="text-danger">{errordateto}</span>
                                                     </div>
