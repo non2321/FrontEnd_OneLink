@@ -92,10 +92,7 @@ class TransferInventory extends React.Component {
             errorstore_id: (store_id) ? '' : 'The store id is required',
             submitted: false
         })
-        console.log(store_id)
-        console.log(stamp)
-        console.log(datefrom)
-        console.log(dateto)
+       
         if (stamp, store_id) {
             setTimeout(() => {
                 self.setState({

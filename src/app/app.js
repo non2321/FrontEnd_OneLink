@@ -37,6 +37,7 @@ const routes = {
     require('./routes/sdc/steampinventory').default,
        
     //Report
+    //SDC Sale
     require('./routes/report/sdc/dailyflashsales').default,
     require('./routes/report/sdc/cashsalesreconciliation').default,
     require('./routes/report/sdc/bankinsummarybybank').default,
@@ -45,7 +46,17 @@ const routes = {
     require('./routes/report/sdc/restaurantdataanalysisformonth').default,
     require('./routes/report/sdc/restaurantpettycashananlysis').default,
     require('./routes/report/sdc/summarycashreconciliation').default,
+    //SDC Inventory
+    require('./routes/report/sdc/receiptsallvendorbyregion').default,
+    require('./routes/report/sdc/detailstocktransferIn').default,
+    require('./routes/report/sdc/inventorycostpermonth').default,
+    require('./routes/report/sdc/detailStocktransferout').default,
+    require('./routes/report/sdc/summaryStocktransferout').default,
+    require('./routes/report/sdc/endinginventory').default,
+    require('./routes/report/sdc/receiptsallvendor').default,
+    //Page Not Found
     require('./routes/notfound').default,
+    
     // comment unused routes
     // this will speed up builds
   ]

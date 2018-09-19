@@ -25,7 +25,7 @@ exports.ScreenIDUnitCost = 'S0015'
 exports.ScreenIDSteampInventory = 'S0016'
 
 //Report
-//SDC
+//SDC Sales
 exports.ScreenIDReportRestaurantPettyCashAnanlysis = 'S0017'
 exports.ScreenIDReportRestaurantDataAnalysisForMonth = 'S0018'
 exports.ScreenIDReportBankInSummaryByBank = 'S0019'
@@ -34,7 +34,14 @@ exports.ScreenIDReportTotalPettyCashReimbursementByStore = 'S0021'
 exports.ScreenIDReportCashSalesReconcilationByStore = 'S0022'
 exports.ScreenIDReportDailyFlashSales = 'S0023'
 exports.ScreenIDReportCashSalesReconciliation = 'S0024'
-
+//SDC Inventory
+exports.ScreenIDReportReceiptsAllVendorByRegion = 'S0025'
+exports.ScreenIDReportDetailStockTransferIn = 'S0026'
+exports.ScreenIDReportInventoryCostPerMonth = 'S0027'
+exports.ScreenIDReportDetailStockTransferOut = 'S0028'
+exports.ScreenIDReportSummaryStockTransferOut = 'S0029'
+exports.ScreenIDReportEndingInventory = 'S0030'
+exports.ScreenIDReportReceiptsAllVendor = 'S0031'
 
 //Path Tableau
 exports.TableauDailyFlashSales = 'http://192.168.151.31/views/PH_RDS_Financial/1_PettyCash?iframeSizedToWindow=true&:embed=y&:showAppBanner=false&:display_count=no&:showVizHome=no'

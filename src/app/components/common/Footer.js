@@ -65,9 +65,9 @@ export default class Footer extends React.Component {
 
                         </div>
                         <div class="btn-group">
-                            <ScrollButton scrollStepInPx="50" delayInMs="16.66" type="TOP" />
-                            <ScrollButton scrollStepInPx="50" delayInMs="16.66" type="BOTTOM" />
-                        </div>                        
+                            <ScrollButton scrollStepInPx="5000" delayInMs="16.66" type="TOP" />
+                            <ScrollButton scrollStepInPx="5000" delayInMs="16.66" type="BOTTOM" />
+                        </div>
                     </div>
                 </div>
             </div>
@@ -86,17 +86,23 @@ class ScrollButton extends React.Component {
 
     scrollStep() {
         const type = this.props.type
-       
-        if (type == "TOP") {
-            if (window.pageYOffset === 0) {
-                clearInterval(this.state.intervalId);
-            }
-            window.scroll(0, window.pageYOffset - this.props.scrollStepInPx);
+
+        if (type == "TOP") {           
+            window.scrollTo(0,0); 
+            clearInterval(this.state.intervalId);   
+            // window.scroll(0, -window.scrollY / (this.props.scrollStepInPx / 15));
+            // if (window.pageYOffset === 0) {
+            //     clearInterval(this.state.intervalId);
+            // }
+            // window.scroll(0, window.pageYOffset - this.props.scrollStepInPx);
         } else {
-            if (window.pageYOffset > 1) {
-                clearInterval(this.state.intervalId);
-            }
-            window.scroll(0, window.pageYOffset + this.props.scrollStepInPx);          
+            
+            // if (window.pageYOffset > 100) {               
+            //     clearInterval(this.state.intervalId);
+            // }
+            // window.scroll(0, window.pageYOffset + this.props.scrollStepInPx);   
+            window.scrollTo(0,document.body.scrollHeight); 
+            clearInterval(this.state.intervalId);      
         }
     }
 
@@ -108,13 +114,13 @@ class ScrollButton extends React.Component {
     render() {
         const type = this.props.type
         return (
-            (type == "TOP") ? 
-            // <a title='Back to top' className='btn btn-default btn-xs  ' onClick={() => { this.scrollToTop(); }}>
-            //     {/* <i className="fa fa-arrow-circle-up" /> */}
-            // </a> :
-            <button title='Back to top' className='btn btn-default btn-xs' onClick={() => { this.scrollToTop(); }}>
-                <i className="fa fa-chevron-up" />
-            </button> :
+            (type == "TOP") ?
+                // <a title='Back to top' className='btn btn-default btn-xs  ' onClick={() => { this.scrollToTop(); }}>
+                //     {/* <i className="fa fa-arrow-circle-up" /> */}
+                // </a> :
+                <button title='Back to top' className='btn btn-default btn-xs' onClick={() => { this.scrollToTop(); }}>
+                    <i className="fa fa-chevron-up" />
+                </button> :
                 <button title='Back to bottom' className='btn btn-default btn-xs' onClick={() => { this.scrollToTop(); }}>
                     <i className="fa fa-chevron-down" />
                 </button>

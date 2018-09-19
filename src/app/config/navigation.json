@@ -183,7 +183,48 @@
           "comment": "Store Date Consolidate - Inventory",
           "screen_id": "H0004",
           "items": [
-            {}
+            {
+              "title": "Receipts All Vendor By Region",
+              "route": "/SDC/ReportReceiptsAllVendorByRegion",
+              "comment": "Receipts All Vendor By Region",
+              "screen_id": "S0025"
+            },
+            {
+              "title": "Detail Stock Transfer In",
+              "route": "/SDC/ReportDetailStockTransferIn",
+              "comment": "Detail Stock Transfer In",
+              "screen_id": "S0026"
+            },
+            {
+              "title": "Inventory Cost Per Month",
+              "route": "/SDC/ReportInventoryCostPerMonth",
+              "comment": "Inventory Cost Per Month",
+              "screen_id": "S0027"
+            },
+            {
+              "title": "Detail Stock Transfer Out",
+              "route": "/SDC/ReportDetailStockTransferOut",
+              "comment": "Detail Stock Transfer Out",
+              "screen_id": "S0028"
+            },
+            {
+              "title": "Summary Stock Transfer Out",
+              "route": "/SDC/ReportSummaryStockTransferOut",
+              "comment": "Summary Stock Transfer Out",
+              "screen_id": "S0029"
+            },
+            {
+              "title": "Ending Inventory",
+              "route": "/SDC/ReportEndingInventory",
+              "comment": "Ending Inventory",
+              "screen_id": "S0030"
+            },
+            {
+              "title": "Receipts All Vendor",
+              "route": "/SDC/ReportReceiptsAllVendor",
+              "comment": "Receipts All Vendor",
+              "screen_id": "S0031"
+            }
           ]
         }
       ]
