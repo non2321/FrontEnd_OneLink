@@ -493,7 +493,7 @@ class BankInAdjustment extends React.Component {
                                         <a style={{ "padding-left": "10px", "padding-right": "10px" }} onClick={this.handleImport} title="Import" className="button-icon form-group" data-toggle="modal" data-target="#myModalUpload">
                                             <span > Import</span></a>
                                         <a style={{ "padding-left": "10px", "padding-right": "10px" }} onClick={this.handleGenGL} title="Gen GL To E1" className="button-icon form-group" data-toggle="modal" data-target="#myModalGL">
-                                            <span > Gen GL To E1</span></a>
+                                        <span > Gen </span><span class="hidden-mobile">GL To E1</span></a>
                                     </div>
                                     }
                                 </header>
@@ -604,7 +604,7 @@ class BankInAdjustment extends React.Component {
                                                                                 render: function (data, type, row) {
                                                                                     return `<input type="number"  name="txtfinname" class="form-control input-xs" disabled="disabled" value=${parseFloat(Math.round(data * 100) / 100).toFixed(2)} step='0.01'></div><label class="text-danger"></label>`;
                                                                                 }
-                                                                            }],
+                                                                            }],                                                                            
                                                                             buttons: [
                                                                                 {
                                                                                     text: `<span ><i class="fa fa-edit" /><span class="hidden-mobile"> Edit</span></span>`,

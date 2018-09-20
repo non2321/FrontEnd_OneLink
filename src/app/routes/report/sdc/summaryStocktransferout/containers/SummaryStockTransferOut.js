@@ -42,4 +42,4 @@ function mapStateToProps(state) {
 }
 
 const connectedSummaryStockTransferOut= connect(mapStateToProps)(SummaryStockTransferOut);
-export default connectedSummaryStockTransferOutก
+export default connectedSummaryStockTransferOut

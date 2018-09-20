@@ -188,33 +188,36 @@ class Receipts extends React.Component {
                                                         ajax: `${PathBackEnd}/api/receipts/${datastore_id}/${datadatefrom}/${datadateto}/${(datainvoice_no) ? datainvoice_no : ''}`,
                                                         columns: [{ data: "INVOICE", "width": "9%" }, { data: "STOCK_NUM", "width": "8%" }, { data: "INV_ITEM_DESC" }, { data: "RECEIPT_DATE_DESC", "width": "10%" }, { data: "VENDOR_NAME", "width": "15%" }, { data: "UNITS_DESC", "width": "6%" },
                                                         {
-                                                            data: "RECEIVED", "width": "8%",
-                                                            className: 'text-right',
+                                                            data: "RECEIVED", "width": "8%",                                                          
                                                             render: function (data, type, row) {
                                                                 return parseFloat(Math.round(data * 100) / 100).toFixed(2)
                                                             }
                                                         },
                                                         {
-                                                            data: "INVOICE_AMOUNT", "width": "8%",
-                                                            className: 'text-right',
+                                                            data: "INVOICE_AMOUNT", "width": "8%",                                                          
                                                             render: function (data, type, row) {
                                                                 return parseFloat(Math.round(data * 100) / 100).toFixed(2)
                                                             }
                                                         },
                                                         {
-                                                            data: "S_RECEIVED", "width": "8%",
-                                                            className: 'text-right',
+                                                            data: "S_RECEIVED", "width": "8%",                                                            
                                                             render: function (data, type, row) {
                                                                 return parseFloat(Math.round(data * 100) / 100).toFixed(2)
                                                             }
                                                         },
                                                         {
-                                                            data: "S_INVOICE_AMOUNT", "width": "8%",
-                                                            className: 'text-right',
+                                                            data: "S_INVOICE_AMOUNT", "width": "8%",                                                           
                                                             render: function (data, type, row) {
                                                                 return parseFloat(Math.round(data * 100) / 100).toFixed(2)
                                                             }
-                                                        },],
+                                                        }],
+                                                        "fnRowCallback": function (nRow, aData, iDisplayIndex) {
+                                                            $('td:eq(6)', nRow).css("text-align", "right");
+                                                            $('td:eq(7)', nRow).css("text-align", "right");
+                                                            $('td:eq(8)', nRow).css("text-align", "right");
+                                                            $('td:eq(9)', nRow).css("text-align", "right");                                                                                                  
+                                                            return nRow;
+                                                        },
                                                         buttons: [
                                                         ],
                                                     }}

@@ -431,7 +431,7 @@ class EndingInventory extends React.Component {
                     self.setState({ optioninven_category: data })
                     return data
                 });
-        }, 400)
+        }, 300)
 
         let apiRequest2 = setTimeout(function () {
             fetch(`${PathBackEnd}/api/importtojde/ddlperiod`)
@@ -440,7 +440,7 @@ class EndingInventory extends React.Component {
                     self.setState({ tempperiod: data })
                     return data
                 });
-        }, 700)
+        }, 600)
 
         if (month && year) {
 
@@ -453,7 +453,7 @@ class EndingInventory extends React.Component {
                         self.setState({ period: data[0].value })
                         return data
                     });
-            }, 500)
+            }, 800)
         }       
     }
 
@@ -479,7 +479,7 @@ class EndingInventory extends React.Component {
                                         <a style={{ "padding-left": "10px", "padding-right": "10px" }} onClick={this.handleImport} title="Import" className="button-icon form-group" data-toggle="modal" data-target="#myModalUpload">
                                             <span > Import</span></a>
                                         <a style={{ "padding-left": "10px", "padding-right": "10px" }} onClick={this.handleGenPHInventory} title="Gen GL To E1" className="button-icon form-group" data-toggle="modal" data-target="#myModalGenPHInventory">
-                                            <span > Gen PH Inventory To E1</span></a>
+                                            <span > Gen </span><span class="hidden-mobile">PH Inventory To E1</span></a>
                                     </div>
                                     }
                                 </header>

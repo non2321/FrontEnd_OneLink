@@ -33,8 +33,7 @@ class DatatableTransferInventory extends React.Component {
             }
         }
 
-        options = _.extend(options, {
-
+        options = _.extend(options, {           
             "dom": "<'dt-toolbar'<'col-xs-12 col-sm-8' B><'pull-right hidden-xs' l><'pull-right' f>r >" +
                 "t" +
                 "<'dt-toolbar-footer' <'col-sm-6 col-xs-12 hidden-xs'i>p<'col-xs-12 col-sm-6'>>",

@@ -1,6 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import Delay from 'react-delay'
+import dateFormat from 'dateformat'
 
 import { userAuth } from '../../../../actions/auth'
 
@@ -92,7 +93,7 @@ class TransferInventory extends React.Component {
             errorstore_id: (store_id) ? '' : 'The store id is required',
             submitted: false
         })
-       
+
         if (stamp, store_id) {
             setTimeout(() => {
                 self.setState({
@@ -107,7 +108,6 @@ class TransferInventory extends React.Component {
     }
 
     componentDidMount() {
-
     }
 
     render() {
@@ -216,7 +216,23 @@ class TransferInventory extends React.Component {
                                                     options={{
                                                         colReorder: true,
                                                         ajax: `${PathBackEnd}/api/transferinventory/${datastamp}/${datastore_id}/${datadatefrom}/${datadateto}`,
-                                                        columns: [{ data: "STOCK_NUM" }, { data: "INV_ITEM_DESC" }, { data: "DESTINATION" }, { data: "COUNT_DESC" }, { data: "S_NUM_TRANSFERRED" }, { data: "NUM_TRANSFERRED" }, { data: "COST_PER_COUNT" }, { data: "TRANSFER_DATE" }],
+                                                        columns: [{ data: "STOCK_NUM" }, { data: "INV_ITEM_DESC" }, { data: "DESTINATION" }, { data: "COUNT_DESC" }, { data: "S_NUM_TRANSFERRED" }, { data: "NUM_TRANSFERRED" }, { data: "COST_PER_COUNT" },
+                                                        {
+                                                            data: "TRANSFER_DATE",
+                                                            render: function (data, type, row) {
+                                                                if (type === "sort" || type === "type") {
+                                                                    return data;
+                                                                }
+                                                                return dateFormat(data, "dd/mm/yyyy HH:MM:ss")
+                                                            }
+                                                        },
+                                                        ],
+                                                        "fnRowCallback": function (nRow, aData, iDisplayIndex) {
+                                                            $('td:eq(4)', nRow).css("text-align", "right");
+                                                            $('td:eq(5)', nRow).css("text-align", "right");
+                                                            $('td:eq(6)', nRow).css("text-align", "right");                                                                                                 
+                                                            return nRow;
+                                                        },
                                                         buttons: [
                                                         ],
                                                     }}
@@ -265,7 +281,23 @@ class TransferInventory extends React.Component {
                                                     options={{
                                                         colReorder: true,
                                                         ajax: `${PathBackEnd}/api/transferinventory/${datastamp}/${datastore_id}/${datadatefrom}/${datadateto}`,
-                                                        columns: [{ data: "STOCK_NUM" }, { data: "INV_ITEM_DESC" }, { data: "SOURCE" }, { data: "COUNT_DESC" }, { data: "S_NUM_TRANSFERRED" }, { data: "NUM_TRANSFERRED" }, { data: "COST_PER_COUNT" }, { data: "TRANSFER_DATE" }],
+                                                        columns: [{ data: "STOCK_NUM" }, { data: "INV_ITEM_DESC" }, { data: "SOURCE" }, { data: "COUNT_DESC" }, { data: "S_NUM_TRANSFERRED" }, { data: "NUM_TRANSFERRED" }, { data: "COST_PER_COUNT" },
+                                                        {
+                                                            data: "TRANSFER_DATE",
+                                                            className: 'dt-body-right',
+                                                            render: function (data, type, row) {
+                                                                if (type === "sort" || type === "type") {
+                                                                    return data;
+                                                                }
+                                                                return dateFormat(data, "dd/mm/yyyy HH:MM:ss")
+                                                            }
+                                                        }],
+                                                        "fnRowCallback": function (nRow, aData, iDisplayIndex) {
+                                                            $('td:eq(4)', nRow).css("text-align", "right");
+                                                            $('td:eq(5)', nRow).css("text-align", "right");
+                                                            $('td:eq(6)', nRow).css("text-align", "right");                                                                                                 
+                                                            return nRow;
+                                                        },
                                                         buttons: [
                                                         ],
                                                     }}

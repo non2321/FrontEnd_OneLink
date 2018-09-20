@@ -44,6 +44,7 @@ exports.ScreenIDReportEndingInventory = 'S0030'
 exports.ScreenIDReportReceiptsAllVendor = 'S0031'
 
 //Path Tableau
+//SDC Sales
 exports.TableauDailyFlashSales = 'http://192.168.151.31/views/PH_RDS_Financial/1_PettyCash?iframeSizedToWindow=true&:embed=y&:showAppBanner=false&:display_count=no&:showVizHome=no'
 exports.TableauCashSalesReconciliation = 'http://192.168.151.31/views/PH_RDS_Financial/1_PettyCash?iframeSizedToWindow=true&:embed=y&:showAppBanner=false&:display_count=no&:showVizHome=no'
 exports.TableauBankInSummaryByBank = 'http://192.168.151.31/views/PH_RDS_Financial/1_PettyCash?iframeSizedToWindow=true&:embed=y&:showAppBanner=false&:display_count=no&:showVizHome=no'
@@ -52,6 +53,14 @@ exports.TableauTotalPettyCashReimbursementByStore = 'http://192.168.151.31/views
 exports.TableauReportRestaurantDataAnalysisForMonth = 'http://192.168.151.31/views/PH_RDS_Financial/1_PettyCash?iframeSizedToWindow=true&:embed=y&:showAppBanner=false&:display_count=no&:showVizHome=no'
 exports.TableauReportRestaurantPettyCashAnanlysis = 'http://192.168.151.31/views/PH_RDS_Financial/1_PettyCash?iframeSizedToWindow=true&:embed=y&:showAppBanner=false&:display_count=no&:showVizHome=no'
 exports.TableauReportSummaryCashReconciliation = 'http://192.168.151.31/views/PH_RDS_Financial/1_PettyCash?iframeSizedToWindow=true&:embed=y&:showAppBanner=false&:display_count=no&:showVizHome=no'
+//SDC Inventory
+exports.TableauReceiptsAllVendorByRegion = 'http://192.168.151.31/views/PH_RDS_Financial/1_PettyCash?iframeSizedToWindow=true&:embed=y&:showAppBanner=false&:display_count=no&:showVizHome=no'
+exports.TableauDetailStockTransferIn = 'http://192.168.151.31/views/PH_RDS_Financial/1_PettyCash?iframeSizedToWindow=true&:embed=y&:showAppBanner=false&:display_count=no&:showVizHome=no'
+exports.TableauInventoryCostPerMonth = 'http://192.168.151.31/views/PH_RDS_Financial/1_PettyCash?iframeSizedToWindow=true&:embed=y&:showAppBanner=false&:display_count=no&:showVizHome=no'
+exports.TableauDetailStockTransferOut = 'http://192.168.151.31/views/PH_RDS_Financial/1_PettyCash?iframeSizedToWindow=true&:embed=y&:showAppBanner=false&:display_count=no&:showVizHome=no'
+exports.TableauSummaryStockTransferOut = 'http://192.168.151.31/views/PH_RDS_Financial/1_PettyCash?iframeSizedToWindow=true&:embed=y&:showAppBanner=false&:display_count=no&:showVizHome=no'
+exports.TableauEndingInventory = 'http://192.168.151.31/views/PH_RDS_Financial/1_PettyCash?iframeSizedToWindow=true&:embed=y&:showAppBanner=false&:display_count=no&:showVizHome=no'
+exports.TableauReceiptsAllVendor = 'http://192.168.151.31/views/PH_RDS_Financial/1_PettyCash?iframeSizedToWindow=true&:embed=y&:showAppBanner=false&:display_count=no&:showVizHome=no'
 
 exports.DropdownMonth = [
     { "value": "1", "label": "January" },
