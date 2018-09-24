@@ -8,7 +8,7 @@ import { ScreenIDHomePage } from '../../../../../settings'
 class Home extends React.Component {
     constructor(props) {
         super(props);
-           
+
         if (this.state === undefined) {
             const prm = {
                 screen_id: ScreenIDHomePage,
@@ -16,7 +16,7 @@ class Home extends React.Component {
             this.props.dispatch(userAuth.loadpage(prm))
         }
     }
-    
+
 
     render() {
         return (
@@ -28,10 +28,10 @@ class Home extends React.Component {
     }
 }
 
-function mapStateToProps(state) {  
+function mapStateToProps(state) {
     return {
     };
-  }
-  
-  const connectedHome = connect(mapStateToProps)(Home);
-  export default connectedHome
+}
+
+const connectedHome = connect(mapStateToProps)(Home);
+export default connectedHome

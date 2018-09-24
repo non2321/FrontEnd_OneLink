@@ -566,7 +566,18 @@ class EndingInventory extends React.Component {
                                                     fixedHeader: true,
                                                     ajax: `${PathBackEnd}/api/unitcost/${dataperiod}/${datainvencategory}/${datastockno}`,
                                                     columns: [{ data: "STOCK_NUM" }, { data: "INV_ITEM" }, { data: "INV_ITEM_DESC" }, { data: "UOM" },
-
+                                                    {
+                                                        data: "UNIT_COST", "visible": false,
+                                                        render: function (data, type, row) {
+                                                            return parseFloat(Math.round(data * 100) / 100).toFixed(2)
+                                                        }
+                                                    },
+                                                    {
+                                                        data: "COUNT_PER_UNIT", "visible": false,
+                                                        render: function (data, type, row) {
+                                                            return parseFloat(Math.round(data * 100) / 100).toFixed(2)
+                                                        }
+                                                    },
                                                     {
                                                         data: "UNIT_COST",
                                                         render: function (data, type, row) {
@@ -632,6 +643,14 @@ class EndingInventory extends React.Component {
                                                         <th data-hide="user"><i
                                                             className="text-muted hidden-md hidden-sm hidden-xs" />
                                                             UOM
+                                                        </th>
+                                                        <th data-hide="user"><i
+                                                            className="text-muted hidden-md hidden-sm hidden-xs" />
+                                                            Unit Cost
+                                                        </th>
+                                                        <th data-hide="user"><i
+                                                            className="text-muted hidden-md hidden-sm hidden-xs" />
+                                                            Count/Unit
                                                         </th>
                                                         <th data-hide="user"><i
                                                             className="text-muted hidden-md hidden-sm hidden-xs" />
