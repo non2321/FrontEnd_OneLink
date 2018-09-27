@@ -208,7 +208,7 @@ function genunitcost(prm) {
                 const url = window.URL.createObjectURL(blob);
                 const link = document.createElement('a');
                 link.href = url;
-                link.setAttribute('download', 'GLSALES_PH.txt');
+                link.setAttribute('download', 'GLINV_PH.txt');
                 document.body.appendChild(link);
                 link.click();
 
