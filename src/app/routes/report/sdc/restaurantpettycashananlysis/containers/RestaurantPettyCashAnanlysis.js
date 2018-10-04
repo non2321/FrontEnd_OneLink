@@ -9,6 +9,7 @@ import { smallBox, bigBox, SmartMessageBox } from '../../../../../components/uti
 
 import UiDatepicker from '../../../../../components/forms/inputs/UiDatepicker'
 import { ScreenIDReportRestaurantPettyCashAnanlysis, PathBackEnd, TableauReportRestaurantPettyCashAnanlysis } from '../../../../../../../settings'
+import { utils } from '../../../../../services'
 
 import Select from 'react-select'
 import 'react-select/dist/react-select.css';
@@ -79,8 +80,7 @@ class RestaurantPettyCashAnanlysis extends React.Component {
         })
 
         if (datefrom && store && screen_id) {
-            let datePartsfrom = datefrom.split("/");
-            let dateObjectfrom = `${datePartsfrom[2]}/${datePartsfrom[1]}/${datePartsfrom[0]}`
+            const dateObjectfrom = utils.convertdateformatString(datefrom)           
 
             const prm = {
                 screen_id: screen_id

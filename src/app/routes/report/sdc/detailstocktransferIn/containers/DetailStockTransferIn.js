@@ -9,8 +9,10 @@ import { reportsdc } from '../../../../../actions/report'
 import { Stats, BigBreadcrumbs, WidgetGrid, JarvisWidget } from '../../../../../components'
 import { ScreenIDReportDetailStockTransferIn, PathBackEnd, TableauDetailStockTransferIn } from '../../../../../../../settings'
 import UiDatepicker from '../../../../../components/forms/inputs/UiDatepicker'
+import { utils } from '../../../../../services'
 
 import Select from 'react-select'
+import ReactMultiSelectCheckboxes from 'react-multiselect-checkboxes';
 import 'react-select/dist/react-select.css'
 
 const optiontableau = {
@@ -86,12 +88,8 @@ class DetailStockTransferIn extends React.Component {
         })
 
         if (datefrom && dateto && store && screen_id) {
-            let datePartsfrom = datefrom.split("/");
-            let dateObjectfrom = `${datePartsfrom[2]}/${datePartsfrom[1]}/${datePartsfrom[0]}`
-
-            let datePartsto = dateto.split("/");
-            let dateObjectto = `${datePartsto[2]}/${datePartsto[1]}/${datePartsto[0]}`
-
+            const dateObjectfrom = utils.convertdateformatString(datefrom)
+            const dateObjectto = utils.convertdateformatString(dateto)
 
             const prm = {
                 screen_id: screen_id
@@ -120,7 +118,7 @@ class DetailStockTransferIn extends React.Component {
                     self.setState({ optionstore: data })
                     return data
                 });
-        }, 300)
+        }, 500)
     }
 
     render() {

@@ -4,11 +4,11 @@ import { connect } from 'react-redux';
 import { userAuth } from '../../../../../actions/auth';
 import { reportsdc } from '../../../../../actions/report'
 
-import { Stats, BigBreadcrumbs, WidgetGrid, JarvisWidget } from '../../../../../components'
-import { smallBox, bigBox, SmartMessageBox } from '../../../../../components/utils/actions/MessageActions'
+import { WidgetGrid, JarvisWidget } from '../../../../../components'
 
 import UiDatepicker from '../../../../../components/forms/inputs/UiDatepicker'
 import { ScreenIDReportSummaryCashReconciliation, PathBackEnd, TableauReportSummaryCashReconciliation } from '../../../../../../../settings'
+import { utils } from '../../../../../services'
 
 import Select from 'react-select'
 import 'react-select/dist/react-select.css';
@@ -97,11 +97,8 @@ class SummaryCashReconciliation extends React.Component {
         })
 
         if (datefrom && dateto && from_store && to_store && screen_id) {
-            let datePartsfrom = datefrom.split("/");
-            let dateObjectfrom = `${datePartsfrom[2]}/${datePartsfrom[1]}/${datePartsfrom[0]}`
-
-            let datePartsto = dateto.split("/");
-            let dateObjectto = `${datePartsto[2]}/${datePartsto[1]}/${datePartsto[0]}`
+            const dateObjectfrom = utils.convertdateformatString(datefrom)
+            const dateObjectto = utils.convertdateformatString(dateto)
 
             const prm = {
                 screen_id: screen_id

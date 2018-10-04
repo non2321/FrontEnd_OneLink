@@ -1,13 +1,23 @@
 import React from 'react'
 import { connect } from 'react-redux'
+import TableauReport from 'react-tableau-report'
 
 import { userAuth } from '../../../../../actions/auth'
+import { reportsdc } from '../../../../../actions/report'
 
 import { Stats, BigBreadcrumbs, WidgetGrid, JarvisWidget } from '../../../../../components'
 import { ScreenIDReportReceiptsAllVendorByRegion, PathBackEnd, TableauReceiptsAllVendorByRegion } from '../../../../../../../settings'
 
+import UiDatepicker from '../../../../../components/forms/inputs/UiDatepicker'
+import { utils } from '../../../../../services'
+
+
+import ReactMultiSelectCheckboxes from 'react-multiselect-checkboxes';
+import Select from 'react-select'
+import 'react-select/dist/react-select.css'
+
 const optiontableau = {
-    hideTabs: true,   
+    hideTabs: true,
 }
 
 class ReceiptsAllVendorByRegion extends React.Component {
@@ -19,12 +29,12 @@ class ReceiptsAllVendorByRegion extends React.Component {
                 screen_id: ScreenIDReportReceiptsAllVendorByRegion,
             }
             this.props.dispatch(userAuth.loadpage(prm))
-        }      
+        }
 
         this.state = {
             datefrom: '',
             dateto: '',
-            store: '',
+            vendor: '',
             errordatefrom: '',
             errordateto: '',
             errorstore: '',
@@ -51,16 +61,22 @@ class ReceiptsAllVendorByRegion extends React.Component {
         });
     }
 
-    handleChangesStore = (store) => {
+    handleChangesVendor = (vendor) => {
         this.setState({
-            store: (store == null) ? '' : store
+            vendor: (vendor == null) ? '' : vendor
+        });
+    }
+
+    handleChangesRegion = (region) => {
+        this.setState({
+            region: (region == null) ? '' : region
         });
     }
 
     handleReset(e) {
         e.preventDefault();
 
-        this.setState({ datefrom: '', dateto: '', store: '', submitted: false, parameters: null })
+        this.setState({ datefrom: '', dateto: '', vendor: '', submitted: false, parameters: null })
         this.setState({ errordatefrom: '', errordateto: '', errorstore: '' })
     }
 
@@ -68,64 +84,72 @@ class ReceiptsAllVendorByRegion extends React.Component {
         e.preventDefault();
 
         const { dispatch } = this.props
-        const { datefrom, dateto, store, screen_id } = this.state
+        const { datefrom, dateto, vendor, region, screen_id } = this.state
         const self = this
 
         this.setState({
             errordatefrom: (datefrom) ? '' : 'The From Date is required',
             errordateto: (dateto) ? '' : 'The To Date is required',
-            errorstore: (store) ? '' : 'The Store is required',
+            errorvender: (vendor) ? (vendor.length > 0) ? '' : 'The Vendor is required' : 'The Vendor is required',
+            errorregion: (region) ? '' : 'The Region is required',
             submitted: false
         })
 
-        if (datefrom && dateto && store && screen_id) {
-            let datePartsfrom = datefrom.split("/");
-            let dateObjectfrom = `${datePartsfrom[2]}/${datePartsfrom[1]}/${datePartsfrom[0]}`
+        if (datefrom && dateto && vendor && region && screen_id) {
+            if (vendor.length > 0) {
+                const dateObjectfrom = utils.convertdateformatString(datefrom)
+                const dateObjectto = utils.convertdateformatString(dateto)
 
-            let datePartsto = dateto.split("/");
-            let dateObjectto = `${datePartsto[2]}/${datePartsto[1]}/${datePartsto[0]}`
-
-
-            const prm = {
-                screen_id: screen_id
-            }
-            dispatch(reportsdc.generatetokentableau(prm))
-            this.setState({
-                parameters: {
-                    p_from_date: dateObjectfrom,
-                    p_to_date: dateObjectto,
-                    p_store: store
+                const prm = {
+                    screen_id: screen_id
                 }
-            })
+                dispatch(reportsdc.generatetokentableau(prm))
+                this.setState({
+                    parameters: {
+                        p_from_date: dateObjectfrom,
+                        p_to_date: dateObjectto,
+                        p_vendor: vendor
+                    }
+                })
 
-            setTimeout(function () {
-                self.setState({ submitted: true })
-            }, 500)
+                setTimeout(function () {
+                    self.setState({ submitted: true })
+                }, 500)
+            }
         }
     }
 
     componentDidMount() {
         const self = this
         let apiRequest1 = setTimeout(function () {
-            fetch(`${PathBackEnd}/api/report/storeall`)
+            fetch(`${PathBackEnd}/api/report/vendor`)
                 .then(response => response.json())
                 .then(data => {
-                    self.setState({ optionstore: data })
+                    self.setState({ optionvendor: data })
                     return data
                 });
         }, 300)
+
+        let apiRequest2 = setTimeout(function () {
+            fetch(`${PathBackEnd}/api/report/region`)
+                .then(response => response.json())
+                .then(data => {
+                    self.setState({ optionregion: data })
+                    return data
+                });
+        }, 600)
     }
-    
+
     render() {
-        const { datefrom, dateto, store, optionstore, submitted, parameters } = this.state;
-        const { errordatefrom, errordateto, errorstore } = this.state;
+        const { datefrom, dateto, vendor, region, optionvendor, optionregion, submitted, parameters } = this.state;
+        const { errordatefrom, errordateto, errorvender, errorregion } = this.state;
         const { modify, screen_name, report } = this.props;
 
         const tokentableau = report.data
 
         return (
             <div id="content">
-               <WidgetGrid>
+                <WidgetGrid>
                     <div className="row">
                         <article className="col-sm-12">
                             <JarvisWidget editbutton={false} colorbutton={false} deletebutton={false} togglebutton={false} color="darken">
@@ -137,7 +161,7 @@ class ReceiptsAllVendorByRegion extends React.Component {
                                             <div className="col-md-6 form-group">
                                                 <div className="col-md-4 control-label"><label > From Date</label><span class="text-danger">*</span></div>
                                                 <div className="col-md-6">
-                                                    <UiDatepicker type="text" name="startdate" id="startdate" changeMonth="true" changeYear="true" dateFormat="dd/mm/yy" addday="120" datefrom="#startdate" dateto="#finishdate" onInputChange={this.handleDateFrom} value={datefrom}
+                                                    <UiDatepicker type="text" name="startdate" id="startdate" changeMonth="true" changeYear="true" dateFormat="dd/mm/yy" addday="365" datefrom="#startdate" dateto="#finishdate" onInputChange={this.handleDateFrom} value={datefrom}
                                                         placeholder="Start date" />
                                                     <span className="text-danger">{errordatefrom}</span>
                                                 </div>
@@ -145,25 +169,29 @@ class ReceiptsAllVendorByRegion extends React.Component {
                                             <div className="col-md-6 form-group">
                                                 <div className="col-md-4 control-label"><label > To Date</label><span class="text-danger">*</span></div>
                                                 <div className="col-md-6">
-                                                    <UiDatepicker type="text" name="finishdate" id="finishdate" changeMonth="true" changeYear="true" dateFormat="dd/mm/yy" addday="120" onInputChange={this.handleDateTo} value={dateto} disabled={!datefrom} placeholder="Finish date" />
+                                                    <UiDatepicker type="text" name="finishdate" id="finishdate" changeMonth="true" changeYear="true" dateFormat="dd/mm/yy" addday="365" onInputChange={this.handleDateTo} value={dateto} disabled={!datefrom} placeholder="Finish date" />
                                                     <span className="text-danger">{errordateto}</span>
                                                 </div>
                                             </div>
                                         </div>
                                         <div className="row">
                                             <div className="col-md-6 form-group">
-                                                <div className="col-md-4 control-label"><label > Store</label><span class="text-danger">*</span></div>
+                                                <div className="col-md-4 control-label"><label > Vendor</label><span class="text-danger">*</span></div>
                                                 <div className="col-md-6">
-                                                    {optionstore &&
-                                                        <Select options={optionstore} placeholder='Store' name="store" value={store} onChange={this.handleChangesStore} />
+                                                    {optionvendor &&
+                                                        <ReactMultiSelectCheckboxes options={optionvendor} placeholder='Vendor' name="vendor" onChange={this.handleChangesVendor} />
                                                     }
-                                                    <span className="text-danger">{errorstore}</span>
+                                                    <span className="text-danger">{errorvender}</span>
                                                 </div>
                                             </div>
                                             <div className="col-md-6 form-group">
-                                                <div className="col-md-4 control-label">
+                                                <div className="col-md-4 control-label"><label > Region</label><span class="text-danger">*</span>
                                                 </div>
                                                 <div className="col-md-6">
+                                                    {optionregion &&
+                                                        <Select options={optionregion} placeholder='Region' value={region} name="region" onChange={this.handleChangesRegion} />
+                                                    }
+                                                    <span className="text-danger">{errorregion}</span>
                                                 </div>
                                             </div>
                                         </div>
@@ -217,9 +245,6 @@ class ReceiptsAllVendorByRegion extends React.Component {
         )
     }
 }
-
-
-
 
 function mapStateToProps(state) {
     const { loadpage, report } = state;

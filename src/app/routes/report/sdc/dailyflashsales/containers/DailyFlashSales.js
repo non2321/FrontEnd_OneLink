@@ -9,6 +9,7 @@ import { smallBox, bigBox, SmartMessageBox } from '../../../../../components/uti
 
 import UiDatepicker from '../../../../../components/forms/inputs/UiDatepicker'
 import { ScreenIDReportDailyFlashSales, PathBackEnd, TableauDailyFlashSales } from '../../../../../../../settings'
+import { utils } from '../../../../../services'
 
 import Delay from 'react-delay'
 
@@ -112,16 +113,13 @@ class DailyFlashSales extends React.Component {
             errordatefrom: (datefrom) ? '' : 'The From Date is required',
             errordateto: (dateto) ? '' : 'The To Date is required',
             errorfrom_store: (from_store) ? '' : 'The From Store is required',
-            errorto_store: (to_store) ? '' : 'The To Store To is required',
+            errorto_store: (to_store) ? '' : 'The To Store is required',
             submitted: false
         })
 
         if (datefrom && dateto && from_store && to_store && screen_id) {
-            let datePartsfrom = datefrom.split("/");
-            let dateObjectfrom = `${datePartsfrom[2]}/${datePartsfrom[1]}/${datePartsfrom[0]}`
-
-            let datePartsto = dateto.split("/");
-            let dateObjectto = `${datePartsto[2]}/${datePartsto[1]}/${datePartsto[0]}`
+            const dateObjectfrom = utils.convertdateformatString(datefrom)
+            const dateObjectto = utils.convertdateformatString(dateto)
 
             const prm = {
                 screen_id: screen_id
@@ -151,7 +149,7 @@ class DailyFlashSales extends React.Component {
                     self.setState({ options: data })
                     return data
                 });
-        }, 300)
+        }, 500)
     }
 
 
