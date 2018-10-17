@@ -206,13 +206,7 @@
               "route": "/SDC/ReportDetailStockTransferOut",
               "comment": "Detail Stock Transfer Out",
               "screen_id": "S0028"
-            },
-            {
-              "title": "Summary Stock Transfer Out",
-              "route": "/SDC/ReportSummaryStockTransferOut",
-              "comment": "Summary Stock Transfer Out",
-              "screen_id": "S0029"
-            },
+            },          
             {
               "title": "Ending Inventory",
               "route": "/SDC/ReportEndingInventory",

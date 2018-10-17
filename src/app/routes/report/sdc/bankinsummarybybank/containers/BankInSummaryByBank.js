@@ -101,9 +101,9 @@ class BankInSummaryByBank extends React.Component {
             dispatch(reportsdc.generatetokentableau(prm))
             this.setState({
                 parameters: {
-                    p_from_date: dateObjectfrom,
-                    p_to_date: dateObjectto,
-                    p_bank: bank
+                    'Financial Date From': dateObjectfrom,
+                    'Financial Date To': dateObjectto,
+                    'Bank Code': bank.value
                 }
             })
 

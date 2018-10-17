@@ -39,28 +39,34 @@ exports.ScreenIDReportReceiptsAllVendorByRegion = 'S0025'
 exports.ScreenIDReportDetailStockTransferIn = 'S0026'
 exports.ScreenIDReportInventoryCostPerMonth = 'S0027'
 exports.ScreenIDReportDetailStockTransferOut = 'S0028'
+
+//Duplicate
 exports.ScreenIDReportSummaryStockTransferOut = 'S0029'
+
 exports.ScreenIDReportEndingInventory = 'S0030'
 exports.ScreenIDReportReceiptsAllVendor = 'S0031'
 
 //Path Tableau
 //SDC Sales
-exports.TableauDailyFlashSales = 'http://192.168.151.31/views/PH_RDS_Financial/1_PettyCash?iframeSizedToWindow=true&:embed=y&:showAppBanner=false&:display_count=no&:showVizHome=no'
-exports.TableauCashSalesReconciliation = 'http://192.168.151.31/views/PH_RDS_Financial/1_PettyCash?iframeSizedToWindow=true&:embed=y&:showAppBanner=false&:display_count=no&:showVizHome=no'
-exports.TableauBankInSummaryByBank = 'http://192.168.151.31/views/PH_RDS_Financial/1_PettyCash?iframeSizedToWindow=true&:embed=y&:showAppBanner=false&:display_count=no&:showVizHome=no'
-exports.TableauCashSalesReconcilationByStore = 'http://192.168.151.31/views/PH_RDS_Financial/1_PettyCash?iframeSizedToWindow=true&:embed=y&:showAppBanner=false&:display_count=no&:showVizHome=no'
-exports.TableauTotalPettyCashReimbursementByStore = 'http://192.168.151.31/views/PH_RDS_Financial/1_PettyCash?iframeSizedToWindow=true&:embed=y&:showAppBanner=false&:display_count=no&:showVizHome=no'
-exports.TableauReportRestaurantDataAnalysisForMonth = 'http://192.168.151.31/views/PH_RDS_Financial/1_PettyCash?iframeSizedToWindow=true&:embed=y&:showAppBanner=false&:display_count=no&:showVizHome=no'
-exports.TableauReportRestaurantPettyCashAnanlysis = 'http://192.168.151.31/views/PH_RDS_Financial/1_PettyCash?iframeSizedToWindow=true&:embed=y&:showAppBanner=false&:display_count=no&:showVizHome=no'
-exports.TableauReportSummaryCashReconciliation = 'http://192.168.151.31/views/PH_RDS_Financial/1_PettyCash?iframeSizedToWindow=true&:embed=y&:showAppBanner=false&:display_count=no&:showVizHome=no'
+exports.TableauDailyFlashSales = 'http://192.168.151.31/views/ONELINKREPORTSDC/REPORTDAILYFLASHSALES?iframeSizedToWindow=true&:embed=y&:showAppBanner=false&:display_count=no&:showVizHome=no'
+exports.TableauCashSalesReconciliation = 'http://192.168.151.31/views/ONELINKREPORTSDC/REPORTHOTMONTHLYCASHSALESRECONCILIATIONDIFFDBCR?iframeSizedToWindow=true&:embed=y&:showAppBanner=false&:display_count=no&:showVizHome=no#1'
+exports.TableauBankInSummaryByBank = 'http://192.168.151.31/views/ONELINKREPORTSDC/REPORTMONTHLYBANKINSUMMARYREPORTBYBANK?iframeSizedToWindow=true&:embed=y&:showAppBanner=false&:display_count=no&:showVizHome=no'
+exports.TableauCashSalesReconcilationByStore = 'http://192.168.151.31/views/ONELINKREPORTSDC/REPORTMONTHLYCASHSALESRECONCILATIONBYSTORE?iframeSizedToWindow=true&:embed=y&:showAppBanner=false&:display_count=no&:showVizHome=no'
+exports.TableauTotalPettyCashReimbursementByStore = 'http://192.168.151.31/views/ONELINKREPORTSDC/REPORTMONTHLYTOTALPETTYCASHREIMBURSEMENTBYSTORE?iframeSizedToWindow=true&:embed=y&:showAppBanner=false&:display_count=no&:showVizHome=no'
+exports.TableauReportRestaurantDataAnalysisForMonth = 'http://192.168.151.31/views/ONELINKREPORTSDC/REPORTRESTAURANTDATAANALYSISFORMONTH?iframeSizedToWindow=true&:embed=y&:showAppBanner=false&:display_count=no&:showVizHome=no'
+exports.TableauReportRestaurantPettyCashAnanlysis = 'http://192.168.151.31/views/ONELINKREPORTSDC/REPORTMONTHLYRESTAURANTPETTYCASHANANLYSIS?iframeSizedToWindow=true&:embed=y&:showAppBanner=false&:display_count=no&:showVizHome=no'
+exports.TableauReportSummaryCashReconciliation = 'http://192.168.151.31/views/ONELINKREPORTSDC/REPORTSUMMARYCASHRECONCILIATION?iframeSizedToWindow=true&:embed=y&:showAppBanner=false&:display_count=no&:showVizHome=no'
 //SDC Inventory
-exports.TableauReceiptsAllVendorByRegion = 'http://192.168.151.31/views/PH_RDS_Financial/1_PettyCash?iframeSizedToWindow=true&:embed=y&:showAppBanner=false&:display_count=no&:showVizHome=no'
-exports.TableauDetailStockTransferIn = 'http://192.168.151.31/views/PH_RDS_Financial/1_PettyCash?iframeSizedToWindow=true&:embed=y&:showAppBanner=false&:display_count=no&:showVizHome=no'
-exports.TableauInventoryCostPerMonth = 'http://192.168.151.31/views/PH_RDS_Financial/1_PettyCash?iframeSizedToWindow=true&:embed=y&:showAppBanner=false&:display_count=no&:showVizHome=no'
-exports.TableauDetailStockTransferOut = 'http://192.168.151.31/views/PH_RDS_Financial/1_PettyCash?iframeSizedToWindow=true&:embed=y&:showAppBanner=false&:display_count=no&:showVizHome=no'
+exports.TableauReceiptsAllVendorByRegion = 'http://192.168.151.31/views/ONELINKREPORTSDC/REPORTRECEIPTSALLVENDORBYREGION?iframeSizedToWindow=true&:embed=y&:showAppBanner=false&:display_count=no&:showVizHome=no'
+exports.TableauDetailStockTransferIn = 'http://192.168.151.31/views/ONELINKREPORTSDC/REPORTDETAILSTOCKTRANSFERIN?iframeSizedToWindow=true&:embed=y&:showAppBanner=false&:display_count=no&:showVizHome=no'
+exports.TableauInventoryCostPerMonth = 'http://192.168.151.31/views/ONELINKREPORTSDC/REPORTINVENTORYCOSTPERMONTH?iframeSizedToWindow=true&:embed=y&:showAppBanner=false&:display_count=no&:showVizHome=no'
+exports.TableauDetailStockTransferOut = 'http://192.168.151.31/views/ONELINKREPORTSDC/REPORTDETAILSTOCKTRANSFEROUT?iframeSizedToWindow=true&:embed=y&:showAppBanner=false&:display_count=no&:showVizHome=no'
+
+//Duplicate
 exports.TableauSummaryStockTransferOut = 'http://192.168.151.31/views/PH_RDS_Financial/1_PettyCash?iframeSizedToWindow=true&:embed=y&:showAppBanner=false&:display_count=no&:showVizHome=no'
-exports.TableauEndingInventory = 'http://192.168.151.31/views/PH_RDS_Financial/1_PettyCash?iframeSizedToWindow=true&:embed=y&:showAppBanner=false&:display_count=no&:showVizHome=no'
-exports.TableauReceiptsAllVendor = 'http://192.168.151.31/views/PH_RDS_Financial/1_PettyCash?iframeSizedToWindow=true&:embed=y&:showAppBanner=false&:display_count=no&:showVizHome=no'
+
+exports.TableauEndingInventory = 'http://192.168.151.31/views/ONELINKREPORTSDC/ReportEndingInventory?iframeSizedToWindow=true&:embed=y&:showAppBanner=false&:display_count=no&:showVizHome=no'
+exports.TableauReceiptsAllVendor = 'http://192.168.151.31/views/ONELINKREPORTSDC/REPORTRECEIPTSALLVENDOR?iframeSizedToWindow=true&:embed=y&:showAppBanner=false&:display_count=no&:showVizHome=no'
 
 exports.DropdownMonth = [
     { "value": "1", "label": "January" },

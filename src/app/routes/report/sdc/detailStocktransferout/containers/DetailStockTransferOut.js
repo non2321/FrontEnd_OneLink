@@ -97,9 +97,9 @@ class DetailStockTransferOut extends React.Component {
             dispatch(reportsdc.generatetokentableau(prm))
             this.setState({
                 parameters: {
-                    p_from_date: dateObjectfrom,
-                    p_to_date: dateObjectto,
-                    p_store: store
+                    'Financial Date From': dateObjectfrom,
+                    'Financial Date To': dateObjectto,
+                    'Store From': store.value
                 }
             })
 

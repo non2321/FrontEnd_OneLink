@@ -51,7 +51,10 @@ const routes = {
     require('./routes/report/sdc/detailstocktransferIn').default,
     require('./routes/report/sdc/inventorycostpermonth').default,
     require('./routes/report/sdc/detailStocktransferout').default,
-    require('./routes/report/sdc/summaryStocktransferout').default,
+
+    //Duplicate
+    //require('./routes/report/sdc/summaryStocktransferout').default,
+
     require('./routes/report/sdc/endinginventory').default,
     require('./routes/report/sdc/receiptsallvendor').default,
     //Page Not Found

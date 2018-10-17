@@ -72,11 +72,11 @@ class InventoryCostPerMonth extends React.Component {
         if (year && period && screen_id) {
             const prm = {
                 screen_id: screen_id
-            }
+            }            
             dispatch(reportsdc.generatetokentableau(prm))
             this.setState({
                 parameters: {
-                    p_period: period
+                    'Period Id': period.value
                 }
             })
 

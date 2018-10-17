@@ -76,8 +76,8 @@ class ReceiptsAllVendorByRegion extends React.Component {
     handleReset(e) {
         e.preventDefault();
 
-        this.setState({ datefrom: '', dateto: '', vendor: '', submitted: false, parameters: null })
-        this.setState({ errordatefrom: '', errordateto: '', errorstore: '' })
+        this.setState({ datefrom: '', dateto: '', vendor: [], region: '', submitted: false, parameters: null })
+        this.setState({ errordatefrom: '', errordateto: '', errorstore: '', errorvender: '', errorregion: '' })
     }
 
     handleSubmit(e) {
@@ -103,15 +103,24 @@ class ReceiptsAllVendorByRegion extends React.Component {
                 const prm = {
                     screen_id: screen_id
                 }
-                dispatch(reportsdc.generatetokentableau(prm))
-                this.setState({
-                    parameters: {
-                        p_from_date: dateObjectfrom,
-                        p_to_date: dateObjectto,
-                        p_vendor: vendor
-                    }
-                })
+                dispatch(reportsdc.generatetokentableau(prm))                
 
+                let temps = {
+                    'Financial Date From': dateObjectfrom,
+                    'Financial Date To': dateObjectto,
+                    'Region Id': region.value                     
+                }
+                let count = 0
+                for (let item of vendor) {
+                    count++ 
+                    temps[`P${count}`] = item.value.toString().trim()
+                            
+                }
+               
+                this.setState({
+                    parameters: temps
+                })
+                
                 setTimeout(function () {
                     self.setState({ submitted: true })
                 }, 500)
@@ -128,7 +137,7 @@ class ReceiptsAllVendorByRegion extends React.Component {
                     self.setState({ optionvendor: data })
                     return data
                 });
-        }, 300)
+        }, 600)
 
         let apiRequest2 = setTimeout(function () {
             fetch(`${PathBackEnd}/api/report/region`)
@@ -137,7 +146,7 @@ class ReceiptsAllVendorByRegion extends React.Component {
                     self.setState({ optionregion: data })
                     return data
                 });
-        }, 600)
+        }, 1000)
     }
 
     render() {
@@ -146,7 +155,7 @@ class ReceiptsAllVendorByRegion extends React.Component {
         const { modify, screen_name, report } = this.props;
 
         const tokentableau = report.data
-
+        console.log(parameters)
         return (
             <div id="content">
                 <WidgetGrid>
@@ -179,7 +188,7 @@ class ReceiptsAllVendorByRegion extends React.Component {
                                                 <div className="col-md-4 control-label"><label > Vendor</label><span class="text-danger">*</span></div>
                                                 <div className="col-md-6">
                                                     {optionvendor &&
-                                                        <ReactMultiSelectCheckboxes options={optionvendor} placeholder='Vendor' name="vendor" onChange={this.handleChangesVendor} />
+                                                        <ReactMultiSelectCheckboxes value={vendor} options={optionvendor} placeholder='Vendor' name="vendor" onChange={this.handleChangesVendor} placeholderButtonLabel={'Please Select'} />
                                                     }
                                                     <span className="text-danger">{errorvender}</span>
                                                 </div>
@@ -230,7 +239,6 @@ class ReceiptsAllVendorByRegion extends React.Component {
                                                         options={optiontableau}
                                                     />
                                                 </div>
-
                                             </div>
                                         </div>
                                         }

@@ -774,7 +774,7 @@ class EndingInventory extends React.Component {
                                             Upload
                                         </button>
                                         <button type="button" className="btn btn-default" data-dismiss="modal">
-                                            Cancel
+                                            Close
                                         </button>
                                     </div>
                                 </div>

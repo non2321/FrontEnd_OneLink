@@ -142,14 +142,14 @@ class EndingInventory extends React.Component {
         if (store && period && screen_id) {
             const prm = {
                 screen_id: screen_id
-            }
+            }           
             dispatch(reportsdc.generatetokentableau(prm))
             this.setState({
                 parameters: {
-                    p_store: store,
-                    p_period: period,
-                    p_invencategory: (invencategory) ? invencategory : '',
-                    p_stockno: (stockno) ? stockno : ''
+                    'Store From': store.value,                   
+                    'Period Id': period,
+                    'P Inven Category': (invencategory) ? invencategory.value : 'All',
+                    'P Stock Zone': (stockno) ? stockno : 'All'
                 }
             })
 

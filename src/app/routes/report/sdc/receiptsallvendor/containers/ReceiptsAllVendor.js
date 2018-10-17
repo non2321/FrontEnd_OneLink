@@ -75,7 +75,7 @@ class ReceiptsAllVendor extends React.Component {
     handleReset(e) {
         e.preventDefault();
 
-        this.setState({ datefrom: '', dateto: '', from_store: '', to_store: '', submitted: false, parameters: null })
+        this.setState({ datefrom: '', dateto: '', from_store: '', to_store: '', vendor: [], submitted: false, parameters: null })
         this.setState({ errordatefrom: '', errordateto: '', errorfrom_store: '', errorto_store: '' })
     }
 
@@ -104,14 +104,22 @@ class ReceiptsAllVendor extends React.Component {
                     screen_id: screen_id
                 }
                 dispatch(reportsdc.generatetokentableau(prm))
+                let temps = {
+                    'Financial Date From': dateObjectfrom,
+                    'Financial Date To': dateObjectto,
+                    'Store From': from_store.value,
+                    'Store To': to_store.value              
+                }
+
+                let count = 0
+                for (let item of vendor) {
+                    count++ 
+                    temps[`P${count}`] = item.value.toString().trim()
+                            
+                }
+               
                 this.setState({
-                    parameters: {                      
-                        p_from_date: dateObjectfrom,
-                        p_to_date: dateObjectto,
-                        p_from_store: from_store,
-                        p_to_store: to_store,
-                        p_vendor: vendor,
-                    }
+                    parameters: temps
                 })
 
                 setTimeout(function () {
@@ -136,7 +144,7 @@ class ReceiptsAllVendor extends React.Component {
                     self.setState({ options: data })
                     return data
                 });
-        }, 500)
+        }, 600)
 
         let apiRequest2 = setTimeout(function () {
             fetch(`${PathBackEnd}/api/report/vendor`)
@@ -145,11 +153,11 @@ class ReceiptsAllVendor extends React.Component {
                     self.setState({ optionvendor: data })
                     return data
                 });
-        }, 800)
+        }, 1000)
     }
 
     render() {
-        const { datefrom, dateto, from_store, to_store, options, optionvendor, submitted, parameters } = this.state;
+        const { datefrom, dateto, vendor , from_store, to_store, options, optionvendor, submitted, parameters } = this.state;
         const { errordatefrom, errordateto, errorfrom_store, errorto_store, errorvender } = this.state;
         const { modify, screen_name, report } = this.props;
 
@@ -206,7 +214,7 @@ class ReceiptsAllVendor extends React.Component {
                                                 <div className="col-md-4 control-label"><label > Vendor</label><span class="text-danger">*</span></div>
                                                 <div className="col-md-6">
                                                     {optionvendor &&
-                                                        <ReactMultiSelectCheckboxes options={optionvendor} placeholder='Vendor' name="vendor" onChange={this.handleChangesVendor} />
+                                                        <ReactMultiSelectCheckboxes value={vendor} options={optionvendor} placeholder='Vendor' name="vendor" onChange={this.handleChangesVendor} placeholderButtonLabel={'Please Select'} />
                                                     }
                                                     <span className="text-danger">{errorvender}</span>
                                                 </div>

@@ -81,7 +81,7 @@ class RestaurantDataAnalysisForMonth extends React.Component {
         })
 
         if (datefrom && store && screen_id) {
-            const dateObjectfrom = utils.convertdateformatString(datefrom)
+            const dateObjectto = utils.convertdateformatString(datefrom)
 
             const prm = {
                 screen_id: screen_id
@@ -89,8 +89,8 @@ class RestaurantDataAnalysisForMonth extends React.Component {
             dispatch(reportsdc.generatetokentableau(prm))
             this.setState({
                 parameters: {
-                    p_date: dateObjectfrom,                   
-                    p_store: store
+                    'Financial Date To': dateObjectto,
+                    'Store From': store.value
                 }
             })
 

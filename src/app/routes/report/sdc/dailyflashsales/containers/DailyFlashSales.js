@@ -127,10 +127,10 @@ class DailyFlashSales extends React.Component {
             dispatch(reportsdc.generatetokentableau(prm))
             this.setState({
                 parameters: {
-                    p_from_date: dateObjectfrom,
-                    p_to_date: dateObjectto,
-                    p_from_store: from_store,
-                    p_to_store: to_store
+                    'Financial Date From': dateObjectfrom,
+                    'Financial Date To': dateObjectto,
+                    'Store From': from_store.value,
+                    'Store To': to_store.value
                 }
             })
     
