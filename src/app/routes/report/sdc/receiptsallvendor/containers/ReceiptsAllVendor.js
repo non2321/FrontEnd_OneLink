@@ -46,7 +46,7 @@ class ReceiptsAllVendor extends React.Component {
         this.handleDateTo = this.handleDateTo.bind(this)
 
         this.handleReset = this.handleReset.bind(this)
-        this.handleSubmit = this.handleSubmit.bind(this)
+        this.handleSubmit = this.handleSubmit.bind(this)       
     }
 
     handleDateFrom(data) {
@@ -136,6 +136,9 @@ class ReceiptsAllVendor extends React.Component {
     }
 
     componentDidMount() {
+        const { screen_id } = this.state 
+        const { dispatch } = this.props
+        
         const self = this
         let apiRequest1 = setTimeout(function () {
             fetch(`${PathBackEnd}/api/report/storeall`)
@@ -154,6 +157,20 @@ class ReceiptsAllVendor extends React.Component {
                     return data
                 });
         }, 1000)
+
+        $(document).on('click', '.jarviswidget-fullscreen-btn', function () {
+            self.setState({
+                submitted: false
+            });           
+            const prm = {
+                screen_id: screen_id
+            }
+            dispatch(reportsdc.generatetokentableauforfullscreen(prm))  
+
+            setTimeout(function () {          
+                self.setState({ submitted: true });
+            }, 1000);
+        })
     }
 
     render() {

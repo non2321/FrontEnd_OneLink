@@ -103,6 +103,9 @@ class InventoryCostPerMonth extends React.Component {
     }
 
     componentDidMount() {
+        const { screen_id } = this.state 
+        const { dispatch } = this.props
+
         const self = this
         let apiRequest1 = setTimeout(function () {
             fetch(`${PathBackEnd}/api/importtojde/ddlperiod`)
@@ -112,6 +115,20 @@ class InventoryCostPerMonth extends React.Component {
                     return data
                 });
         }, 300)
+
+        $(document).on('click', '.jarviswidget-fullscreen-btn', function () {
+            self.setState({
+                submitted: false
+            });           
+            const prm = {
+                screen_id: screen_id
+            }
+            dispatch(reportsdc.generatetokentableauforfullscreen(prm))  
+
+            setTimeout(function () {          
+                self.setState({ submitted: true });
+            }, 1000);
+        })
     }
 
     render() {

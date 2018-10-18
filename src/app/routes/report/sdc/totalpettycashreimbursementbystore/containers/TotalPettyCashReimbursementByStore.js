@@ -112,6 +112,9 @@ class TotalPettyCashReimbursementByStore extends React.Component {
     }
 
     componentDidMount() {
+        const { screen_id } = this.state
+        const { dispatch } = this.props
+
         const self = this
         let apiRequest1 = setTimeout(function () {
             fetch(`${PathBackEnd}/api/report/storeall`)
@@ -121,6 +124,20 @@ class TotalPettyCashReimbursementByStore extends React.Component {
                     return data
                 });
         }, 300)
+
+        $(document).on('click', '.jarviswidget-fullscreen-btn', function () {
+            self.setState({
+                submitted: false
+            });           
+            const prm = {
+                screen_id: screen_id
+            }
+            dispatch(reportsdc.generatetokentableauforfullscreen(prm))  
+
+            setTimeout(function () {          
+                self.setState({ submitted: true });
+            }, 1000);
+        })
     }
 
     render() {
@@ -197,17 +214,17 @@ class TotalPettyCashReimbursementByStore extends React.Component {
                                                             </button>
                                                     </div>
                                                 </div>
-                                            </div>                                           
+                                            </div>
                                         </div>
                                         {submitted && tokentableau && parameters && <div className="row">
                                             <div className="col-md-12">
                                                 <hr />
                                                 <div style={{ minwidth: '800px', minheight: '573px', overflow: 'scroll' }}>
                                                     <TableauReport
-                                                       url={TableauTotalPettyCashReimbursementByStore}
-                                                       token={tokentableau}
-                                                       parameters={parameters}
-                                                       options={optiontableau}
+                                                        url={TableauTotalPettyCashReimbursementByStore}
+                                                        token={tokentableau}
+                                                        parameters={parameters}
+                                                        options={optiontableau}
                                                     />
                                                 </div>
 

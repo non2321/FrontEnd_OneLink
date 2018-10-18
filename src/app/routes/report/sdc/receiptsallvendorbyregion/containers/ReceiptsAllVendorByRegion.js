@@ -103,24 +103,24 @@ class ReceiptsAllVendorByRegion extends React.Component {
                 const prm = {
                     screen_id: screen_id
                 }
-                dispatch(reportsdc.generatetokentableau(prm))                
+                dispatch(reportsdc.generatetokentableau(prm))
 
                 let temps = {
                     'Financial Date From': dateObjectfrom,
                     'Financial Date To': dateObjectto,
-                    'Region Id': region.value                     
+                    'Region Id': region.value
                 }
                 let count = 0
                 for (let item of vendor) {
-                    count++ 
+                    count++
                     temps[`P${count}`] = item.value.toString().trim()
-                            
+
                 }
-               
+
                 this.setState({
                     parameters: temps
                 })
-                
+
                 setTimeout(function () {
                     self.setState({ submitted: true })
                 }, 500)
@@ -129,6 +129,9 @@ class ReceiptsAllVendorByRegion extends React.Component {
     }
 
     componentDidMount() {
+        const { screen_id } = this.state 
+        const { dispatch } = this.props
+
         const self = this
         let apiRequest1 = setTimeout(function () {
             fetch(`${PathBackEnd}/api/report/vendor`)
@@ -147,6 +150,20 @@ class ReceiptsAllVendorByRegion extends React.Component {
                     return data
                 });
         }, 1000)
+
+        $(document).on('click', '.jarviswidget-fullscreen-btn', function () {
+            self.setState({
+                submitted: false
+            });           
+            const prm = {
+                screen_id: screen_id
+            }
+            dispatch(reportsdc.generatetokentableauforfullscreen(prm))  
+
+            setTimeout(function () {          
+                self.setState({ submitted: true });
+            }, 1000);
+        })
     }
 
     render() {
@@ -155,7 +172,7 @@ class ReceiptsAllVendorByRegion extends React.Component {
         const { modify, screen_name, report } = this.props;
 
         const tokentableau = report.data
-        console.log(parameters)
+       
         return (
             <div id="content">
                 <WidgetGrid>

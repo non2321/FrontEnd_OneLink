@@ -49,7 +49,7 @@ class BankInSummaryByBank extends React.Component {
         this.handleDateTo = this.handleDateTo.bind(this)
 
         this.handleReset = this.handleReset.bind(this)
-        this.handleSubmit = this.handleSubmit.bind(this)
+        this.handleSubmit = this.handleSubmit.bind(this)       
     }
 
     handleDateFrom(data) {
@@ -113,7 +113,10 @@ class BankInSummaryByBank extends React.Component {
         }
     }
 
-    componentDidMount() {         
+    componentDidMount() {        
+        const { screen_id } = this.state 
+        const { dispatch } = this.props
+       
         const self = this
         let apiRequest1 = setTimeout(function () {
             fetch(`${PathBackEnd}/api/report/bankall`)
@@ -122,7 +125,21 @@ class BankInSummaryByBank extends React.Component {
                     self.setState({ optionbank: data })
                     return data
                 });
-        }, 300)
+        }, 500)
+
+        $(document).on('click', '.jarviswidget-fullscreen-btn', function () {           
+            self.setState({
+                submitted: false
+            });           
+            const prm = {
+                screen_id: screen_id
+            }
+            dispatch(reportsdc.generatetokentableauforfullscreen(prm))  
+
+            setTimeout(function () {          
+                self.setState({ submitted: true });
+            }, 1000);
+        })
     }
 
     render() {
@@ -130,7 +147,7 @@ class BankInSummaryByBank extends React.Component {
         const { errordatefrom, errordateto, errorbank } = this.state;
         const { modify, screen_name, report } = this.props;
 
-        let tokentableau = report.data        
+        let tokentableau = report.data 
 
         return (
             <div id="content">

@@ -4,6 +4,7 @@ import 'isomorphic-fetch'
 
 export const reportsdcService = {
     generatetokentableau,
+    generatetokentableauforfullscreen
 }
 
 function generatetokentableau(prm) {
@@ -16,6 +17,30 @@ function generatetokentableau(prm) {
     };
   
     return fetch(`${PathBackEnd}/api/report/gentokentableau`, requestOptions)
+        .then(response => {
+            return handleResponse(response)
+        })
+        .then(user => {
+
+            // login successful if there's a jwt token in the response
+            if (user && user.status == 'Y') {
+                // store user details and jwt token in local storage to keep user logged in between page refreshes
+                localStorage.setItem(localStorageAuth, JSON.stringify(user.user));
+            }
+            return user;
+        })
+}
+
+function generatetokentableauforfullscreen(prm) {
+    const screen_id = prm.screen_id
+
+    const requestOptions = {
+        method: 'POST',
+        headers: { ...authHeader(), 'Content-Type': 'application/json' },
+        body: JSON.stringify({ screen_id })
+    };
+  
+    return fetch(`${PathBackEnd}/api/report/gentokentableauforfullscreen`, requestOptions)
         .then(response => {
             return handleResponse(response)
         })
