@@ -28,7 +28,7 @@ class InventoryCostPerMonth extends React.Component {
             this.props.dispatch(userAuth.loadpage(prm))
         }
 
-        const datenow = new Date()       
+        const datenow = new Date()
         const yearnow = datenow.getFullYear()
         let optionyear = []
         const yearago = yearnow - 10
@@ -72,7 +72,7 @@ class InventoryCostPerMonth extends React.Component {
         if (year && period && screen_id) {
             const prm = {
                 screen_id: screen_id
-            }            
+            }
             dispatch(reportsdc.generatetokentableau(prm))
             this.setState({
                 parameters: {
@@ -103,7 +103,7 @@ class InventoryCostPerMonth extends React.Component {
     }
 
     componentDidMount() {
-        const { screen_id } = this.state 
+        const { screen_id } = this.state
         const { dispatch } = this.props
 
         const self = this
@@ -119,13 +119,13 @@ class InventoryCostPerMonth extends React.Component {
         $(document).on('click', '.jarviswidget-fullscreen-btn', function () {
             self.setState({
                 submitted: false
-            });           
+            });
             const prm = {
                 screen_id: screen_id
             }
-            dispatch(reportsdc.generatetokentableauforfullscreen(prm))  
+            dispatch(reportsdc.generatetokentableauforfullscreen(prm))
 
-            setTimeout(function () {          
+            setTimeout(function () {
                 self.setState({ submitted: true });
             }, 1000);
         })
@@ -159,13 +159,6 @@ class InventoryCostPerMonth extends React.Component {
                                                 </div>
                                             </div>
                                             <div className="col-md-6 form-group">
-                                                <div className="col-md-4 control-label"></div>
-                                                <div className="col-md-6">
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div className="row">
-                                            <div className="col-md-6 form-group">
                                                 <div className="col-md-4 control-label"><label > Period (End Date)</label><span class="text-danger">*</span></div>
                                                 <div className="col-md-6">
                                                     {tempperiod &&
@@ -174,13 +167,7 @@ class InventoryCostPerMonth extends React.Component {
                                                     <span className="text-danger">{errorperiod}</span>
                                                 </div>
                                             </div>
-                                            <div className="col-md-6 form-group">
-                                                <div className="col-md-4 control-label">
-                                                </div>
-                                                <div className="col-md-6">
-                                                </div>
-                                            </div>
-                                        </div>
+                                        </div>                                       
                                         <div className="row">
                                             <div className="col-md-6 form-group">
                                                 <div className="col-md-4 control-label">
