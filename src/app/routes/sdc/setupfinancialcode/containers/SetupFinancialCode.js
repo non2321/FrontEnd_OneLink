@@ -26,7 +26,7 @@ class SetupCompanyAccount extends React.Component {
 
     this.state = {
       account_code: '',
-      edit: false,
+      edit: false,     
       submitted: true,
       screen_id: ScreenIDSetupFinancialCode
     }
@@ -79,9 +79,9 @@ class SetupCompanyAccount extends React.Component {
     this.setState({ edit: true })
   }
 
-  handleChangesActive = (active) => {
+  handleChangesActive = (active) => {    
     this.setState({
-      active: (active == null) ? '' : active
+      active: (active == null) ? {value: "1", label: "Active"} : active
     })
   }
 
@@ -163,6 +163,7 @@ class SetupCompanyAccount extends React.Component {
     const { errorfinancialcode, errorfinancialname, erroractive } = this.state
     const { modify, screen_name } = this.props;
     const self = this
+
     return (
       <div id="content">
         <WidgetGrid>
@@ -204,7 +205,7 @@ class SetupCompanyAccount extends React.Component {
                               className: `btn btn-primary btn-sm ${(modify.can_add == "Y") ? '' : 'hidden'}`,
                               action: function (e, dt, node, config) {
                                 $("#myModalAdd").modal()
-                                self.setState({ financialcode: '', financialname: '', active: '', submitted: false });
+                                self.setState({ financialcode: '', financialname: '', active: {value: "1", label: "Active"}, submitted: false });
                                 $('#financialcode').prop('disabled', false)
                                 $('#financialname').prop('disabled', false);
                               }
@@ -299,7 +300,7 @@ class SetupCompanyAccount extends React.Component {
                     <div className="row">
                       <div className="col-md-12 form-group">
                         <label htmlFor="active"> Active</label>
-                        {DropdownActive &&
+                        {DropdownActive && active &&
                           <Select options={DropdownActive} placeholder='Active' name="active" value={active} onChange={this.handleChangesActive} />
                         }
                         <span className="text-danger">{erroractive}</span>

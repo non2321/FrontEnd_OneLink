@@ -84,8 +84,8 @@ exports.DropdownMonth = [
 ]
 
 exports.DropdownActive = [
-    { "value": "0", "label": "Non Active"},
-    { "value": "1", "label": "Active"}
+    { "value": "1", "label": "Active"},
+    { "value": "0", "label": "Non Active"}   
 ]
 
 //Use SteampInventory
