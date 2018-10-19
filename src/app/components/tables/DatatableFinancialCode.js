@@ -166,8 +166,7 @@ class DatatableFinancialCode extends React.Component {
   }
 
   render() {
-    let { children, options, detailsFormat, paginationLength, ...props } = this.props;
-    const { company_id, company_code, company_name, report_name } = this.state;
+    let { children, options, detailsFormat, paginationLength, screen_id, screen_name, alert, actions, dispatch, ...props } = this.props;
     return (
       <BootstrapValidator options={validatorOptions}>
         <div>

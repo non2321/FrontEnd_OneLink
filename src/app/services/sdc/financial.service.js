@@ -4,6 +4,7 @@ import 'isomorphic-fetch'
 
 
 export const financialService = {
+    addfinancialcode,
     editfinancialcode,
 
     addbankaccount,
@@ -21,6 +22,30 @@ export const financialService = {
     stampclosedailyfins
 }
 
+function addfinancialcode(prm) {
+    const fin_code = prm.fin_code
+    const fin_name = prm.fin_name
+    const active = prm.active 
+    const screen_id = prm.screen_id
+
+    const requestOptions = {
+        method: 'POST',
+        headers: { ...authHeader(), 'Content-Type': 'application/json' },
+        body: JSON.stringify({ fin_code, fin_name, active, screen_id })
+    };
+
+    return fetch(`${PathBackEnd}/api/financialcodeconfig`, requestOptions)
+        .then(response => {
+            return handleResponse(response)
+        })
+        .then(user => {
+            if (user && user.token && user.status == 'Y') {
+                localStorage.setItem(localStorageAuth, JSON.stringify(user));
+            }
+            return user;
+        });
+}
+
 function editfinancialcode(obj) {
     const requestOptions = {
         method: 'PUT',
@@ -33,8 +58,8 @@ function editfinancialcode(obj) {
             return handleResponse(response)
         })
         .then(user => {
-            if (user && user.token && user.status == 'Y') {
-                localStorage.setItem(localStorageAuth, JSON.stringify(user));
+             if (user && user.status == 'Y') {                
+                localStorage.setItem(localStorageAuth, JSON.stringify(user.user));
             }
             return user;
         });

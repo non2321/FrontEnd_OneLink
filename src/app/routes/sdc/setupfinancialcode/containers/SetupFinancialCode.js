@@ -8,7 +8,9 @@ import { Stats, BigBreadcrumbs, WidgetGrid, JarvisWidget } from '../../../../com
 
 import DatatableFinancialCode from '../../../../components/tables/DatatableFinancialCode'
 
-import { ScreenIDSetupFinancialCode, PathBackEnd } from '../../../../../../settings'
+import { ScreenIDSetupFinancialCode, PathBackEnd, DropdownActive } from '../../../../../../settings'
+import Select from 'react-select'
+import 'react-select/dist/react-select.css'
 
 
 class SetupCompanyAccount extends React.Component {
@@ -39,7 +41,31 @@ class SetupCompanyAccount extends React.Component {
   }
 
   handleAddSubmits(e) {
-    e.preventDefault();
+    e.preventDefault()    
+    const { financialcode, financialname, active, screen_id } = this.state
+    const { dispatch } = this.props
+    const self = this
+
+    this.setState({
+      errorfinancialcode: (financialcode) ? '' : 'The Financial Code is required',
+      errorfinancialname: (financialname) ? '' : 'The Financial Name is required',
+      erroractive: (active) ? '' : 'The Active is required',
+      submitted: false
+    })
+
+    if (financialcode && financialname && active) {
+      const prm = {
+        fin_code: financialcode,
+        fin_name: financialname,
+        active: active.value,       
+        screen_id: screen_id,
+      }     
+      dispatch(financialActions.addfinancialcode(prm))
+
+      setTimeout(function () {
+        self.setState({ submitted: true })
+      }, 500)
+    }
   }
 
   handleAdd(e) {
@@ -51,6 +77,12 @@ class SetupCompanyAccount extends React.Component {
     $('label[name="lblcheck"]').removeClass("state-disabled");
 
     this.setState({ edit: true })
+  }
+
+  handleChangesActive = (active) => {
+    this.setState({
+      active: (active == null) ? '' : active
+    })
   }
 
   handleChange(e) {
@@ -127,6 +159,8 @@ class SetupCompanyAccount extends React.Component {
 
   render() {
     const { edit, submitted, modifydata } = this.state;
+    const { financialcode, financialname, active } = this.state
+    const { errorfinancialcode, errorfinancialname, erroractive } = this.state
     const { modify, screen_name } = this.props;
     const self = this
     return (
@@ -137,20 +171,7 @@ class SetupCompanyAccount extends React.Component {
               <article className="col-sm-12">
                 <JarvisWidget editbutton={false} colorbutton={false} deletebutton={false} togglebutton={false} color="darken">
                   <header><h2>{screen_name}</h2></header>
-                  {modify && <div className="widget-body">
-                    {/* {modify.can_edit == 'Y' &&
-                        <div className="widget-body-toolbar">
-                          <div className="row">
-                            <div className="col-xs-9 col-sm-5 col-md-5 col-lg-5 pull-right">
-                              <button onClick={this.handleAdd} disabled={this.state.edit} className="btn btn-primary btn-sm pull-right">
-                                <i className="fa fa-edit" /> <span className="hidden-mobile"> Edit</span>
-                              </button>
-                            </div>
-                            <div className="col-xs-3 col-sm-7 col-md-7 col-lg-7 text-right">
-                            </div>
-                          </div>
-                        </div>
-                      } */}
+                  {modify && <div className="widget-body">                    
                     <div className="widget-body no-padding">
                       <DatatableFinancialCode actions={edit}
                         options={{
@@ -178,6 +199,16 @@ class SetupCompanyAccount extends React.Component {
                           }
                           ],
                           buttons: [
+                            {
+                              text: `<span ><i class="fa fa-plus" /><span class="hidden-mobile"> Add</span></span>`,
+                              className: `btn btn-primary btn-sm ${(modify.can_add == "Y") ? '' : 'hidden'}`,
+                              action: function (e, dt, node, config) {
+                                $("#myModalAdd").modal()
+                                self.setState({ financialcode: '', financialname: '', active: '', submitted: false });
+                                $('#financialcode').prop('disabled', false)
+                                $('#financialname').prop('disabled', false);
+                              }
+                            },
                             {
                               text: `<span ><i class="fa fa-edit" /><span class="hidden-mobile"> Edit</span></span>`,
                               className: `btn btn-primary btn-sm ${(modify.can_edit == "Y") ? '' : 'hidden'}`,
@@ -237,6 +268,57 @@ class SetupCompanyAccount extends React.Component {
             </form>
           </div>
         </WidgetGrid>
+        {/* Modal Add */}
+        <div className="modal fade" id="myModalAdd" tabIndex="-1" role="dialog" aria-labelledby="myModalLabel"
+          aria-hidden="true">
+          <form id="add-form" >
+            <div className="modal-dialog">
+              <div className="modal-content">
+                <div className="modal-header">
+                  <button type="button" className="close" data-dismiss="modal" aria-hidden="true">
+                    &times;
+                      </button>
+                  <h4 className="modal-title" id="myModalLabel">Add {screen_name}</h4>
+                </div>
+                <div className="modal-body">
+                  <div className="form-group">
+                    <div className="row">
+                      <div className="col-md-12 form-group">
+                        <label htmlFor="financialcode"> Financial Code</label>
+                        <input type="text" name="financialcode" id="financialcode" value={financialcode} onChange={this.handleChange} className="form-control" placeholder="Finnancial Code" />
+                        <span className="text-danger">{errorfinancialcode}</span>
+                      </div>
+                    </div>
+                    <div className="row">
+                      <div className="col-md-12 form-group">
+                        <label htmlFor="financialname"> Financial Name</label>
+                        <input type="text" name="financialname" id="financialname" value={financialname} onChange={this.handleChange} className="form-control" placeholder="Finnancial Name" />
+                        <span className="text-danger">{errorfinancialname}</span>
+                      </div>
+                    </div>
+                    <div className="row">
+                      <div className="col-md-12 form-group">
+                        <label htmlFor="active"> Active</label>
+                        {DropdownActive &&
+                          <Select options={DropdownActive} placeholder='Year' name="year" value={active} onChange={this.handleChangesActive} />
+                        }
+                        <span className="text-danger">{erroractive}</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div className="modal-footer">
+                  <button type="button" onClick={this.handleAddSubmits}  className="btn btn-primary">
+                    Save
+                  </button>
+                  <button type="button" className="btn btn-default" data-dismiss="modal">
+                    Cancel
+                  </button>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
       </div>
     )
   }

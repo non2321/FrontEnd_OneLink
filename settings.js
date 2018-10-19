@@ -83,6 +83,11 @@ exports.DropdownMonth = [
     { "value": "12", "label": "December" },
 ]
 
+exports.DropdownActive = [
+    { "value": "0", "label": "Non Active"},
+    { "value": "1", "label": "Active"}
+]
+
 //Use SteampInventory
 exports.DropdownPostDataType = [
     { "value": "receipts", "label": "Stamp Close Receipts" },
