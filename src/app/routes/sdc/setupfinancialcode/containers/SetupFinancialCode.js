@@ -300,7 +300,7 @@ class SetupCompanyAccount extends React.Component {
                       <div className="col-md-12 form-group">
                         <label htmlFor="active"> Active</label>
                         {DropdownActive &&
-                          <Select options={DropdownActive} placeholder='Year' name="year" value={active} onChange={this.handleChangesActive} />
+                          <Select options={DropdownActive} placeholder='Active' name="active" value={active} onChange={this.handleChangesActive} />
                         }
                         <span className="text-danger">{erroractive}</span>
                       </div>
