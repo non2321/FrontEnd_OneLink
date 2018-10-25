@@ -39,8 +39,8 @@ function addfinancialcode(prm) {
             return handleResponse(response)
         })
         .then(user => {
-            if (user && user.token && user.status == 'Y') {
-                localStorage.setItem(localStorageAuth, JSON.stringify(user));
+            if (user && user.status == 'Y') {
+                localStorage.setItem(localStorageAuth, JSON.stringify(user.user));
             }
             return user;
         });
@@ -58,7 +58,7 @@ function editfinancialcode(obj) {
             return handleResponse(response)
         })
         .then(user => {
-             if (user && user.status == 'Y') {                
+            if (user && user.status == 'Y') {                
                 localStorage.setItem(localStorageAuth, JSON.stringify(user.user));
             }
             return user;
@@ -83,8 +83,8 @@ function addbankaccount(prm) {
             return handleResponse(response)
         })
         .then(user => {
-            if (user && user.token && user.status == 'Y') {
-                localStorage.setItem(localStorageAuth, JSON.stringify(user));
+            if (user && user.status == 'Y') {
+                localStorage.setItem(localStorageAuth, JSON.stringify(user.user));
             }
             return user;
         });
@@ -108,8 +108,8 @@ function editbankaccount(prm) {
             return handleResponse(response)
         })
         .then(user => {
-            if (user && user.token && user.status == 'Y') {
-                localStorage.setItem(localStorageAuth, JSON.stringify(user));
+            if (user && user.status == 'Y') {
+                localStorage.setItem(localStorageAuth, JSON.stringify(user.user));
             }
             return user;
         });
@@ -130,8 +130,8 @@ function deletebankcode(prm) {
             return handleResponse(response)
         })
         .then(user => {
-            if (user && user.token && user.status == 'Y') {
-                localStorage.setItem(localStorageAuth, JSON.stringify(user));
+            if (user && user.status == 'Y') {
+                localStorage.setItem(localStorageAuth, JSON.stringify(user.user));
             }
             return user;
         });
@@ -157,8 +157,8 @@ function addaccountforsale(prm) {
             return handleResponse(response)
         })
         .then(user => {
-            if (user && user.token && user.status == 'Y') {
-                localStorage.setItem(localStorageAuth, JSON.stringify(user));
+            if (user && user.status == 'Y') {
+                localStorage.setItem(localStorageAuth, JSON.stringify(user.user));
             }
             return user;
         });
@@ -185,8 +185,8 @@ function editaccountforsale(prm) {
             return handleResponse(response)
         })
         .then(user => {
-            if (user && user.token && user.status == 'Y') {
-                localStorage.setItem(localStorageAuth, JSON.stringify(user));
+            if (user && user.status == 'Y') {
+                localStorage.setItem(localStorageAuth, JSON.stringify(user.user));
             }
             return user;
         });
@@ -235,8 +235,8 @@ function editbankinadjustment(obj) {
             return handleResponse(response)
         })
         .then(user => {
-            if (user && user.token && user.status == 'Y') {
-                localStorage.setItem(localStorageAuth, JSON.stringify(user));
+            if (user && user.status == 'Y') {
+                localStorage.setItem(localStorageAuth, JSON.stringify(user.user));
             }
             return user;
         });
@@ -297,8 +297,8 @@ function importbankinadjustment(obj, screen_id) {
             return handleResponse(response)
         })
         .then(user => {
-            if (user && user.token && user.status == 'Y') {
-                localStorage.setItem(localStorageAuth, JSON.stringify(user));
+            if (user && user.status == 'Y') {
+                localStorage.setItem(localStorageAuth, JSON.stringify(user.user));
             }
             return user;
         });
@@ -321,8 +321,8 @@ function stampclosedailyfins(prm) {
             return handleResponse(response)
         })
         .then(user => {
-            if (user && user.token && user.status == 'Y') {
-                localStorage.setItem(localStorageAuth, JSON.stringify(user));
+            if (user && user.status == 'Y') {
+                localStorage.setItem(localStorageAuth, JSON.stringify(user.user));
             }
             return user;
         });

@@ -32,10 +32,9 @@ function addcompany(prm) {
         })
         .then(user => {
             // login successful if there's a jwt token in the response
-            if (user && user.token && user.status == 'Y') {
+            if (user && user.status == 'Y') {
                 // store user details and jwt token in local storage to keep user logged in between page refreshes
-
-                localStorage.setItem(localStorageAuth, JSON.stringify(user));
+                localStorage.setItem(localStorageAuth, JSON.stringify(user.user));
             }
 
             return user;
@@ -63,9 +62,9 @@ function editcompany(prm) {
         })
         .then(user => {
             // login successful if there's a jwt token in the response
-            if (user && user.token && user.status == 'Y') {
+            if (user && user.status == 'Y') {                
                 // store user details and jwt token in local storage to keep user logged in between page refreshes               
-                localStorage.setItem(localStorageAuth, JSON.stringify(user));
+                localStorage.setItem(localStorageAuth, JSON.stringify(user.user));
             }
 
             return user;
@@ -91,9 +90,9 @@ function deletecompany(prm) {
         })
         .then(user => {
             // login successful if there's a jwt token in the response
-            if (user && user.token && user.status == 'Y') {
+            if (user && user.status == 'Y') {               
                 // store user details and jwt token in local storage to keep user logged in between page refreshes               
-                localStorage.setItem(localStorageAuth, JSON.stringify(user));
+                localStorage.setItem(localStorageAuth, JSON.stringify(user.user));
             }
 
             return user;
@@ -122,10 +121,10 @@ function addcompanyaccount(prm) {
         })
         .then(user => {
             // login successful if there's a jwt token in the response
-            if (user && user.token && user.status == 'Y') {
+            if (user && user.status == 'Y') {
                 // store user details and jwt token in local storage to keep user logged in between page refreshes
 
-                localStorage.setItem(localStorageAuth, JSON.stringify(user));
+                localStorage.setItem(localStorageAuth, JSON.stringify(user.user));
             }
 
             return user;
@@ -154,9 +153,9 @@ function editcompanyaccount(prm) {
         })
         .then(user => {
             // login successful if there's a jwt token in the response
-            if (user && user.token && user.status == 'Y') {
+            if (user && user.status == 'Y') {
                 // store user details and jwt token in local storage to keep user logged in between page refreshes               
-                localStorage.setItem(localStorageAuth, JSON.stringify(user));
+                localStorage.setItem(localStorageAuth, JSON.stringify(user.user));
             }
 
             return user;
@@ -182,9 +181,9 @@ function deletecompanyaccount(prm) {
         })
         .then(user => {
             // login successful if there's a jwt token in the response
-            if (user && user.token && user.status == 'Y') {
+            if (user && user.status == 'Y') {
                 // store user details and jwt token in local storage to keep user logged in between page refreshes               
-                localStorage.setItem(localStorageAuth, JSON.stringify(user));
+                localStorage.setItem(localStorageAuth, JSON.stringify(user.user));
             }
 
             return user;
