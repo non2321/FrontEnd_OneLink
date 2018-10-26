@@ -603,10 +603,10 @@ class EndingInventory extends React.Component {
                                                                     const row = table.row(index)
                                                                     const data = row.data()
 
-                                                                    const inputCountCost = table.cell(index, 4).nodes().to$().find('input')
+                                                                    const inputCountCost = table.cell(index, 6).nodes().to$().find('input')
                                                                     inputCountCost.prop('disabled', false);
 
-                                                                    const inputCountUnit = table.cell(index, 5).nodes().to$().find('input')
+                                                                    const inputCountUnit = table.cell(index, 7).nodes().to$().find('input')
                                                                     inputCountUnit.prop('disabled', false);
 
                                                                 })
@@ -824,7 +824,7 @@ class EndingInventory extends React.Component {
                                             Process
                                         </button>
                                         <button type="button" className="btn btn-default" data-dismiss="modal">
-                                            Cancel
+                                            Close
                                         </button>
                                     </div>
                                 </div>
