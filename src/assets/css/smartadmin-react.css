@@ -30,7 +30,8 @@ html>body.menu-on-top #main {
 
 }
 #content {
-
+  height: -webkit-fill-available;
+  background-image: url(https://responsive.tillster.com/responsive/ph-thailand/1540497458/img/texture-bg-mobile.jpg);
 }
 
 

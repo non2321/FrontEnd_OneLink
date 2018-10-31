@@ -9,7 +9,7 @@ const SmartadminConfig = {
     skins: [
         {
             name: "smart-style-0",
-            logo: "assets/img/logo.png",
+            logo: "https://responsive.tillster.com/responsive/ph-thailand/1540497458/img/logo_desktop.png",
             class: "btn btn-block btn-xs txt-color-white margin-right-5",
             style: {
                 backgroundColor: '#4E463F'

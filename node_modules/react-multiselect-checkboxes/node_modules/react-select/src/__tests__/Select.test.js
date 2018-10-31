@@ -58,6 +58,13 @@ test('hidden input field is not present if name is not passes', () => {
   expect(selectWrapper.find('input[type="hidden"]').exists()).toBeFalsy();
 });
 
+test('hidden input field is present if name passes', () => {
+  let selectWrapper = mount(
+    <Select name="test-input-name" options={OPTIONS} />
+  );
+  expect(selectWrapper.find('input[type="hidden"]').exists()).toBeTruthy();
+});
+
 test('single select > passing multiple values > should select the first value', () => {
   const props = { ...BASIC_PROPS, value: [OPTIONS[0], OPTIONS[4]] };
   let selectWrapper = mount(<Select {...props} />);
@@ -168,7 +175,7 @@ cases(
 cases(
   'menuIsOpen prop',
   ({ props = BASIC_PROPS }) => {
-    let selectWrapper = shallow(<Select {...props} />);
+    let selectWrapper = mount(<Select {...props} />);
     expect(selectWrapper.find(Menu).exists()).toBeFalsy();
 
     selectWrapper.setProps({ menuIsOpen: true });
@@ -191,7 +198,7 @@ cases(
 cases(
   'filterOption() prop - should filter only if function returns truthy for value',
   ({ props, searchString, expectResultsLength }) => {
-    let selectWrapper = shallow(<Select {...props} />);
+    let selectWrapper = mount(<Select {...props} />);
     selectWrapper.setProps({ inputValue: searchString });
     expect(selectWrapper.find(Option).length).toBe(expectResultsLength);
   },
@@ -223,7 +230,7 @@ cases(
 cases(
   'filterOption prop is null',
   ({ props, searchString, expectResultsLength }) => {
-    let selectWrapper = shallow(<Select {...props} />);
+    let selectWrapper = mount(<Select {...props} />);
     selectWrapper.setProps({ inputValue: searchString });
     expect(selectWrapper.find(Option).length).toBe(expectResultsLength);
   },
@@ -255,7 +262,7 @@ cases(
 cases(
   'no option found on search based on filterOption prop',
   ({ props, searchString }) => {
-    let selectWrapper = shallow(<Select {...props} />);
+    let selectWrapper = mount(<Select {...props} />);
     selectWrapper.setProps({ inputValue: searchString });
     expect(selectWrapper.find(NoOptionsMessage).exists()).toBeTruthy();
   },
@@ -282,7 +289,7 @@ cases(
 cases(
   'noOptionsMessage() function prop',
   ({ props, expectNoOptionsMessage, searchString }) => {
-    let selectWrapper = shallow(<Select {...props} />);
+    let selectWrapper = mount(<Select {...props} />);
     selectWrapper.setProps({ inputValue: searchString });
     expect(selectWrapper.find(NoOptionsMessage).props().children).toBe(
       expectNoOptionsMessage
@@ -2248,4 +2255,29 @@ test.skip('hitting spacebar should not select option if isSearchable is true (de
   selectWrapper.setState({ focusedOption: OPTIONS[0] });
   selectWrapper.simulate('keyDown', { keyCode: 32, key: ' ' });
   expect(onChangeSpy).not.toHaveBeenCalled();
+});
+
+
+test('renders with custom theme', () => {
+  const primary = 'rgb(255, 164, 83)';
+  const selectWrapper = mount(
+    <Select
+      {...BASIC_PROPS}
+      value={OPTIONS[0]}
+      menuIsOpen
+      theme={(theme) => (
+        {
+          ... theme,
+          borderRadius: 180,
+          colors: {
+            ...theme.colors,
+            primary,
+          },
+        }
+      )} />
+  );
+  const menu = selectWrapper.find(Menu);
+  expect(window.getComputedStyle(menu.getDOMNode()).getPropertyValue('border-radius')).toEqual('180px');
+  const firstOption = selectWrapper.find(Option).first();
+  expect(window.getComputedStyle(firstOption.getDOMNode()).getPropertyValue('background-color')).toEqual(primary);
 });

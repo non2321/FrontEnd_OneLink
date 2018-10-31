@@ -88,7 +88,8 @@ class Login extends React.Component {
       //</div>
       <div id="extr-page">         
         <div id="main" role="main" className="animated fadeInDown">
-          <div id="content" className="container">
+          {/* <div id="content" className="container"> */}
+          <div className="container">
             <div className="row">
               <div className="col-lg-4 col-lg-offset-4">
                 <div className="well no-padding">
