@@ -8,12 +8,18 @@ import ToggleMenu from './ToggleMenu'
 import { connect } from 'react-redux';
 import { userActions } from '../../actions/user';
 
+import { localStorageAuth } from '../../../../settings'
 
 class Header extends React.Component {
   constructor(props) {
     super(props)
 
     this.handleClick = this.handleClick.bind(this);
+    const user = JSON.parse(localStorage.getItem(localStorageAuth));
+    this.state = {
+      user: (user) ? `${user.firstname} ${user.lastname}` : '',
+      position: (user) ? `${user.position}` : ''
+    }
   }
 
 
@@ -23,6 +29,8 @@ class Header extends React.Component {
 
 
   render() {
+    const { user, position } = this.state;
+
     return <header id="header">
       <div id="logo-group">
         <span id="logo">
@@ -92,24 +100,20 @@ class Header extends React.Component {
               className="fa fa-sign-out" />
           </a></span>
         </div>
-        {/* <div className="btn-header transparent pull-right">
-          <div className="form-group ">
-            <div className="row">
-              <label className="label control-label">Label 1</label>
-              <label className="label control-label">Label 1</label>
-            </div>
-            <div className="row">
-              <label className="label control-label">Label 1</label>
-              <label className="label control-label">Label 1</label>
-            </div>
+        <div id="position" className="btn-header transparent pull-right form-group">
+          <div className="col-md-12" style={{ 'padding-top': '5px' }}>
+            <h9 style={{ 'color': '#fff', 'float': 'right' }}>{user}</h9>
           </div>
-        </div> */}
+          <div className="col-md-12">
+            <h9 style={{ 'color': '#fff', 'float': 'right' }}>{position}</h9>
+          </div>
+        </div>
       </div>
 
       {/* end pulled right: nav area */}
 
 
-    </header>
+    </header >
   }
 }
 

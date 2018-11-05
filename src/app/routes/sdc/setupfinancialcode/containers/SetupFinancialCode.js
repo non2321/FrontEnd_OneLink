@@ -188,7 +188,7 @@ class SetupCompanyAccount extends React.Component {
                           {
                             searchable: false,
                             data: null,
-                            width: "10%",
+                            width: "20%",
                             render: function (data, type, row) {
                               if (row.FIXFLAG == "1") {
                                 return '<div class="smart-form checkbox "><label name="lblcheck"  class="checkbox state-disabled"><input type="checkbox" name="checkbox" disabled="disabled" checked/><i name="chklist"/></label></div>'
@@ -244,7 +244,7 @@ class SetupCompanyAccount extends React.Component {
                               Financial Name
                               </th>
                             <th data-hide="user">
-                              Active
+                            Edit Account Daily Fins
                               </th>
                           </tr>
                         </thead>
@@ -299,7 +299,7 @@ class SetupCompanyAccount extends React.Component {
                     </div>
                     <div className="row">
                       <div className="col-md-12 form-group">
-                        <label htmlFor="active"> Active</label>
+                        <label htmlFor="active"> Edit Account Daily Fins</label>
                         {DropdownActive && active &&
                           <Select options={DropdownActive} placeholder='Active' name="active" value={active} onChange={this.handleChangesActive} />
                         }

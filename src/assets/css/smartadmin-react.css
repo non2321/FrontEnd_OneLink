@@ -222,7 +222,19 @@ nav{
 
 @media (min-width: 768px) {
   .bs-glyphicons li {
-    width: 12.5%; } }
+    width: 12.5%; }  
+   }
+
+   @media (max-width: 600px) {
+    #position {
+      visibility: hidden;
+      clear: both;
+      float: left;
+      margin: 10px auto 5px 20px;
+      width: 28%;
+      display: none;
+    }
+  }
 
 
 .dataTables_filter .input-group-addon {
