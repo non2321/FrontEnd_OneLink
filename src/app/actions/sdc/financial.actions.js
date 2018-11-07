@@ -26,6 +26,7 @@ function addfinancialcode(prm) {
     const fin_code = prm.fin_code
     const fin_name = prm.fin_name
     const active = prm.active 
+    const show = prm.show
     const screen_id = prm.screen_id
 
     return dispatch => {       

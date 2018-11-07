@@ -26,7 +26,7 @@ class SetupCompanyAccount extends React.Component {
 
     this.state = {
       account_code: '',
-      edit: false,     
+      edit: false,
       submitted: true,
       screen_id: ScreenIDSetupFinancialCode
     }
@@ -41,8 +41,8 @@ class SetupCompanyAccount extends React.Component {
   }
 
   handleAddSubmits(e) {
-    e.preventDefault()    
-    const { financialcode, financialname, active, screen_id } = this.state
+    e.preventDefault()
+    const { financialcode, financialname, active, show, screen_id } = this.state
     const { dispatch } = this.props
     const self = this
 
@@ -50,16 +50,18 @@ class SetupCompanyAccount extends React.Component {
       errorfinancialcode: (financialcode) ? '' : 'The Financial Code is required',
       errorfinancialname: (financialname) ? '' : 'The Financial Name is required',
       erroractive: (active) ? '' : 'The Active is required',
+      errorshow: (show)? '': 'The Show is required',
       submitted: false
     })
 
-    if (financialcode && financialname && active) {
+    if (financialcode && financialname && active && show) {
       const prm = {
         fin_code: financialcode,
         fin_name: financialname,
-        active: active.value,       
+        active: active.value,
+        show: show.value,
         screen_id: screen_id,
-      }     
+      }
       dispatch(financialActions.addfinancialcode(prm))
 
       setTimeout(function () {
@@ -79,9 +81,15 @@ class SetupCompanyAccount extends React.Component {
     this.setState({ edit: true })
   }
 
-  handleChangesActive = (active) => {    
+  handleChangesActive = (active) => {
     this.setState({
-      active: (active == null) ? {value: "1", label: "Active"} : active
+      active: (active == null) ? { value: "1", label: "Active" } : active
+    })
+  }
+
+  handleChangesShow = (show) => {
+    this.setState({
+      show: (show == null) ? { value: "1", label: "Active" } : show
     })
   }
 
@@ -129,11 +137,13 @@ class SetupCompanyAccount extends React.Component {
         let data = row.data()
 
         let inputtxt = table.cell(index, 2).nodes().to$().find('input').val()
-        let inputchk = table.cell(index, 3).nodes().to$().find('input').prop('checked')
-        let Flag = (inputchk == true) ? '1' : '0'
-        if (inputtxt != data['FINANCIAL_DESC'].toString() || Flag != data['FIXFLAG'].toString()) {
+        let inputchkFlag = table.cell(index, 3).nodes().to$().find('input').prop('checked')
+        let inputchkShow = table.cell(index, 4).nodes().to$().find('input').prop('checked')
+        let Flag = (inputchkFlag == true) ? '1' : '0'
+        let Show = (inputchkShow == true) ? '1' : '0'
+        if (inputtxt != data['FINANCIAL_DESC'].toString() || Flag != data['FIXFLAG'].toString() || Show != data['S_DAILY_FINS_FLAG'].toString()) {
           if (data['FINANCIAL_CODE'] && Flag) {
-            const temp = { fin_code: data['FINANCIAL_CODE'].toString(), fin_desc: inputtxt, fin_flag: Flag, screen_id: screen_id }
+            const temp = { fin_code: data['FINANCIAL_CODE'].toString(), fin_desc: inputtxt, fin_flag: Flag, fin_show: Show, screen_id: screen_id }
             objectitem.push(temp)
           }
         }
@@ -159,8 +169,8 @@ class SetupCompanyAccount extends React.Component {
 
   render() {
     const { edit, submitted, modifydata } = this.state;
-    const { financialcode, financialname, active } = this.state
-    const { errorfinancialcode, errorfinancialname, erroractive } = this.state
+    const { financialcode, financialname, active, show } = this.state
+    const { errorfinancialcode, errorfinancialname, erroractive, errorshow } = this.state
     const { modify, screen_name } = this.props;
     const self = this
 
@@ -172,7 +182,7 @@ class SetupCompanyAccount extends React.Component {
               <article className="col-sm-12">
                 <JarvisWidget editbutton={false} colorbutton={false} deletebutton={false} togglebutton={false} color="darken">
                   <header><h2>{screen_name}</h2></header>
-                  {modify && <div className="widget-body">                    
+                  {modify && <div className="widget-body">
                     <div className="widget-body no-padding">
                       <DatatableFinancialCode actions={edit}
                         options={{
@@ -197,6 +207,19 @@ class SetupCompanyAccount extends React.Component {
                               }
                               return data;
                             }
+                          },
+                          {
+                            searchable: false,
+                            data: null,
+                            width: "20%",
+                            render: function (data, type, row) {
+                              if (row.S_DAILY_FINS_FLAG == "1") {
+                                return '<div class="smart-form checkbox "><label name="lblcheck"  class="checkbox state-disabled"><input type="checkbox" name="checkbox" disabled="disabled" checked/><i name="chklist"/></label></div>'
+                              } else {
+                                return '<div class="smart-form checkbox "><label name="lblcheck"  class="checkbox state-disabled"><input type="checkbox" name="checkbox" disabled="disabled"/><i name="chklist"/></label></div>'
+                              }
+                              return data;
+                            }
                           }
                           ],
                           buttons: [
@@ -205,7 +228,7 @@ class SetupCompanyAccount extends React.Component {
                               className: `btn btn-primary btn-sm ${(modify.can_add == "Y") ? '' : 'hidden'}`,
                               action: function (e, dt, node, config) {
                                 $("#myModalAdd").modal()
-                                self.setState({ financialcode: '', financialname: '', active: {value: "1", label: "Active"}, submitted: false });
+                                self.setState({ financialcode: '', financialname: '', active: { value: "1", label: "Active" }, show: { value: "1", label: "Active" }, submitted: false });
                                 $('#financialcode').prop('disabled', false)
                                 $('#financialname').prop('disabled', false);
                               }
@@ -244,7 +267,10 @@ class SetupCompanyAccount extends React.Component {
                               Financial Name
                               </th>
                             <th data-hide="user">
-                            Edit Account Daily Fins
+                              Edit Account Daily Fins
+                              </th>
+                            <th data-hide="user">
+                            Show Bank-In Adjustment
                               </th>
                           </tr>
                         </thead>
@@ -306,10 +332,19 @@ class SetupCompanyAccount extends React.Component {
                         <span className="text-danger">{erroractive}</span>
                       </div>
                     </div>
+                    <div className="row">
+                      <div className="col-md-12 form-group">
+                        <label htmlFor="active"> Show Bank-In Adjustment</label>
+                        {DropdownActive && active &&
+                          <Select options={DropdownActive} placeholder='Active' name="active" value={show} onChange={this.handleChangesShow} />
+                        }
+                        <span className="text-danger">{errorshow}</span>
+                      </div>
+                    </div>
                   </div>
                 </div>
                 <div className="modal-footer">
-                  <button type="button" onClick={this.handleAddSubmits}  className="btn btn-primary">
+                  <button type="button" onClick={this.handleAddSubmits} className="btn btn-primary">
                     Save
                   </button>
                   <button type="button" className="btn btn-default" data-dismiss="modal">
