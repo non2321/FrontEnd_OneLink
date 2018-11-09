@@ -111,19 +111,19 @@ class TotalPettyCashReimbursementByStore extends React.Component {
         }
     }
 
-    componentDidMount() {
+    async componentDidMount() {
         const { screen_id } = this.state
         const { dispatch } = this.props
 
         const self = this
-        let apiRequest1 = setTimeout(function () {
-            fetch(`${PathBackEnd}/api/report/storeall`)
-                .then(response => response.json())
-                .then(data => {
-                    self.setState({ optionstore: data })
-                    return data
-                });
-        }, 300)
+        setTimeout(async () => {
+            let response = await fetch(`${PathBackEnd}/api/report/storeall`)   
+            let json = await response.json()             
+            this.setState({
+                optionstore: json
+            })
+        }, 300)          
+       
 
         $(document).on('click', '.jarviswidget-fullscreen-btn', function () {
             self.setState({

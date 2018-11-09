@@ -205,7 +205,7 @@ class Datatable extends React.Component {
   }
 
   render() {
-    let { children, options, detailsFormat, paginationLength, ...props } = this.props;
+    let { children, options, detailsFormat, paginationLength, modify, screen_id, screen_name, alert, dispatch, ...props } = this.props;
     const { company_id, company_code, company_name, report_name } = this.state;
     return (
       <BootstrapValidator options={validatorOptions}>

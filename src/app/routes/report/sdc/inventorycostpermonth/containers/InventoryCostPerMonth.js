@@ -82,7 +82,7 @@ class InventoryCostPerMonth extends React.Component {
 
             setTimeout(function () {
                 self.setState({ submitted: true })
-            }, 500)
+            }, 600)
         }
     }
 
@@ -102,19 +102,19 @@ class InventoryCostPerMonth extends React.Component {
         })
     }
 
-    componentDidMount() {
+    async componentDidMount() {
         const { screen_id } = this.state
         const { dispatch } = this.props
 
         const self = this
-        let apiRequest1 = setTimeout(function () {
-            fetch(`${PathBackEnd}/api/importtojde/ddlperiod`)
-                .then(response => response.json())
-                .then(data => {
-                    self.setState({ tempperiod: data })
-                    return data
-                });
-        }, 300)
+        setTimeout(async () => {
+            let response = await fetch(`${PathBackEnd}/api/importtojde/ddlperiod`)   
+            let json = await response.json()             
+            this.setState({
+                tempperiod: json
+            })
+        }, 300)  
+        
 
         $(document).on('click', '.jarviswidget-fullscreen-btn', function () {
             self.setState({

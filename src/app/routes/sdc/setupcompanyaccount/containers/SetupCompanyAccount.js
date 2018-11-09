@@ -63,12 +63,12 @@ class SetupCompanyAccount extends React.Component {
   constructor(props) {
     super(props)
 
-    if(this.state === undefined){
+    if (this.state === undefined) {
       const prm = {
         screen_id: ScreenIDSetupCompanyAccount,
       }
       this.props.dispatch(userAuth.loadpage(prm))
-    }  
+    }
 
     this.state = {
       company_id: '',
@@ -77,7 +77,7 @@ class SetupCompanyAccount extends React.Component {
       report_name: '',
       submitted: true,
       screen_id: ScreenIDSetupCompanyAccount
-    }    
+    }
 
     this.handleChange = this.handleChange.bind(this)
     this.handleAdd = this.handleAdd.bind(this)
@@ -125,70 +125,57 @@ class SetupCompanyAccount extends React.Component {
               <JarvisWidget editbutton={false} colorbutton={false} deletebutton={false} togglebutton={false} color="darken">
                 <header><h2>{screen_name}</h2></header>
                 {modify && <div>
-                  {/* {modify.can_add == 'Y' &&
-                      <div className="widget-body-toolbar">
-                        <div className="row">
-                          <div className="col-xs-9 col-sm-5 col-md-5 col-lg-5">
-                            <button onClick={this.handleAdd} className="btn btn-primary btn-sm" data-toggle="modal"
-                              data-target="#myModalAdd">
-                              <i className="fa fa-plus" /> <span className="hidden-mobile"> Add</span>
-                            </button>
-                          </div>
-                          <div className="col-xs-3 col-sm-7 col-md-7 col-lg-7 text-right">
-                          </div>
-                        </div>
-                      </div>
-                    } */}
-                  <div className="widget-body no-padding"><DatatableCompanyAccount modify={modify}
-                    screen_id={screen_id}
-                    screen_name={screen_name}
-                    options={{
-                      colReorder: true,
-                      ajax: `${PathBackEnd}/api/companyaccountconfig`,
-                      columns: [{ data: "LOV_ID", "visible": false, searchable: false }, { data: "LOV1" }, { data: "LOV2" }, { data: "LOV3" },
-                      {
-                        searchable: false,
-                        visible: (modify.can_edit == "Y" || modify.can_delete == "Y") ? true : false,
-                        targets: -1,
-                        data: null,
-                        width: "6%",
-                        //defaultContent: `<div class="btn-group">${(modify.can_edit == "Y") ? '<button ID="btnEdit" class="btn btn-info btn-sm" data-toggle="modal" data-target="#myModalEdit"><span >Edit &nbsp;&nbsp;</span></button>' : ''}  ${(modify.can_delete == "Y") ? '<button ID="btnDelete" class="btn btn-danger btn-sm">Delete</button>' : ''}</div>`
-                        defaultContent: `<div class="row">${(modify.can_edit == "Y") ? '<div data-toggle="tooltip" title="Edit" class = "col-md-2"><a id="btnEdit" data-toggle="modal" data-target="#myModalEdit" class="fa fa-fw fa-pencil-square-o" /></div>' : ''}${(modify.can_delete == "Y") ? '<div data-toggle="tooltip" title="Delete" class = "col-md-2"><a id="btnDelete" class="glyphicon glyphicon-trash " /></div>' : ''}</div>`
-                      }],
-                      buttons: [
+                  <div className="widget-body no-padding">
+                    <DatatableCompanyAccount modify={modify}
+                      screen_id={screen_id}
+                      screen_name={screen_name}
+                      options={{
+                        colReorder: true,
+                        ajax: `${PathBackEnd}/api/companyaccountconfig`,
+                        columns: [{ data: "LOV_ID", "visible": false, searchable: false }, { data: "LOV1" }, { data: "LOV2" }, { data: "LOV3" },
                         {
-                          text: `<span ><i class="fa fa-plus" /><span class="hidden-mobile"> Add</span></span>`,
-                          className: `btn btn-primary btn-sm ${(modify.can_add == "Y") ? '' : 'hidden'}`,
-                          action: function (e, dt, node, config) {
-                            $("#myModalAdd").modal()
-                            seft.setState({ company_id: '', company_code: '', company_name: '', report_name: '', submitted: false });
-                            $('#add-form').bootstrapValidator("resetForm", true);  
-                          }
-                        },
-                      ],
-                    }}
-                    paginationLength={true} className="table table-striped table-bordered table-hover"
-                    width="100%">
-                    <thead>
-                      <tr>
-                        <th data-hide="user">ID</th>
-                        <th data-class="expand"><i
-                          className="text-muted hidden-md hidden-sm hidden-xs" />
-                          Company Account Code
+                          searchable: false,
+                          visible: (modify.can_edit == "Y" || modify.can_delete == "Y") ? true : false,
+                          targets: -1,
+                          data: null,
+                          width: "6%",
+                          //defaultContent: `<div class="btn-group">${(modify.can_edit == "Y") ? '<button ID="btnEdit" class="btn btn-info btn-sm" data-toggle="modal" data-target="#myModalEdit"><span >Edit &nbsp;&nbsp;</span></button>' : ''}  ${(modify.can_delete == "Y") ? '<button ID="btnDelete" class="btn btn-danger btn-sm">Delete</button>' : ''}</div>`
+                          defaultContent: `<div class="row">${(modify.can_edit == "Y") ? '<div data-toggle="tooltip" title="Edit" class = "col-md-2"><a id="btnEdit" data-toggle="modal" data-target="#myModalEdit" class="fa fa-fw fa-pencil-square-o" /></div>' : ''}${(modify.can_delete == "Y") ? '<div data-toggle="tooltip" title="Delete" class = "col-md-2"><a id="btnDelete" class="glyphicon glyphicon-trash " /></div>' : ''}</div>`
+                        }],
+                        buttons: [
+                          {
+                            text: `<span ><i class="fa fa-plus" /><span class="hidden-mobile"> Add</span></span>`,
+                            className: `btn btn-primary btn-sm ${(modify.can_add == "Y") ? '' : 'hidden'}`,
+                            action: function (e, dt, node, config) {
+                              $("#myModalAdd").modal()
+                              seft.setState({ company_id: '', company_code: '', company_name: '', report_name: '', submitted: false });
+                              $('#add-form').bootstrapValidator("resetForm", true);
+                            }
+                          },
+                        ],
+                      }}
+                      paginationLength={true} className="table table-striped table-bordered table-hover"
+                      width="100%">
+                      <thead>
+                        <tr>
+                          <th data-hide="user">ID</th>
+                          <th data-class="expand"><i
+                            className="text-muted hidden-md hidden-sm hidden-xs" />
+                            Company Account Code
                         </th>
-                        <th data-hide="user"><i
-                          className="text-muted hidden-md hidden-sm hidden-xs" />
-                          Company Account Name
+                          <th data-hide="user"><i
+                            className="text-muted hidden-md hidden-sm hidden-xs" />
+                            Company Account Name
                         </th>
-                        <th data-hide="user"><i
-                          className="text-muted hidden-md hidden-sm hidden-xs" />
-                          Report Name
+                          <th data-hide="user"><i
+                            className="text-muted hidden-md hidden-sm hidden-xs" />
+                            Report Name
                         </th>
-                        <th data-hide="user" className="text-right">
-                        </th>
-                      </tr>
-                    </thead>
-                  </DatatableCompanyAccount></div>
+                          <th data-hide="user" className="text-right">
+                          </th>
+                        </tr>
+                      </thead>
+                    </DatatableCompanyAccount></div>
                 </div>
                 }
               </JarvisWidget>

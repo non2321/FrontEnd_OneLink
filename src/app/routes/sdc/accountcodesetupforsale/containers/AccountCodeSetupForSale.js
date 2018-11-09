@@ -1,14 +1,11 @@
 import React from 'react'
-import { connect } from 'react-redux';
-import ReactTooltip from 'react-tooltip'
+import { connect } from 'react-redux'
 
-import { userAuth } from '../../../../actions/auth';
+import { userAuth } from '../../../../actions/auth'
 import { financialActions } from '../../../../actions/sdc'
-import { alertActions } from '../../../../actions/alert'
 
 import { Stats, BigBreadcrumbs, WidgetGrid, JarvisWidget } from '../../../../components'
-import { smallBox, bigBox, SmartMessageBox } from '../../../../components/utils/actions/MessageActions'
-import UiValidate from '../../../../components/forms/validation/UiValidate'
+
 import BootstrapValidator from '../../../../components/forms/validation/BootstrapValidator'
 import DatatableAccountCodeSetupForSale from '../../../../components/tables/DatatableAccountCodeSetupForSale'
 
@@ -80,7 +77,7 @@ const getOptionsBuType = () => {
     });
 }
 
-const getOptionsType = () => {
+const getOptionsType = () => { 
   return fetch(`${PathBackEnd}/api/accountcodeconfigforsale/ddltype`)
     .then((response) => {
       return response.json();
@@ -93,12 +90,12 @@ class AccountCodeSetupForSale extends React.Component {
   constructor(props) {
     super(props)
 
-    if(this.state === undefined){
+    if (this.state === undefined) {
       const prm = {
         screen_id: ScreenIDAccountCodeSetupForSale,
       }
       this.props.dispatch(userAuth.loadpage(prm))
-    }  
+    }
 
     this.state = {
       formular_name: '',
@@ -109,7 +106,7 @@ class AccountCodeSetupForSale extends React.Component {
       subledger: '',
       submitted: false,
       screen_id: ScreenIDAccountCodeSetupForSale
-    }    
+    }
 
     this.handleChange = this.handleChange.bind(this)
     this.handleAddSubmit = this.handleAddSubmit.bind(this)
@@ -134,7 +131,7 @@ class AccountCodeSetupForSale extends React.Component {
 
     const { dispatch } = this.props;
 
-    if (formular_name ) {
+    if (formular_name) {
       const prm = {
         formular_name: formular_name.toString(),
         account_code: account_code.toString(),
@@ -185,7 +182,7 @@ class AccountCodeSetupForSale extends React.Component {
                               $("#myModalAdd").modal()
                               seft.setState({ formular_name: '', account_code: '', bu_type: '', type: '', subledger_type: '', subledger: '', submitted: false });
                               // $('#add-form').bootstrapValidator('disableSubmitButtons', false)
-                              $('#add-form').bootstrapValidator("resetForm", true);                             
+                              $('#add-form').bootstrapValidator("resetForm", true);
                             }
                           },
                         ],

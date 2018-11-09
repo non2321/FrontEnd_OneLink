@@ -94,14 +94,13 @@ class EndingInventory extends React.Component {
             const prm_year = (year.value) ? year.value : year
             const prm_month = (month.value) ? month.value : month
 
-            const apiRequest = setTimeout(function () {
-                fetch(`${PathBackEnd}/api/endinginventory/getperiod/${prm_year}/${prm_month}`)
-                    .then(response => response.json())
-                    .then(data => {
-                        self.setState({ period: data[0].value })
-                        return data
-                    });
-            }, 200)
+            setTimeout(async () => {
+                let response = await fetch(`${PathBackEnd}/api/endinginventory/getperiod/${prm_year}/${prm_month}`)   
+                let json = await response.json()             
+                this.setState({
+                    period: json[0].value
+                })
+            }, 300)              
         }
     }
 
@@ -164,23 +163,21 @@ class EndingInventory extends React.Component {
         const { dispatch } = this.props
 
         const self = this
-        let apiRequest1 = setTimeout(function () {
-            fetch(`${PathBackEnd}/api/report/storeall`)
-                .then(response => response.json())
-                .then(data => {
-                    self.setState({ options: data })
-                    return data
-                });
-        }, 500)
-
-        let apiRequest2 = setTimeout(function () {
-            fetch(`${PathBackEnd}/api/unitcost/ddlinvencategory`)
-                .then(response => response.json())
-                .then(data => {
-                    self.setState({ optioninven_category: data })
-                    return data
-                });
-        }, 800)
+        setTimeout(async () => {
+            let response = await fetch(`${PathBackEnd}/api/report/storeall`)   
+            let json = await response.json()             
+            this.setState({
+                options: json
+            })
+        }, 300)  
+        setTimeout(async () => {
+            let response = await fetch(`${PathBackEnd}/api/unitcost/ddlinvencategory`)   
+            let json = await response.json()             
+            this.setState({
+                optioninven_category: json
+            })
+        }, 600)         
+       
 
         $(document).on('click', '.jarviswidget-fullscreen-btn', function () {
             self.setState({

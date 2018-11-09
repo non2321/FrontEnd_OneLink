@@ -437,38 +437,35 @@ class BankInAdjustment extends React.Component {
             obj: null,
             upload: null
         })
-    }
+    }   
 
-
-    componentDidMount() {
-        let self = this
-
-        let apiRequest1 = setTimeout(function () {
-            fetch(`${PathBackEnd}/api/bankinadjustment/validationstore`)
-                .then(response => response.json())
-                .then(data => {
-                    self.setState({ validationstore: data })
-                    return data
-                });
-        }, 350)
-
-        let apiRequest2 = setTimeout(function () {
-            fetch(`${PathBackEnd}/api/bankinadjustment/validationfinancialcode`)
-                .then(response => response.json())
-                .then(data => {
-                    self.setState({ validationfinancialcode: data })
-                    return data
-                });
-        }, 600)
-
-        let apiRequest3 = setTimeout(function () {
-            fetch(`${PathBackEnd}/api/report/storeall`)
-                .then(response => response.json())
-                .then(data => {
-                    self.setState({ optionstore: data })
-                    return data
-                });
-        }, 850)
+    async componentDidMount() {
+        try {            
+            setTimeout(async () => {
+                let response = await fetch(`${PathBackEnd}/api/bankinadjustment/validationstore`)   
+                let json = await response.json()             
+                this.setState({
+                    validationstore: json
+                })
+            }, 300)
+            setTimeout(async () => {
+                let response = await fetch(`${PathBackEnd}/api/bankinadjustment/validationfinancialcode`)                
+                let json = await response.json()     
+                this.setState({
+                    validationfinancialcode: json
+                })
+            }, 500)
+            setTimeout(async () => {
+                let response = await fetch(`${PathBackEnd}/api/report/storeall`) 
+                let json = await response.json()                   
+                this.setState({
+                    optionstore: json
+                })
+            }, 600)
+        }
+        catch (err) {            
+            console.log(err);
+        }
     }
 
     render() {
@@ -493,7 +490,7 @@ class BankInAdjustment extends React.Component {
                                         <a style={{ "padding-left": "10px", "padding-right": "10px" }} onClick={this.handleImport} title="Import" className="button-icon form-group" data-toggle="modal" data-target="#myModalUpload">
                                             <span > Import</span></a>
                                         <a style={{ "padding-left": "10px", "padding-right": "10px" }} onClick={this.handleGenGL} title="Gen GL To E1" className="button-icon form-group" data-toggle="modal" data-target="#myModalGL">
-                                        <span > Gen </span><span class="hidden-mobile">GL To E1</span></a>
+                                            <span > Gen </span><span class="hidden-mobile">GL To E1</span></a>
                                     </div>
                                     }
                                 </header>
@@ -604,7 +601,7 @@ class BankInAdjustment extends React.Component {
                                                                                 render: function (data, type, row) {
                                                                                     return `<input type="number"  name="txtfinname" class="form-control input-xs" disabled="disabled" value=${parseFloat(Math.round(data * 100) / 100).toFixed(2)} step='0.01'></div><label class="text-danger"></label>`;
                                                                                 }
-                                                                            }],                                                                            
+                                                                            }],
                                                                             buttons: [
                                                                                 {
                                                                                     text: `<span ><i class="fa fa-edit" /><span class="hidden-mobile"> Edit</span></span>`,

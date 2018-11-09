@@ -206,7 +206,7 @@ class DatatableBankAccount extends React.Component {
   }
 
   render() {
-    let { children, options, detailsFormat, paginationLength, ...props } = this.props;
+    let { children, options, detailsFormat, paginationLength, screen_id, screen_name, dispatch, ...props } = this.props;
     const { bank_code, bank_name, bank_branch, account_code } = this.state;
     return (
       <BootstrapValidator options={validatorOptions}>

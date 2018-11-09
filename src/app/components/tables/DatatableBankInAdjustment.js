@@ -130,7 +130,7 @@ class DatatableBankInAdjustment extends React.Component {
   }
 
   render() {
-    let { children, options, detailsFormat, paginationLength, ...props } = this.props;
+    let { children, options, detailsFormat, paginationLength, dispatch, ...props } = this.props;
     return (
       <div>
         <table id="table" name="tables" {...props} ref="table">

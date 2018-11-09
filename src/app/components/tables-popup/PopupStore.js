@@ -120,7 +120,7 @@ class PopupStore extends React.Component {
   }
 
   render() {
-    let { children, options, detailsFormat, paginationLength,handlerFromParant, ...props } = this.props;
+    let { children, options, detailsFormat, paginationLength,handlerFromParant, dispatch, ...props } = this.props;
     return (
       <div>
         <table id="poptable" {...props} ref="table">
