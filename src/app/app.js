@@ -26,6 +26,7 @@ const routes = {
     require('./routes/sdc/setupstore').default,
     require('./routes/sdc/accountcodesetupforsale').default,
     require('./routes/sdc/bankinadjustment').default,
+    require('./routes/sdc/generateg1toe1').default,
     require('./routes/sdc/steampclosedailyfins').default,
 
     require('./routes/sdc/accountcodeforinventory').default,

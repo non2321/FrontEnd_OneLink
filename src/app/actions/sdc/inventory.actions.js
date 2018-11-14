@@ -6,6 +6,8 @@ import { hashHistory } from 'react-router'
 export const inventoryActions = {
     addaccountcodeforinventory,   
     editaccountcodeforinventory,
+    downloadtemplateaccountcodeforinventory,
+    importaccountcodeforinventory,
 
     addtermclosing,
     edittermclosing,
@@ -108,6 +110,39 @@ function editaccountcodeforinventory(prm) {
             )
     }
 
+    function request(inventory) { return { type: inventoryConstants.ADD_REQUEST, inventory } }
+    function success(inventory) { return { type: inventoryConstants.ADD_SUCCESS, inventory } }
+    function failure(error) { return { type: inventoryConstants.ADD_FAILURE, error } }
+}
+
+function downloadtemplateaccountcodeforinventory() {
+    inventoryService.downloadtemplateaccountcodeforinventory()
+}
+
+function importaccountcodeforinventory(obj, screen_id) {
+    return dispatch => {
+        dispatch(request({ obj }));
+        inventoryService.importaccountcodeforinventory(obj, screen_id)
+            .then(
+                inventory => {
+                    if (inventory.status == 'Y') {
+                        $('#table').DataTable().ajax.reload();
+                        dispatch(success(inventory));
+                        dispatch(alertActions.success(inventory.message));                        
+                    } else if (inventory.status == 'NA') {
+                        dispatch(failure(inventory.message));
+                        dispatch(alertActions.error(inventory.message));
+                        hashHistory.push('/Login');
+                    } else {
+                        $('#table').DataTable().ajax.reload();
+                        dispatch(failure(inventory.message));
+                        dispatch(alertActions.error(inventory.message));
+                    }
+                },
+                error => {
+                }
+            )
+    }
     function request(inventory) { return { type: inventoryConstants.ADD_REQUEST, inventory } }
     function success(inventory) { return { type: inventoryConstants.ADD_SUCCESS, inventory } }
     function failure(error) { return { type: inventoryConstants.ADD_FAILURE, error } }

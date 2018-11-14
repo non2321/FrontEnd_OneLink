@@ -116,6 +116,7 @@ class BankInAdjustment extends React.Component {
             let fileReader = new FileReader();
 
             let objectitem = []
+            let tempdata
             fileReader.onload = function (e) {
 
                 // call 'xlsx' to read the file
@@ -127,25 +128,34 @@ class BankInAdjustment extends React.Component {
                     let worksheet = workbook.Sheets[y];
                     worksheet['!ref'] = "A2:Z10000"
                     let tempitem = XLSX.utils.sheet_to_json(worksheet)
-                    objectitem.push(tempitem)
+
+                    for (let item of tempitem) {                                    
+                        tempdata = {}
+                        tempdata['Store ID'] = (item['Store ID']) ? item['Period'] : ''
+                        tempdata['Financial Code'] = (item['Financial Code']) ? item['Financial Code'] : ''
+                        tempdata['Financial Date'] = (item['Financial Date']) ? item['Financial Date'] : ''
+                        tempdata['Account Daily Fins'] = (item['Account Daily Fins']) ? item['Account Daily Fins'] : ''
+                        
+                        objectitem.push(tempdata)  
+                    }                     
                 })
                 let checkColumn = true
 
-                if (objectitem[0].length > 0) {
-                    if (objectitem[0][0]['Store ID'] === undefined) checkColumn = false
-                    if (objectitem[0][0]['Financial Code'] === undefined) checkColumn = false
-                    if (objectitem[0][0]['Financial Date'] === undefined) checkColumn = false
-                    if (objectitem[0][0]['Account Daily Fins'] === undefined) checkColumn = false
+                if (objectitem.length > 0) {
+                    if (objectitem[0]['Store ID'] === '') checkColumn = false
+                    if (objectitem[0]['Financial Code'] === '') checkColumn = false
+                    if (objectitem[0]['Financial Date'] === '') checkColumn = false
+                    if (objectitem[0]['Account Daily Fins'] === '') checkColumn = false
 
                     if (checkColumn == true) {
-                        for (let item in objectitem[0]) {
-                            objectitem[0][item]['Status'] = ''
+                        for (let item in objectitem) {
+                            objectitem[item]['Status'] = ''
                         }
 
                         let data = {
-                            "aaData": objectitem[0]
+                            "aaData": objectitem
                         }
-                        self.setState({ uploading: false, upload: data, obj: objectitem[0] })
+                        self.setState({ uploading: false, upload: data, obj: objectitem })
 
                     } else {
 
@@ -489,8 +499,8 @@ class BankInAdjustment extends React.Component {
                                     {modify && modify.can_edit == "Y" && <div className="jarviswidget-ctrls" >
                                         <a style={{ "padding-left": "10px", "padding-right": "10px" }} onClick={this.handleImport} title="Import" className="button-icon form-group" data-toggle="modal" data-target="#myModalUpload">
                                             <span > Import</span></a>
-                                        <a style={{ "padding-left": "10px", "padding-right": "10px" }} onClick={this.handleGenGL} title="Gen GL To E1" className="button-icon form-group" data-toggle="modal" data-target="#myModalGL">
-                                            <span > Gen </span><span class="hidden-mobile">GL To E1</span></a>
+                                        {/* <a style={{ "padding-left": "10px", "padding-right": "10px" }} onClick={this.handleGenGL} title="Gen GL To E1" className="button-icon form-group" data-toggle="modal" data-target="#myModalGL">
+                                            <span > Gen </span><span class="hidden-mobile">GL To E1</span></a> */}
                                     </div>
                                     }
                                 </header>

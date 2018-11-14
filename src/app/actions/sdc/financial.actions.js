@@ -226,6 +226,7 @@ function addaccountforsale(prm) {
     const type = prm.type
     const subledger_type = prm.subledger_type
     const subledger = prm.subledger
+    const fincode = prm.fincode
     const screen_id = prm.screen_id
 
     return dispatch => {
@@ -271,6 +272,7 @@ function editaccountforsale(prm) {
     const type = prm.type
     const subledger_type = prm.subledger_type
     const subledger = prm.subledger
+    const fincode = prm.fincode
     const screen_id = prm.screen_id
 
     return dispatch => {

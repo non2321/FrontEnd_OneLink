@@ -41,6 +41,19 @@ const validatorOptions = {
           message: 'The bank branch is required'
         }
       }
+    },
+    account_code: {
+      // The group will be set as default (.form-group)
+      group: '.col-md-6',
+      validators: {
+        notEmpty: {
+          message: 'The account code is required'
+        },
+        stringLength: {
+          max: 30,
+          message: 'The account code be less than 30 characters long'
+        }
+      }
     }
   }
 };
@@ -245,7 +258,7 @@ class DatatableBankAccount extends React.Component {
                             <input type="text" name="bank_branch" value={bank_branch} onChange={this.handleChange} className="form-control" id="txtBankBranch" placeholder="Bank Branch" />
                           </div>
                           <div className="col-md-6 form-group">
-                            <label htmlFor="account_code"> Account Code</label>
+                            <label htmlFor="account_code"> Account Code</label><span class="text-danger">*</span>
                             <input type="text" name="account_code" value={account_code} onChange={this.handleChange} className="form-control" id="txtAccountCode" placeholder="Account Code" />
                           </div>
                         </div>

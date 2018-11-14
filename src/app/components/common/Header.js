@@ -17,7 +17,7 @@ class Header extends React.Component {
     this.handleClick = this.handleClick.bind(this);
     const user = JSON.parse(localStorage.getItem(localStorageAuth));
     this.state = {
-      user: (user) ? `${user.firstname} ${user.lastname}` : '',
+      user: (user) ? `${user.id} ${user.firstname} ${user.lastname}` : '',
       position: (user) ? `${user.position}` : ''
     }
   }

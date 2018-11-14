@@ -89,7 +89,8 @@ class EndingInventory extends React.Component {
             file = files[0];
             let fileReader = new FileReader();
 
-            let objectitem = []
+            let objectitem = []          
+            let tempdata
             fileReader.onload = function (e) {
 
                 // call 'xlsx' to read the file
@@ -98,29 +99,39 @@ class EndingInventory extends React.Component {
                 let sheet_name_list = workbook.SheetNames;
 
                 sheet_name_list.forEach(function (y) { /* iterate through sheets */
-                    let worksheet = workbook.Sheets[y];
+                    let worksheet = workbook.Sheets[y];                    
                     worksheet['!ref'] = "A2:Z10000"
-                    let tempitem = XLSX.utils.sheet_to_json(worksheet)
-                    objectitem.push(tempitem)
+                    let tempitem = XLSX.utils.sheet_to_json(worksheet) 
+                                     
+                    for (let item of tempitem) {                                    
+                        tempdata = {}
+                        tempdata['Period'] = (item['Period']) ? item['Period'] : ''
+                        tempdata['Stock No'] = (item['Stock No']) ? item['Stock No'] : ''
+                        tempdata['Inv Item'] = (item['Inv Item']) ? item['Inv Item'] : ''
+                        tempdata['Unit Cost'] = (item['Unit Cost']) ? item['Unit Cost'] : ''
+                        tempdata['Unit'] = (item['Unit']) ? item['Unit'] : ''
+                       
+                        objectitem.push(tempdata)  
+                    }  
                 })
-                let checkColumn = true
-
-                if (objectitem[0].length > 0) {
-                    if (objectitem[0][0]['Period'] === undefined) checkColumn = false
-                    if (objectitem[0][0]['Stock No'] === undefined) checkColumn = false
-                    if (objectitem[0][0]['Inv Item'] === undefined) checkColumn = false
-                    if (objectitem[0][0]['Unit Cost'] === undefined) checkColumn = false
-                    if (objectitem[0][0]['Unit'] === undefined) checkColumn = false
+                let checkColumn = true                
+                if (objectitem.length > 0) {
+                    
+                    if (objectitem[0]['Period'] === '') checkColumn = false
+                    if (objectitem[0]['Stock No'] === '') checkColumn = false
+                    if (objectitem[0]['Inv Item'] === '') checkColumn = false
+                    if (objectitem[0]['Unit Cost'] === '') checkColumn = false
+                    if (objectitem[0]['Unit'] === '') checkColumn = false
 
                     if (checkColumn == true) {
-                        for (let item in objectitem[0]) {
-                            objectitem[0][item]['Status'] = ''
+                        for (let item in objectitem) {
+                            objectitem[item]['Status'] = ''
                         }
 
                         let data = {
-                            "aaData": objectitem[0]
+                            "aaData": objectitem
                         }
-                        self.setState({ uploading: false, upload: data, obj: objectitem[0] })
+                        self.setState({ uploading: false, upload: data, obj: objectitem })
                     } else {
 
                         self.setState({ file: null, filename: 'Choose a file...', uploading: false, upload: null, obj: null })
@@ -199,7 +210,7 @@ class EndingInventory extends React.Component {
 
     handleChangesYearGenInven = (yeargeninven) => {
         const { tempperiod } = this.state
-        
+
         this.setState({
             yeargeninven: (yeargeninven == null) ? '' : yeargeninven,
             periodgeninven: '',
@@ -239,7 +250,7 @@ class EndingInventory extends React.Component {
         e.preventDefault
         const self = this
         const { dispatch } = this.props
-        const { screen_id, obj, validationstore, validationfinancialcode } = this.state
+        const { screen_id, obj, validationinvitem } = this.state
 
         this.setState({ uploading: true })
         setTimeout(function () {
@@ -251,6 +262,10 @@ class EndingInventory extends React.Component {
 
                     obj[item]['Status'] = 'Success'
                     let status = true
+
+                    const valinvitem = validationinvitem.find((x) => { return (x.PERIOD_ID.toString().trim() == obj[item]['Period'].trim() &&  x.INV_ITEM.toString().trim() == obj[item]['Inv Item'].trim())})
+
+                    if (valinvitem == undefined) status = false
 
                     if (obj[item]['Period'].trim() == '') status = false
                     if (obj[item]['Stock No'].trim() == '') status = false
@@ -400,61 +415,65 @@ class EndingInventory extends React.Component {
 
         const { dispatch } = this.props
         const { yeargeninven, periodgeninven, screen_id } = this.state
-       
+
         this.setState({
             erroryeargeninven: (yeargeninven) ? '' : 'The year is required',
-            errorperiodgeninven: (periodgeninven) ? '' : 'The period is required',          
+            errorperiodgeninven: (periodgeninven) ? '' : 'The period is required',
             gensubmitted: false
         })
 
         if (periodgeninven && screen_id) {
             const prm = {
-                period: periodgeninven.value,               
+                period: periodgeninven.value,
                 screen_id: screen_id
             }
             dispatch(inventoryActions.genunitcost(prm))
-            
+
             this.setState({
                 gensubmitted: true
             })
         }
     }
 
-    componentDidMount() {
-        const { year, month } = this.state
-        const self = this
+    async componentDidMount() {
+        const { year, month } = this.state       
 
-        let apiRequest1 = setTimeout(function () {
-            fetch(`${PathBackEnd}/api/unitcost/ddlinvencategory`)
-                .then(response => response.json())
-                .then(data => {
-                    self.setState({ optioninven_category: data })
-                    return data
-                });
+        setTimeout(async () => {
+            let response = await fetch(`${PathBackEnd}/api/unitcost/ddlinvencategory`)   
+            let json = await response.json()             
+            this.setState({
+                optioninven_category: json
+            })
         }, 300)
 
-        let apiRequest2 = setTimeout(function () {
-            fetch(`${PathBackEnd}/api/importtojde/ddlperiod`)
-                .then(response => response.json())
-                .then(data => {
-                    self.setState({ tempperiod: data })
-                    return data
-                });
-        }, 600)
+        setTimeout(async () => {
+            let response = await fetch(`${PathBackEnd}/api/importtojde/ddlperiod`)   
+            let json = await response.json()             
+            this.setState({
+                tempperiod: json
+            })
+        }, 600)   
 
         if (month && year) {
 
             const prm_year = (year.value) ? year.value : year
             const prm_month = (month.value) ? month.value : month
-            const apiRequest = setTimeout(function () {
-                fetch(`${PathBackEnd}/api/endinginventory/getperiod/${prm_year}/${prm_month}`)
-                    .then(response => response.json())
-                    .then(data => {
-                        self.setState({ period: data[0].value })
-                        return data
-                    });
-            }, 800)
-        }       
+            setTimeout(async () => {
+                let response = await fetch(`${PathBackEnd}/api/endinginventory/getperiod/${prm_year}/${prm_month}`)   
+                let json = await response.json()             
+                this.setState({
+                    period: json[0].value
+                })
+            }, 800)            
+        }
+
+        setTimeout(async () => {
+            let response = await fetch(`${PathBackEnd}/api/unitcostvalidationinvitem`)   
+            let json = await response.json()
+            this.setState({
+                validationinvitem: json
+            })
+        }, 1200)
     }
 
 
@@ -800,7 +819,7 @@ class EndingInventory extends React.Component {
                                                     <div className="col-md-3 control-label"><label > Year</label><span class="text-danger">*</span></div>
                                                     <div className="col-md-5">
                                                         {optionyear &&
-                                                            <Select options={optionyear} placeholder='Year' name="year" value={yeargeninven} onChange={this.handleChangesYearGenInven}/>
+                                                            <Select options={optionyear} placeholder='Year' name="year" value={yeargeninven} onChange={this.handleChangesYearGenInven} />
                                                         }
                                                         <span className="text-danger">{erroryeargeninven}</span>
                                                     </div>

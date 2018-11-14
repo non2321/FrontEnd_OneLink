@@ -67,6 +67,12 @@
               "screen_id": "S0008"
             },
             {
+              "title": "Generate G1 To E1",
+              "route": "/SDC/GenerateG1ToE1",
+              "comment": "Generate G1 To E1",
+              "screen_id": "S0032"
+            },
+            {
               "title": "Stamp Close Daily Fins",
               "route": "/SDC/SteampCloseDailyFins",
               "comment": "Stamp Close Daily Fins",

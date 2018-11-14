@@ -119,7 +119,7 @@ class DatatableAccountCodeSetupForSale extends React.Component {
 
   handleEditSubmit(e) {
     e.preventDefault()
-    const { formular_id, formular_name, account_code, bu_type, type, subledger_type, subledger, screen_id } = this.state;
+    const { formular_id, formular_name, account_code, bu_type, type, subledger_type, subledger, fincode, screen_id } = this.state;
     const { dispatch } = this.props;
 
     if (formular_id && formular_name) {
@@ -131,6 +131,7 @@ class DatatableAccountCodeSetupForSale extends React.Component {
         type: (type)? type.value.toString() : '',
         subledger_type: subledger_type.toString(),
         subledger: subledger.toString(),
+        fincode: fincode.toString(),
         screen_id: screen_id
       }     
       dispatch(financialActions.editaccountforsale(prm));
@@ -237,7 +238,7 @@ class DatatableAccountCodeSetupForSale extends React.Component {
 
   render() {
     let { children, options, detailsFormat, paginationLength, ...props } = this.props;
-    const { formular_id, formular_name, account_code, bu_type, type, subledger_type, subledger, } = this.state;
+    const { formular_id, formular_name, account_code, bu_type, type, subledger_type, subledger, fincode } = this.state;
     let itemaccount_code = ''
     if(account_code.trim() == Notuse) {
       this.setState({account_code: ''})
@@ -265,25 +266,25 @@ class DatatableAccountCodeSetupForSale extends React.Component {
                     <div className="modal-body">
                       <div class="form-group">
                         <div className="row">
-                          <div className="col-md-6">
+                          <div className="col-md-6 form-group">
                             <label htmlFor="formular_id">Formular ID</label>
                             <input type="text" name="formular_id" value={formular_id} onChange={this.handleChange} className="form-control" placeholder="Formular ID" disabled={true} />
                           </div>
-                          <div className="col-md-6">
+                          <div className="col-md-6 form-group">
                           </div>
                         </div>
                         <div className="row">
-                          <div className="col-md-6">
+                          <div className="col-md-6 form-group">
                             <label htmlFor="formular_name">Formular Name</label><span class="text-danger">*</span>
                             <input type="text" name="formular_name" value={formular_name} onChange={this.handleChange} className="form-control" placeholder="Formular Name" />
                           </div>
-                          <div className="col-md-6">
+                          <div className="col-md-6 form-group">
                             <label htmlFor="account_code">Account Code</label>
                             <input type="text" name="account_code" value={account_code} onChange={this.handleChange} className="form-control" placeholder="No Use" />
                           </div>
                         </div>
                         <div className="row">
-                          <div className="col-md-6">
+                          <div className="col-md-6 form-group">
                             <label htmlFor="bu_type"> Bu Type</label>
                             <Delay wait={250} >
                               <Async
@@ -295,7 +296,7 @@ class DatatableAccountCodeSetupForSale extends React.Component {
                               />
                             </Delay>
                           </div>
-                          <div className="col-md-6">
+                          <div className="col-md-6 form-group">
                             <label htmlFor="type"> Type</label>
                             <Delay wait={500} >
                               <Async
@@ -309,15 +310,23 @@ class DatatableAccountCodeSetupForSale extends React.Component {
                           </div>
                         </div>
                         <div className="row">
-                          <div className="col-md-6">
+                          <div className="col-md-6 form-group">
                             <label htmlFor="subledger_type"> SubLedger Type</label>
                             <input type="text" name="subledger_type" value={subledger_type} onChange={this.handleChange} className="form-control" placeholder="SubLedger Type" />
                           </div>
-                          <div className="col-md-6">
+                          <div className="col-md-6 form-group">
                             <label htmlFor="subledger"> SubLedger</label>
                             <input type="text" name="subledger" value={subledger} onChange={this.handleChange} className="form-control" placeholder="SubLedger" />
                           </div>
                         </div>
+                        <div className="row">
+                        <div className="col-md-6 form-group">
+                          <label htmlFor="fincode"> Fin Code</label>
+                          <input type="text" name="fincode" value={fincode} onChange={this.handleChange} className="form-control" placeholder="Fin Code" />
+                        </div>
+                        <div className="col-md-6 form-group">                         
+                        </div>
+                      </div>
                       </div>
                     </div>
                     <div className="modal-footer">

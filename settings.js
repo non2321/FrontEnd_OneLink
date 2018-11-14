@@ -14,6 +14,7 @@ exports.ScreenIDSetupFinancialCode = 'S0004'
 exports.ScreenIDSetupStore = 'S0006'
 exports.ScreenIDAccountCodeSetupForSale = 'S0007'
 exports.ScreenIDBankInAdjustment = 'S0008'
+exports.ScreenIDGenerateG1ToE1 = 'S0032'
 exports.ScreenIDSteampCloseDailyFins = 'S0009'
 //SDC Inventory
 exports.ScreenIDAccountCodeForInventory = 'S0010'

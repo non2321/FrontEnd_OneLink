@@ -127,7 +127,7 @@ class AccountCodeSetupForSale extends React.Component {
 
   handleAddSubmit(e) {
     e.preventDefault();
-    const { formular_name, account_code, bu_type, type, subledger_type, subledger, screen_id } = this.state;
+    const { formular_name, account_code, bu_type, type, subledger_type, subledger, fincode, screen_id } = this.state;
 
     const { dispatch } = this.props;
 
@@ -139,6 +139,7 @@ class AccountCodeSetupForSale extends React.Component {
         type: (type.value) ? type.value.toString() : '',
         subledger_type: subledger_type.toString(),
         subledger: subledger.toString(),
+        fincode: fincode.toString(),
         screen_id: screen_id
       }
       dispatch(financialActions.addaccountforsale(prm));
@@ -146,7 +147,7 @@ class AccountCodeSetupForSale extends React.Component {
   }
 
   render() {
-    const { formular_name, account_code, bu_type, type, subledger_type, subledger, submitted, screen_id } = this.state;
+    const { formular_name, account_code, bu_type, type, subledger_type, subledger, fincode, submitted, screen_id } = this.state;
     const { modify, screen_name } = this.props;
     const seft = this
 
@@ -165,7 +166,7 @@ class AccountCodeSetupForSale extends React.Component {
                       options={{
                         colReorder: true,
                         ajax: `${PathBackEnd}/api/accountcodeconfigforsale`,
-                        columns: [{ data: "FORMULARID" }, { data: "FORMULARNAME" }, { data: "ACCOUNTCODE" }, { data: "BU_TYPE" }, { data: "TYPE" }, { data: "SUBLEDGERTYPE" }, { data: "SUBLEDGER" },
+                        columns: [{ data: "FORMULARID" }, { data: "FORMULARNAME" }, { data: "ACCOUNTCODE" }, { data: "BU_TYPE" }, { data: "TYPE" }, { data: "SUBLEDGERTYPE" }, { data: "SUBLEDGER" }, { data: "FIN_CODE"},
                         {
                           searchable: false,
                           visible: (modify.can_edit == "Y" || modify.can_delete == "Y") ? true : false,
@@ -219,6 +220,10 @@ class AccountCodeSetupForSale extends React.Component {
                             className="text-muted hidden-md hidden-sm hidden-xs" />
                             SubLedge
                           </th>
+                          <th data-hide="user"><i
+                            className="text-muted hidden-md hidden-sm hidden-xs" />
+                            Fin Code
+                          </th>
                           <th data-hide="user" className="text-right">
                           </th>
                         </tr>
@@ -248,17 +253,17 @@ class AccountCodeSetupForSale extends React.Component {
                   <div className="modal-body">
                     <div class="form-group">
                       <div className="row">
-                        <div className="col-md-6">
+                        <div className="col-md-6 form-group">
                           <label htmlFor="formular_name">Formular Name</label><span class="text-danger">*</span>
                           <input type="text" name="formular_name" value={formular_name} onChange={this.handleChange} className="form-control" placeholder="Formular Name" />
                         </div>
-                        <div className="col-md-6">
+                        <div className="col-md-6 form-group">
                           <label htmlFor="account_code">Account Code</label>
                           <input type="text" name="account_code" value={account_code} onChange={this.handleChange} className="form-control" placeholder="No Use" />
                         </div>
                       </div>
                       <div className="row">
-                        <div className="col-md-6">
+                        <div className="col-md-6 form-group">
                           <label htmlFor="bu_type"> Bu Type</label>
                           <Delay wait={250} >
                             <Async
@@ -270,7 +275,7 @@ class AccountCodeSetupForSale extends React.Component {
                             />
                           </Delay>
                         </div>
-                        <div className="col-md-6">
+                        <div className="col-md-6 form-group">
                           <label htmlFor="type"> Type</label>
                           <Delay wait={500} >
                             <Async
@@ -284,13 +289,21 @@ class AccountCodeSetupForSale extends React.Component {
                         </div>
                       </div>
                       <div className="row">
-                        <div className="col-md-6">
+                        <div className="col-md-6 form-group">
                           <label htmlFor="subledger_type"> SubLedger Type</label>
                           <input type="text" name="subledger_type" value={subledger_type} onChange={this.handleChange} className="form-control" placeholder="SubLedger Type" />
                         </div>
-                        <div className="col-md-6">
+                        <div className="col-md-6 form-group">
                           <label htmlFor="subledger"> SubLedger</label>
                           <input type="text" name="subledger" value={subledger} onChange={this.handleChange} className="form-control" placeholder="SubLedger" />
+                        </div>
+                      </div>
+                      <div className="row">
+                        <div className="col-md-6 form-group">
+                          <label htmlFor="fincode"> Fin Code</label>
+                          <input type="text" name="fincode" value={fincode} onChange={this.handleChange} className="form-control" placeholder="Fin Code" />
+                        </div>
+                        <div className="col-md-6 form-group">                         
                         </div>
                       </div>
                     </div>

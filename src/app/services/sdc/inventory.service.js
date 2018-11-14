@@ -1,11 +1,14 @@
 import { authHeader } from '../../store';
 import { localStorageAuth, PathBackEnd } from '../../../../settings'
 import 'isomorphic-fetch'
+import dateFormat from 'dateformat'
 
 
 export const inventoryService = {
     addaccountcodeforinventory,   
-    editaccountcodeforinventory,   
+    editaccountcodeforinventory, 
+    downloadtemplateaccountcodeforinventory,
+    importaccountcodeforinventory,  
 
     addtermclosing,
     edittermclosing,
@@ -73,6 +76,46 @@ function editaccountcodeforinventory(prm) {
             return handleResponse(response)
         })
         .then(user => { 
+            if (user && user.status == 'Y') {               
+                localStorage.setItem(localStorageAuth, JSON.stringify(user.user));
+            }
+            return user;
+        });
+}
+
+function downloadtemplateaccountcodeforinventory() {
+
+    const requestOptions = {
+        method: 'GET',
+        headers: { ...authHeader(), 'Content-Type': 'application/json' }
+    };
+
+    return fetch(`${PathBackEnd}/api/upload/accountcodeforinventory_template`, requestOptions)
+        .then(function (res) {
+            return res.blob()
+        })
+        .then(function (blob) {
+            const url = window.URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.setAttribute('download', 'TemplateAccountCodeForInventory.xlsx');
+            document.body.appendChild(link);
+            link.click();
+        })    
+}
+
+function importaccountcodeforinventory(obj, screen_id) {
+    const requestOptions = {
+        method: 'PUT',
+        headers: { ...authHeader(), 'Content-Type': 'application/json' },
+        body: JSON.stringify({ obj, screen_id })
+    };
+
+    return fetch(`${PathBackEnd}/api/accountcodeforinventory/import`, requestOptions)
+        .then(response => {
+            return handleResponse(response)
+        })
+        .then(user => {
             if (user && user.status == 'Y') {               
                 localStorage.setItem(localStorageAuth, JSON.stringify(user.user));
             }
@@ -208,7 +251,7 @@ function genunitcost(prm) {
                 const url = window.URL.createObjectURL(blob);
                 const link = document.createElement('a');
                 link.href = url;
-                link.setAttribute('download', 'GLINV_PH.txt');
+                link.setAttribute('download', `GLINV_PH${dateFormat(new Date(), "yyyymmdd_hhMMss")}.txt`);
                 document.body.appendChild(link);
                 link.click();
 

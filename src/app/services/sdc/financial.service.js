@@ -1,6 +1,7 @@
 import { authHeader } from '../../store';
 import { localStorageAuth, PathBackEnd } from '../../../../settings'
 import 'isomorphic-fetch'
+import dateFormat from 'dateformat'
 
 
 export const financialService = {
@@ -145,12 +146,13 @@ function addaccountforsale(prm) {
     const type = prm.type
     const subledger_type = prm.subledger_type
     const subledger = prm.subledger
+    const fincode = prm.fincode
     const screen_id = prm.screen_id
 
     const requestOptions = {
         method: 'POST',
         headers: { ...authHeader(), 'Content-Type': 'application/json' },
-        body: JSON.stringify({ formular_name, account_code, bu_type, type, subledger_type, subledger, screen_id })
+        body: JSON.stringify({ formular_name, account_code, bu_type, type, subledger_type, subledger, fincode, screen_id })
     };
 
     return fetch(`${PathBackEnd}/api/accountcodeconfigforsale`, requestOptions)
@@ -173,12 +175,13 @@ function editaccountforsale(prm) {
     const type = prm.type
     const subledger_type = prm.subledger_type
     const subledger = prm.subledger
+    const fincode = prm.fincode
     const screen_id = prm.screen_id
 
     const requestOptions = {
         method: 'PUT',
         headers: { ...authHeader(), 'Content-Type': 'application/json' },
-        body: JSON.stringify({ formular_id, formular_name, account_code, bu_type, type, subledger_type, subledger, screen_id })
+        body: JSON.stringify({ formular_id, formular_name, account_code, bu_type, type, subledger_type, subledger, fincode, screen_id })
     };
 
     return fetch(`${PathBackEnd}/api/accountcodeconfigforsale`, requestOptions)
@@ -275,7 +278,7 @@ function glprocessbankinadjustment(prm) {
                 const url = window.URL.createObjectURL(blob);
                 const link = document.createElement('a');
                 link.href = url;
-                link.setAttribute('download', 'GLSALES_PH.txt');
+                link.setAttribute('download', `GLSALES_PH${dateFormat(new Date(), "yyyymmdd_hhMMss")}.txt`);
                 document.body.appendChild(link);
                 link.click();
 
