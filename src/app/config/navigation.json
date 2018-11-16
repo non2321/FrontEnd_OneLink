@@ -77,6 +77,12 @@
               "route": "/SDC/SteampCloseDailyFins",
               "comment": "Stamp Close Daily Fins",
               "screen_id": "S0009"
+            },
+            {
+              "title": "Log SDC",
+              "route": "/SDC/LogSDC",
+              "comment": "Log SDC",
+              "screen_id": "S0033"
             }
           ]
         },

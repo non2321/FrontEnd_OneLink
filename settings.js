@@ -6,6 +6,10 @@ exports.PathBackEnd = 'http://localhost:3000'
 
 exports.ScreenIDLOGIN = 'LOGIN'
 exports.ScreenIDHomePage = 'HomePage'
+
+//Log SDC
+exports.ScreenIDLogSDC = 'S0033'
+
 //SDC Sales
 exports.ScreenIDSetupBankAccount = 'S0001'
 exports.ScreenIDSetupCompanyAccount = 'S0002'

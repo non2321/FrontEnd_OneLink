@@ -231,6 +231,7 @@ class DatatableAccountCodeSetupForSale extends React.Component {
         type: { value: data['TYPE'], label: data['TYPE'] },
         subledger_type: data['SUBLEDGERTYPE'],
         subledger: data['SUBLEDGER'],
+        fincode: data['FIN_CODE']
       })
     })
 

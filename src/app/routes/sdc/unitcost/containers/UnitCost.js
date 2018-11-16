@@ -89,7 +89,7 @@ class EndingInventory extends React.Component {
             file = files[0];
             let fileReader = new FileReader();
 
-            let objectitem = []          
+            let objectitem = []
             let tempdata
             fileReader.onload = function (e) {
 
@@ -99,24 +99,24 @@ class EndingInventory extends React.Component {
                 let sheet_name_list = workbook.SheetNames;
 
                 sheet_name_list.forEach(function (y) { /* iterate through sheets */
-                    let worksheet = workbook.Sheets[y];                    
+                    let worksheet = workbook.Sheets[y];
                     worksheet['!ref'] = "A2:Z10000"
-                    let tempitem = XLSX.utils.sheet_to_json(worksheet) 
-                                     
-                    for (let item of tempitem) {                                    
+                    let tempitem = XLSX.utils.sheet_to_json(worksheet)
+
+                    for (let item of tempitem) {
                         tempdata = {}
                         tempdata['Period'] = (item['Period']) ? item['Period'] : ''
                         tempdata['Stock No'] = (item['Stock No']) ? item['Stock No'] : ''
                         tempdata['Inv Item'] = (item['Inv Item']) ? item['Inv Item'] : ''
                         tempdata['Unit Cost'] = (item['Unit Cost']) ? item['Unit Cost'] : ''
                         tempdata['Unit'] = (item['Unit']) ? item['Unit'] : ''
-                       
-                        objectitem.push(tempdata)  
-                    }  
+
+                        objectitem.push(tempdata)
+                    }
                 })
-                let checkColumn = true                
+                let checkColumn = true
                 if (objectitem.length > 0) {
-                    
+
                     if (objectitem[0]['Period'] === '') checkColumn = false
                     if (objectitem[0]['Stock No'] === '') checkColumn = false
                     if (objectitem[0]['Inv Item'] === '') checkColumn = false
@@ -263,7 +263,7 @@ class EndingInventory extends React.Component {
                     obj[item]['Status'] = 'Success'
                     let status = true
 
-                    const valinvitem = validationinvitem.find((x) => { return (x.PERIOD_ID.toString().trim() == obj[item]['Period'].trim() &&  x.INV_ITEM.toString().trim() == obj[item]['Inv Item'].trim())})
+                    const valinvitem = validationinvitem.find((x) => { return (x.PERIOD_ID.toString().trim() == obj[item]['Period'].trim() && x.INV_ITEM.toString().trim() == obj[item]['Inv Item'].trim()) })
 
                     if (valinvitem == undefined) status = false
 
@@ -272,6 +272,8 @@ class EndingInventory extends React.Component {
                     if (obj[item]['Inv Item'].trim() == '') status = false
                     if (obj[item]['Unit Cost'].trim() == '') status = false
                     if (obj[item]['Unit'].trim() == '') status = false
+
+                    if (!Number.isInteger(parseFloat(obj[item]['Unit']))) status = false
 
                     if (item == 0) {
                         period = obj[item]['Period'].trim()
@@ -292,7 +294,7 @@ class EndingInventory extends React.Component {
                     if (isNaN(valUnitCost)) status = false
 
                     if (obj[item]['Unit'].trim() == '') status = false
-                    let valUnit = parseFloat(parseFloat(obj[item]['Unit'].trim()))
+                    let valUnit = parseInt(parseInt(obj[item]['Unit'].trim()))
                     if (isNaN(valUnit)) status = false
 
 
@@ -350,20 +352,24 @@ class EndingInventory extends React.Component {
         //check required
         let check_required = true
         table.rows().eq(0).each(function (index) {
-            let inputUnitCost = table.cell(index, 4).nodes().to$().find('input').val()
-            let inputCountUnit = table.cell(index, 5).nodes().to$().find('input').val()
+            let inputUnitCost = table.cell(index, 6).nodes().to$().find('input').val()
+            let inputCountUnit = table.cell(index, 7).nodes().to$().find('input').val()
 
             if (inputUnitCost.toString().trim() == '') {
-                table.cell(index, 4).nodes().to$().find('label').text('required')
+                table.cell(index, 6).nodes().to$().find('label').text('required')
                 check_required = false
             } else {
-                table.cell(index, 4).nodes().to$().find('label').text('')
+                table.cell(index, 6).nodes().to$().find('label').text('')
             }
             if (inputCountUnit.toString().trim() == '') {
-                table.cell(index, 5).nodes().to$().find('label').text('required')
+                table.cell(index, 7).nodes().to$().find('label').text('required')
                 check_required = false
             } else {
-                table.cell(index, 5).nodes().to$().find('label').text('')
+                table.cell(index, 7).nodes().to$().find('label').text('')
+            }
+            if (!Number.isInteger(parseFloat(inputCountUnit.toString().trim()))) {
+                table.cell(index, 7).nodes().to$().find('label').text('required is numeric')
+                check_required = false
             }
         })
 
@@ -380,16 +386,16 @@ class EndingInventory extends React.Component {
                 let row = table.row(index)
                 let data = row.data()
 
-                let inputUnitCost = table.cell(index, 4).nodes().to$().find('input').val()
-                let inputCountUnit = table.cell(index, 5).nodes().to$().find('input').val()
+                let inputUnitCost = table.cell(index, 6).nodes().to$().find('input').val()
+                let inputCountUnit = table.cell(index, 7).nodes().to$().find('input').val()
 
-                if (inputUnitCost != parseFloat(Math.round(data['UNIT_COST'] * 100) / 100).toFixed(2) || inputCountUnit != parseFloat(Math.round(data['COUNT_PER_UNIT'] * 100) / 100).toFixed(2)) {
-                    const temp = { period: data['PERIOD_ID'].toString(), inv_item: data['INV_ITEM'].toString(), unitcost: inputUnitCost, countunit: inputCountUnit, screen_id: screen_id }
+                if (inputUnitCost != parseFloat(Math.round(data['UNIT_COST'] * 100) / 100).toFixed(2) || inputCountUnit != parseFloat(data['COUNT_PER_UNIT'])) {
+                    const temp = { period: data['PERIOD_ID'].toString().trim(), inv_item: data['INV_ITEM'].toString().trim(), unitcost: inputUnitCost, countunit: inputCountUnit, screen_id: screen_id }
                     objectitem.push(temp)
                 }
             })
             $('input[type="number"]').prop('disabled', true);
-            table.buttons().enable();
+            table.buttons().enable();           
             dispatch(inventoryActions.editunitcost(objectitem));
         }
     }
@@ -436,39 +442,39 @@ class EndingInventory extends React.Component {
     }
 
     async componentDidMount() {
-        const { year, month } = this.state       
+        const { year, month } = this.state
 
         setTimeout(async () => {
-            let response = await fetch(`${PathBackEnd}/api/unitcost/ddlinvencategory`)   
-            let json = await response.json()             
+            let response = await fetch(`${PathBackEnd}/api/unitcost/ddlinvencategory`)
+            let json = await response.json()
             this.setState({
                 optioninven_category: json
             })
-        }, 300)
+        }, 400)
 
         setTimeout(async () => {
-            let response = await fetch(`${PathBackEnd}/api/importtojde/ddlperiod`)   
-            let json = await response.json()             
+            let response = await fetch(`${PathBackEnd}/api/importtojde/ddlperiod`)
+            let json = await response.json()
             this.setState({
                 tempperiod: json
             })
-        }, 600)   
+        }, 600)
 
         if (month && year) {
 
             const prm_year = (year.value) ? year.value : year
             const prm_month = (month.value) ? month.value : month
             setTimeout(async () => {
-                let response = await fetch(`${PathBackEnd}/api/endinginventory/getperiod/${prm_year}/${prm_month}`)   
-                let json = await response.json()             
+                let response = await fetch(`${PathBackEnd}/api/endinginventory/getperiod/${prm_year}/${prm_month}`)
+                let json = await response.json()
                 this.setState({
                     period: json[0].value
                 })
-            }, 800)            
+            }, 800)
         }
 
         setTimeout(async () => {
-            let response = await fetch(`${PathBackEnd}/api/unitcostvalidationinvitem`)   
+            let response = await fetch(`${PathBackEnd}/api/unitcostvalidationinvitem`)
             let json = await response.json()
             this.setState({
                 validationinvitem: json
@@ -606,7 +612,7 @@ class EndingInventory extends React.Component {
                                                     {
                                                         data: "COUNT_PER_UNIT",
                                                         render: function (data, type, row) {
-                                                            return `<input type="number"  name="txtfinname" class="form-control input-xs" disabled="disabled" value=${parseFloat(Math.round(data * 100) / 100).toFixed(2)} step='0.01'></div><label class="text-danger"></label>`;
+                                                            return `<input type="number"  name="txtfinname" class="form-control input-xs" disabled="disabled" value=${parseFloat(data)} step='1'></div><label class="text-danger"></label>`;
                                                         }
                                                     }
                                                     ],

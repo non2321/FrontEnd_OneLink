@@ -19,6 +19,9 @@ const routes = {
     //   require('./routes/dashboard').default,    
     require('./routes/auth').default,
     require('./routes/home').default,
+
+    require('./routes/sdc/logsdc').default,
+
     require('./routes/sdc/setupbankaccount').default,
     require('./routes/sdc/setupcompany').default,
     require('./routes/sdc/setupcompanyaccount').default,

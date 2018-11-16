@@ -131,7 +131,7 @@ class BankInAdjustment extends React.Component {
 
                     for (let item of tempitem) {                                    
                         tempdata = {}
-                        tempdata['Store ID'] = (item['Store ID']) ? item['Period'] : ''
+                        tempdata['Store ID'] = (item['Store ID']) ? item['Store ID'] : ''
                         tempdata['Financial Code'] = (item['Financial Code']) ? item['Financial Code'] : ''
                         tempdata['Financial Date'] = (item['Financial Date']) ? item['Financial Date'] : ''
                         tempdata['Account Daily Fins'] = (item['Account Daily Fins']) ? item['Account Daily Fins'] : ''
