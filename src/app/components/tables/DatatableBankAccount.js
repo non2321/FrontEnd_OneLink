@@ -83,7 +83,7 @@ class DatatableBankAccount extends React.Component {
     const { bank_code, bank_name, bank_branch, account_code, screen_id } = this.state;
     const { dispatch } = this.props;
 
-    if (bank_code && bank_name && bank_branch) {
+    if (bank_code && bank_name && bank_branch && account_code) {
       this.setState({ submitted: true });
       const prm = {
         bank_code: bank_code,
