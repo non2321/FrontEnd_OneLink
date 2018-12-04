@@ -7,6 +7,7 @@ import navigationReducer from '../components/navigation/navigationReducer'
 import { authenticationreducers } from './authentication.reducer';
 import { alertreducers } from './alert.reducer'
 import { loadpagereducers } from './loadpage.reducer'
+import { loadingreducers } from './loading.reducer'
 import { reportreducers } from './report.reducer'
 
 const rootReducer = combineReducers({
@@ -16,6 +17,7 @@ const rootReducer = combineReducers({
   authentication: authenticationreducers,
   alert: alertreducers,
   loadpage: loadpagereducers, 
+  loading: loadingreducers,
   report: reportreducers
 });
 

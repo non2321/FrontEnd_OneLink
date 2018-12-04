@@ -20,6 +20,7 @@ exports.ScreenIDAccountCodeSetupForSale = 'S0007'
 exports.ScreenIDBankInAdjustment = 'S0008'
 exports.ScreenIDGenerateG1ToE1 = 'S0032'
 exports.ScreenIDSteampCloseDailyFins = 'S0009'
+exports.ScreenIDGenDataFilePL = 'S0034'
 //SDC Inventory
 exports.ScreenIDAccountCodeForInventory = 'S0010'
 exports.ScreenIDEndingInventory = 'S0011'

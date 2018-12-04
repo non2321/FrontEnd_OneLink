@@ -24,7 +24,7 @@ module.exports = (env) => {
         // 'jquery-ui', 'bootstrap',
         'react-bootstrap', 'lodash', 'babel-polyfill'
       ]
-    },
+    },    
     output: {
       path: path.resolve(__dirname, './dist'),
       filename: isDev ? 'js/[name].bundle.js' : 'js/[name].[hash].bundle.js',
@@ -41,21 +41,21 @@ module.exports = (env) => {
 
           loader: 'babel-loader',
 
-          
+
 
           exclude: [
             /node_modules/,
           ],
         },
 
-        {test: /\.css$/, loader: "style-loader!css-loader"},
+        { test: /\.css$/, loader: "style-loader!css-loader" },
 
-        {test: /\.json$/, loader: "json-loader"},
+        { test: /\.json$/, loader: "json-loader" },
 
         {
           test: /\.(jpe?g|png|gif)$/,
           loader: 'file-loader',
-          query:{
+          query: {
             name: 'assets/img/[name].[ext]'
           }
         },
@@ -76,7 +76,7 @@ module.exports = (env) => {
       contentBase: path.join(__dirname, "dist"),
       port: 8080,
       // hot: true,
-      compress:true,
+      compress: true,
       publicPath: '/',
       stats: "minimal"
 
@@ -90,8 +90,8 @@ module.exports = (env) => {
     plugins: [
       new CleanWebpackPlugin(['dist']),
       new CopyWebpackPlugin([
-        {from: './src/index.html'},
-        {from: './src/assets', to: './assets'},
+        { from: './src/index.html' },
+        { from: './src/assets', to: './assets' },
 
       ]),
       new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),

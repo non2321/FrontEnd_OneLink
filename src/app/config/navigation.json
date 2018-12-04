@@ -79,6 +79,12 @@
               "screen_id": "S0009"
             },
             {
+              "title": "Gen Data File P&L",
+              "route": "/SDC/GenDataFilePL",
+              "comment": "Gen Data File P&L",
+              "screen_id": "S0034"
+            },
+            {
               "title": "Log SDC",
               "route": "/SDC/LogSDC",
               "comment": "Log SDC",

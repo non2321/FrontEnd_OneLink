@@ -42,7 +42,6 @@ class Layout extends React.Component {
 
   componentDidUpdate() {
     const { alert } = this.props;
-
     if (alert.type == 'alert-success') {
       smallBox({
         title: "Alert Success",
@@ -85,15 +84,27 @@ class Layout extends React.Component {
 
     const navItem = this.props.items
 
-    const { modify } = this.props;
+    const { modify, loading } = this.props;
 
-    let loading = true
-
+    let loadingdata = true
+    let msgloading = 'Loading your content...'
+    
     if (modify != undefined) {
-      loading = false
+      msgloading = 'Loading your content...'
+      loadingdata = false
+
+      if (loading.loading == true) {
+        loadingdata = true
+        msgloading = loading.message
+      } else if (loading.loading == false) {
+        loadingdata = false
+        msgloading = 'Loading your content...'
+      }
     } else if (location == '/home' || location == '/Home') {
-      loading = false    
+      loadingdata = false
+      msgloading = 'Loading your content...'
     }
+
 
     return (
       <div>
@@ -105,10 +116,10 @@ class Layout extends React.Component {
         </Delay>
         <Ribbon />
         <Loadable
-          active={loading}
+          active={loadingdata}
           spinner
           // spinnerSize={"100px"}      
-          text='Loading your content...'>
+          text={msgloading}>
           <div id="main" role="main">
             {this.props.children}
           </div>
@@ -125,10 +136,12 @@ function mapStateToProps(state) {
   const { items } = state.navigation;
   const { loadpage } = state;
   const modify = loadpage.modify
+  const { loading } = state;
   return {
     alert,
     items,
-    modify
+    modify,
+    loading
   };
 }
 

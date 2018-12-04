@@ -30,7 +30,7 @@ class EndingInventory extends React.Component {
         }
 
         const datenow = new Date()
-        const monthnow = datenow.getMonth()
+        const monthnow = datenow.getMonth() + 1
         const yearnow = datenow.getFullYear()
         let optionyear = []
         const yearago = yearnow - 10

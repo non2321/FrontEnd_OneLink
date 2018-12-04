@@ -20,13 +20,22 @@ export const financialService = {
     importbankinadjustment,
     glprocessbankinadjustment,
 
-    stampclosedailyfins
+    stampclosedailyfins,
+
+    addgendatafilePL,
+    genfileBAL,
+    genfileBAL_ADJ,
+    genfileBAL_ACTUAL,
+    genfileBAL_ACTUAL_ADJ,
+    genfileBAL_NetSales,
+    genfileBAL_ACTUAL_SPA_AND_ACTUAL_ADJ_SPA,
+    // genfileBAL_ACTUAL_ADJ_SPA
 }
 
 function addfinancialcode(prm) {
     const fin_code = prm.fin_code
     const fin_name = prm.fin_name
-    const active = prm.active 
+    const active = prm.active
     const show = prm.show
     const screen_id = prm.screen_id
 
@@ -60,7 +69,7 @@ function editfinancialcode(obj) {
             return handleResponse(response)
         })
         .then(user => {
-            if (user && user.status == 'Y') {                
+            if (user && user.status == 'Y') {
                 localStorage.setItem(localStorageAuth, JSON.stringify(user.user));
             }
             return user;
@@ -265,16 +274,16 @@ function glprocessbankinadjustment(prm) {
     return fetch(`${PathBackEnd}/api/glprocessbankinadjustment`, requestOptions)
         .then(response => {
             let header = response.headers.get('Content-Type').split(';')
-            if (header[0] == 'application/json') {               
-                return response.json()              
-            } else {               
-                return response.blob()               
+            if (header[0] == 'application/json') {
+                return response.json()
+            } else {
+                return response.blob()
             }
         })
-        .then(blob => {           
+        .then(blob => {
             if (blob.size === undefined) {
                 return blob;
-            } else if (blob.size > 0) {               
+            } else if (blob.size > 0) {
                 const url = window.URL.createObjectURL(blob);
                 const link = document.createElement('a');
                 link.href = url;
@@ -285,7 +294,7 @@ function glprocessbankinadjustment(prm) {
                 return blob.size
             } else {
                 return blob.size
-            }            
+            }
         })
 }
 
@@ -311,9 +320,9 @@ function importbankinadjustment(obj, screen_id) {
 function stampclosedailyfins(prm) {
     const stamp = prm.stamp
     const datefrom = prm.datefrom
-    const dateto = prm.dateto   
+    const dateto = prm.dateto
     const screen_id = prm.screen_id
-   
+
     const requestOptions = {
         method: 'POST',
         headers: { ...authHeader(), 'Content-Type': 'application/json' },
@@ -330,6 +339,264 @@ function stampclosedailyfins(prm) {
             }
             return user;
         });
+}
+
+function addgendatafilePL(year, month, obj, screen_id) {
+    const requestOptions = {
+        method: 'POST',
+        headers: { ...authHeader(), 'Content-Type': 'application/json' },
+        body: JSON.stringify({ year, month, obj, screen_id })
+    };
+
+    return fetch(`${PathBackEnd}/api/gendatafilePL`, requestOptions)
+        .then(response => {
+            return handleResponse(response)
+        })
+        .then(user => {
+            if (user && user.status == 'Y') {
+                localStorage.setItem(localStorageAuth, JSON.stringify(user.user));
+            }
+            return user;
+        });
+}
+
+
+function genfileBAL(year, month, screen_id) {
+
+    const period_month = month
+    const period_year = year
+
+    const requestOptions = {
+        method: 'POST',
+        headers: { ...authHeader(), 'Content-Type': 'application/json' },
+        body: JSON.stringify({ period_month, period_year, screen_id })
+    };
+
+    return fetch(`${PathBackEnd}/api/gendatafilePL/BAL`, requestOptions)
+        .then(response => {
+            let header = response.headers.get('Content-Type').split(';')
+            if (header[0] == 'application/json') {
+                return response.json()
+            } else {
+                return response.blob()
+            }
+        })
+        .then(blob => {
+            if (blob.size === undefined) {
+                return blob;
+            } else if (blob.size > 0) {
+                const url = window.URL.createObjectURL(blob);
+                const link = document.createElement('a');
+                link.href = url;
+                link.setAttribute('download', `BAL${dateFormat(new Date(), "yyyymmdd_hhMMss")}.txt`);
+                document.body.appendChild(link);
+                link.click();
+
+                return blob.size
+            } else {
+                return blob.size
+            }
+        })
+}
+
+function genfileBAL_ADJ(year, month, screen_id) {
+
+    const period_month = month
+    const period_year = year
+
+    const requestOptions = {
+        method: 'POST',
+        headers: { ...authHeader(), 'Content-Type': 'application/json' },
+        body: JSON.stringify({ period_month, period_year, screen_id })
+    };
+
+    return fetch(`${PathBackEnd}/api/gendatafilePL/BAL_ADJ`, requestOptions)
+        .then(response => {
+            let header = response.headers.get('Content-Type').split(';')
+            if (header[0] == 'application/json') {
+                return response.json()
+            } else {
+                return response.blob()
+            }
+        })
+        .then(blob => {
+            if (blob.size === undefined) {
+                return blob;
+            } else if (blob.size > 0) {
+                const url = window.URL.createObjectURL(blob);
+                const link = document.createElement('a');
+                link.href = url;
+                link.setAttribute('download', `BAL_ADJ${dateFormat(new Date(), "yyyymmdd_hhMMss")}.txt`);
+                document.body.appendChild(link);
+                link.click();
+
+                return blob.size
+            } else {
+                return blob.size
+            }
+        })
+}
+
+function genfileBAL_ACTUAL(year, month, screen_id) {
+
+    const period_month = month
+    const period_year = year
+
+    const requestOptions = {
+        method: 'POST',
+        headers: { ...authHeader(), 'Content-Type': 'application/json' },
+        body: JSON.stringify({ period_month, period_year, screen_id })
+    };
+
+    return fetch(`${PathBackEnd}/api/gendatafilePL/ACTUAL`, requestOptions)
+        .then(response => {
+            let header = response.headers.get('Content-Type').split(';')
+            if (header[0] == 'application/json') {
+                return response.json()
+            } else {
+                return response.blob()
+            }
+        })
+        .then(blob => {
+            if (blob.size === undefined) {
+                return blob;
+            } else if (blob.size > 0) {
+                const url = window.URL.createObjectURL(blob);
+                const link = document.createElement('a');
+                link.href = url;
+                link.setAttribute('download', `ACTUAL${dateFormat(new Date(), "yyyymmdd_hhMMss")}.txt`);
+                document.body.appendChild(link);
+                link.click();
+
+                return blob.size
+            } else {
+                return blob.size
+            }
+        })
+}
+
+function genfileBAL_ACTUAL_ADJ(year, month, screen_id) {
+
+    const period_month = month
+    const period_year = year
+
+    const requestOptions = {
+        method: 'POST',
+        headers: { ...authHeader(), 'Content-Type': 'application/json' },
+        body: JSON.stringify({ period_month, period_year, screen_id })
+    };
+
+    return fetch(`${PathBackEnd}/api/gendatafilePL/ACTUAL_ADJ`, requestOptions)
+        .then(response => {
+            let header = response.headers.get('Content-Type').split(';')
+            if (header[0] == 'application/json') {
+                return response.json()
+            } else {
+                return response.blob()
+            }
+        })
+        .then(blob => {
+            if (blob.size === undefined) {
+                return blob;
+            } else if (blob.size > 0) {
+                const url = window.URL.createObjectURL(blob);
+                const link = document.createElement('a');
+                link.href = url;
+                link.setAttribute('download', `ACTUAL_ADJ${dateFormat(new Date(), "yyyymmdd_hhMMss")}.txt`);
+                document.body.appendChild(link);
+                link.click();
+
+                return blob.size
+            } else {
+                return blob.size
+            }
+        })
+}
+
+function genfileBAL_NetSales(year, month, screen_id) {
+
+    const period_month = month
+    const period_year = year
+
+    const requestOptions = {
+        method: 'POST',
+        headers: { ...authHeader(), 'Content-Type': 'application/json' },
+        body: JSON.stringify({ period_month, period_year, screen_id })
+    };
+
+    return fetch(`${PathBackEnd}/api/gendatafilePL/NetSales`, requestOptions)
+        .then(response => {
+            let header = response.headers.get('Content-Type').split(';')
+            if (header[0] == 'application/json') {
+                return response.json()
+            } else {
+                return response.blob()
+            }
+        })
+        .then(blob => {
+            if (blob.size === undefined) {
+                return blob;
+            } else if (blob.size > 0) {
+                const url = window.URL.createObjectURL(blob);
+                const link = document.createElement('a');
+                link.href = url;
+                link.setAttribute('download', `NetSales${dateFormat(new Date(), "yyyymmdd_hhMMss")}.txt`);
+                document.body.appendChild(link);
+                link.click();
+
+                return blob.size
+            } else {
+                return blob.size
+            }
+        })
+}
+
+function genfileBAL_ACTUAL_SPA_AND_ACTUAL_ADJ_SPA(year, month, screen_id) {
+
+    const period_month = month
+    const period_year = year
+
+    const requestOptions = {
+        method: 'POST',
+        headers: { ...authHeader(), 'Content-Type': 'application/json' },
+        body: JSON.stringify({ period_month, period_year, screen_id })
+    };
+
+    return fetch(`${PathBackEnd}/api/gendatafilePL/ACTUAL_SPA_AND_ACTUAL_ADJ_SPA`, requestOptions)
+        .then(response => {
+            let header = response.headers.get('Content-Type').split(';')
+            if (header[0] == 'application/json') {
+                return response.json()
+            } else {
+                return response.json()
+            }
+        })
+        .then(json => {
+            if (json) {
+                if (Object.keys(json.obj1).length > 0) {
+                    const blob = new Blob([`${json.obj1}`], { type: "text/plain" });
+                    const url = window.URL.createObjectURL(blob);
+                    const link = document.createElement('a');
+                    link.href = url;
+                    link.setAttribute('download', `ACTUAL_SPA${dateFormat(new Date(), "yyyymmdd_hhMMss")}.txt`);
+                    document.body.appendChild(link);
+                    link.click();
+                }
+                if (Object.keys(json.obj2).length > 0) {
+                    const blob = new Blob([`${json.obj2}`], { type: "text/plain" });
+                    const url = window.URL.createObjectURL(blob);
+                    const link = document.createElement('a');
+                    link.href = url;
+                    link.setAttribute('download', `ACTUAL_ADJ_SPA${dateFormat(new Date(), "yyyymmdd_hhMMss")}.txt`);
+                    document.body.appendChild(link);
+                    link.click();
+                }
+                return {
+                    obj1: Object.keys(json.obj1).length,
+                    obj2: Object.keys(json.obj2).length
+                }
+            }
+        })
 }
 
 function handleResponse(response) {

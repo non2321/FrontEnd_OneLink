@@ -31,6 +31,7 @@ const routes = {
     require('./routes/sdc/bankinadjustment').default,
     require('./routes/sdc/generateg1toe1').default,
     require('./routes/sdc/steampclosedailyfins').default,
+    require('./routes/sdc/gendatafilepl').default,
 
     require('./routes/sdc/accountcodeforinventory').default,
     require('./routes/sdc/endinginventory').default,
