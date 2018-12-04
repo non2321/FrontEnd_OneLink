@@ -131,6 +131,9 @@ class LogSDC extends React.Component {
                                                 <DatatableLogSDC
                                                     options={{
                                                         order: [[0, 'desc']],
+                                                        deferRender:    true,            
+                                                        scrollCollapse: true,
+                                                        scroller:       true,                                                       
                                                         colReorder: true,
                                                         ajax: `${PathBackEnd}/api/logsdc/${datadatefrom}/${datadateto}`,
                                                         columns: [{ data: "Date Time", "width": "15%" }, { data: "User", "width": "20%" }, { data: "Menu", "width": "20%" }, { data: "Type", "width": "15%" }, { data: "New Data", "visible": false }, { data: "Old Data", "visible": false },
