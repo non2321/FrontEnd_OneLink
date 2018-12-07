@@ -8,7 +8,7 @@ import ToggleMenu from './ToggleMenu'
 import { connect } from 'react-redux';
 import { userActions } from '../../actions/user';
 
-import { localStorageAuth } from '../../../../settings'
+import { localStorageAuth, PathBackEnd } from '../../../../settings'
 
 class Header extends React.Component {
   constructor(props) {
@@ -17,9 +17,21 @@ class Header extends React.Component {
     this.handleClick = this.handleClick.bind(this);
     const user = JSON.parse(localStorage.getItem(localStorageAuth));
     this.state = {
-      user: (user) ? `${user.id} ${user.firstname} ${user.lastname}` : '',
-      position: (user) ? `${user.position}` : ''
+      user: (user) ? `${user.id} ${user.firstname} ${user.lastname}` : '',      
+      user_id: (user) ? user.id : ''
     }
+  }
+
+  async componentDidMount() {
+    const { user_id } = this.state
+
+    setTimeout(async () => {
+      let response = await fetch(`${PathBackEnd}/api/roledata/${user_id}`)
+      let json = await response.json()
+      this.setState({
+        roledata: json
+      })
+    }, 100)
   }
 
 
@@ -29,7 +41,7 @@ class Header extends React.Component {
 
 
   render() {
-    const { user, position } = this.state;
+    const { user, roledata } = this.state;
 
     return <header id="header">
       <div id="logo-group">
@@ -105,7 +117,10 @@ class Header extends React.Component {
             <h9 style={{ 'color': '#fff', 'float': 'right' }}>{user}</h9>
           </div>
           <div className="col-md-12">
-            <h9 style={{ 'color': '#fff', 'float': 'right' }}>{position}</h9>
+            {roledata &&
+              <h9 style={{ 'color': '#fff', 'float': 'right' }}>{roledata.role_name}</h9>
+            }
+
           </div>
         </div>
       </div>
