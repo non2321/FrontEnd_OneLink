@@ -77,13 +77,7 @@
               "route": "/SDC/SteampCloseDailyFins",
               "comment": "Stamp Close Daily Fins",
               "screen_id": "S0009"
-            },
-            {
-              "title": "Gen Data File P&L",
-              "route": "/SDC/GenDataFilePL",
-              "comment": "Gen Data File P&L",
-              "screen_id": "S0034"
-            },
+            },            
             {
               "title": "Log SDC",
               "route": "/SDC/LogSDC",
@@ -139,6 +133,19 @@
               "comment": "Stamp Inventory",
               "screen_id": "S0016"
             }
+          ]
+        },
+        {
+          "title": "P&L",
+          "comment": "P&L",
+          "screen_id": "H0005",
+          "items": [
+            {
+              "title": "Gen Data File P&L",
+              "route": "/SDC/GenDataFilePL",
+              "comment": "Gen Data File P&L",
+              "screen_id": "S0034"
+            }            
           ]
         },
         {
@@ -238,7 +245,7 @@
               "screen_id": "S0031"
             }
           ]
-        }
+        }        
       ]
     }       
   ]
