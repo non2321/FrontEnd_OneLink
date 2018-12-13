@@ -250,4 +250,8 @@ nav{
   margin-top: -35px;
 }
 
-
+.sc-bdVaJa.eSmrHg {
+  z-index: 1200;
+  transform: scale(1.2, 1.2);
+  zoom:0.9;
+}

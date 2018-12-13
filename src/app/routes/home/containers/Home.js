@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { userAuth } from '../../../actions/auth';
 import { alertActions } from '../../../actions/alert'
 import { Slide, Zoom } from 'react-slideshow-image';
-
+import socketIOClient from 'socket.io-client'
 
 import { ScreenIDHomePage } from '../../../../../settings'
 
@@ -39,17 +39,17 @@ class Home extends React.Component {
             }
             this.props.dispatch(userAuth.loadpage(prm))
         }       
-    }
+    }   
+    
 
-
-    render() {
+    render() {        
         return (
             <div id="content">
                 <Slide {...properties}>
                     <div className="each-slide" style={{ 'position': 'relative', 'text-align': 'center' }}> <img key={0} style={{ width: "100%" }} src={slideImages[0]} /><div style={styleHeader}><h1 style={{ 'color': 'rgba(60, 60, 60, 0.8)' }}>WELCOME</h1><h1 style={{ 'color': 'rgba(255, 0, 0, 0.8)' }}>OneLink</h1></div></div>
                     <div className="each-slide" style={{ 'position': 'relative', 'text-align': 'center' }}> <img key={1} style={{ width: "100%" }} src={slideImages[1]} /></div>
                     <div className="each-slide" style={{ 'position': 'relative', 'text-align': 'center' }}> <img key={2} style={{ width: "100%" }} src={slideImages[2]} /></div>
-                </Slide>                
+                </Slide>                          
             </div>
         )
     }

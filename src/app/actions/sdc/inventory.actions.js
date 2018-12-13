@@ -1,6 +1,7 @@
 import { inventoryConstants } from '../../constants';
 import { inventoryService } from '../../services/sdc'
 import { alertActions } from '../alert';
+import { loadingActions } from '../loading'
 import { hashHistory } from 'react-router'
 
 export const inventoryActions = {
@@ -265,21 +266,25 @@ function downloadtemplateunitcost() {
 function importunitcost(obj, screen_id) {
     return dispatch => {
         dispatch(request({ obj }));
+        dispatch(loadingActions.request('Loading Please Wait...'))
         inventoryService.importunitcost(obj, screen_id)
             .then(
                 inventory => {
                     if (inventory.status == 'Y') {
                         $('#table').DataTable().ajax.reload();
                         dispatch(success(inventory));
-                        dispatch(alertActions.success(inventory.message));                        
+                        dispatch(alertActions.success(inventory.message));  
+                        dispatch(loadingActions.success(''))                      
                     } else if (inventory.status == 'NA') {
                         dispatch(failure(inventory.message));
                         dispatch(alertActions.error(inventory.message));
+                        dispatch(loadingActions.success(''))
                         hashHistory.push('/Login');
                     } else {
                         $('#table').DataTable().ajax.reload();
                         dispatch(failure(inventory.message));
                         dispatch(alertActions.error(inventory.message));
+                        dispatch(loadingActions.success(''))
                     }
                 },
                 error => {

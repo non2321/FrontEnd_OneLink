@@ -6,7 +6,7 @@
       "icon": "fa fa-lg fa-fw fa-home",
       "comment": "Home",
       "screen_id": "Home"
-    },
+    },    
     {
       "title": "SDC",
       "icon": "fa fa-lg fa-fw fa-inbox",
@@ -247,6 +247,20 @@
           ]
         }        
       ]
-    }       
+    },
+    {
+      "title": "Admin",      
+      "icon": "fa fa-lg fa-fw fa-user",
+      "comment": "Admin",
+      "screen_id": "ADMIN",
+      "items": [
+        {
+          "title": "SDC Batch File",
+          "route": "/SDC/SDCBatchFile",
+          "comment": "SDC Batch File",
+          "screen_id": "S0035"
+        }
+      ]
+    }    
   ]
 }

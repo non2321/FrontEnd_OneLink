@@ -52,6 +52,9 @@ exports.ScreenIDReportSummaryStockTransferOut = 'S0029'
 exports.ScreenIDReportEndingInventory = 'S0030'
 exports.ScreenIDReportReceiptsAllVendor = 'S0031'
 
+//Admin
+exports.ScreenIDSDCBatchFile = 'S0035'
+
 //Path Tableau
 //SDC Sales
 exports.TableauDailyFlashSales = 'http://192.168.151.31/views/ONELINKREPORTSDC/REPORTDAILYFLASHSALES?iframeSizedToWindow=true&:embed=y&:showAppBanner=false&:display_count=no&:showVizHome=no'

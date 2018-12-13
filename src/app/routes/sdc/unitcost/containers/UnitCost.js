@@ -87,63 +87,69 @@ class EndingInventory extends React.Component {
             let files = e.target.files, file;
             if (!files || files.length == 0) return;
             file = files[0];
-            let fileReader = new FileReader();
+            if (file.type == 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet') {
 
-            let objectitem = []
-            let tempdata
-            fileReader.onload = function (e) {
+                let fileReader = new FileReader();
 
-                // call 'xlsx' to read the file
-                let workbook = XLSX.read(e.target.result, { type: 'buffer' });
+                let objectitem = []
+                let tempdata
+                fileReader.onload = function (e) {
 
-                let sheet_name_list = workbook.SheetNames;
+                    // call 'xlsx' to read the file
+                    let workbook = XLSX.read(e.target.result, { type: 'buffer' });
 
-                sheet_name_list.forEach(function (y) { /* iterate through sheets */
-                    let worksheet = workbook.Sheets[y];
-                    worksheet['!ref'] = "A2:Z10000"
-                    let tempitem = XLSX.utils.sheet_to_json(worksheet)
+                    let sheet_name_list = workbook.SheetNames;
 
-                    for (let item of tempitem) {
-                        tempdata = {}
-                        tempdata['Period'] = (item['Period']) ? item['Period'] : ''
-                        tempdata['Stock No'] = (item['Stock No']) ? item['Stock No'] : ''
-                        tempdata['Inv Item'] = (item['Inv Item']) ? item['Inv Item'] : ''
-                        tempdata['Unit Cost'] = (item['Unit Cost']) ? item['Unit Cost'] : ''
-                        tempdata['Unit'] = (item['Unit']) ? item['Unit'] : ''
+                    sheet_name_list.forEach(function (y) { /* iterate through sheets */
+                        let worksheet = workbook.Sheets[y];
+                        worksheet['!ref'] = "A2:Z10000"
+                        let tempitem = XLSX.utils.sheet_to_json(worksheet)
 
-                        objectitem.push(tempdata)
-                    }
-                })
-                let checkColumn = true
-                if (objectitem.length > 0) {
+                        for (let item of tempitem) {
+                            tempdata = {}
+                            tempdata['Period'] = (item['Period']) ? item['Period'] : ''
+                            tempdata['Stock No'] = (item['Stock No']) ? item['Stock No'] : ''
+                            tempdata['Inv Item'] = (item['Inv Item']) ? item['Inv Item'] : ''
+                            tempdata['Unit Cost'] = (item['Unit Cost']) ? item['Unit Cost'] : ''
+                            tempdata['Unit'] = (item['Unit']) ? item['Unit'] : ''
 
-                    if (objectitem[0]['Period'] === '') checkColumn = false
-                    if (objectitem[0]['Stock No'] === '') checkColumn = false
-                    if (objectitem[0]['Inv Item'] === '') checkColumn = false
-                    if (objectitem[0]['Unit Cost'] === '') checkColumn = false
-                    if (objectitem[0]['Unit'] === '') checkColumn = false
-
-                    if (checkColumn == true) {
-                        for (let item in objectitem) {
-                            objectitem[item]['Status'] = ''
+                            objectitem.push(tempdata)
                         }
+                    })
+                    let checkColumn = true
+                    if (objectitem.length > 0) {
 
-                        let data = {
-                            "aaData": objectitem
+                        if (objectitem[0]['Period'] === '') checkColumn = false
+                        if (objectitem[0]['Stock No'] === '') checkColumn = false
+                        if (objectitem[0]['Inv Item'] === '') checkColumn = false
+                        if (objectitem[0]['Unit Cost'] === '') checkColumn = false
+                        if (objectitem[0]['Unit'] === '') checkColumn = false
+
+                        if (checkColumn == true) {
+                            for (let item in objectitem) {
+                                objectitem[item]['Status'] = ''
+                            }
+
+                            let data = {
+                                "aaData": objectitem
+                            }
+                            self.setState({ uploading: false, upload: data, obj: objectitem })
+                        } else {
+
+                            self.setState({ file: null, filename: 'Choose a file...', uploading: false, upload: null, obj: null })
+                            self.props.dispatch(alertActions.error("File incorrect."))
                         }
-                        self.setState({ uploading: false, upload: data, obj: objectitem })
                     } else {
-
                         self.setState({ file: null, filename: 'Choose a file...', uploading: false, upload: null, obj: null })
-                        self.props.dispatch(alertActions.error("File incorrect."))
+                        self.props.dispatch(alertActions.warning("Data not found."))
                     }
-                } else {
-                    self.setState({ file: null, filename: 'Choose a file...', uploading: false, upload: null, obj: null })
-                    self.props.dispatch(alertActions.warning("Data not found."))
-                }
 
+                }
+                fileReader.readAsArrayBuffer(file)
+            } else {
+                self.setState({ file: null, filename: 'Choose a file...', uploading: false, upload: null, obj: null })
+                self.props.dispatch(alertActions.error("File incorrect."))
             }
-            fileReader.readAsArrayBuffer(file)
             e.target.value = '';
         }
     }
@@ -395,7 +401,7 @@ class EndingInventory extends React.Component {
                 }
             })
             $('input[type="number"]').prop('disabled', true);
-            table.buttons().enable();           
+            table.buttons().enable();
             dispatch(inventoryActions.editunitcost(objectitem));
         }
     }

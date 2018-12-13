@@ -355,6 +355,7 @@ function editbankinadjustment(obj) {
 function importbankinadjustment(obj, screen_id) {
     return dispatch => {
         dispatch(request({ obj }));
+        dispatch(loadingActions.request('Loading Please Wait...'))
         financialService.importbankinadjustment(obj, screen_id)
             .then(
                 financial => {
@@ -362,20 +363,24 @@ function importbankinadjustment(obj, screen_id) {
                         $('#table').DataTable().ajax.reload();
                         dispatch(success(financial));
                         dispatch(alertActions.success(financial.message));
+                        dispatch(loadingActions.success(''))
                         // $('#myModalUpload').modal('hide');
                     } else if (financial.status == 'NA') {
                         dispatch(failure(financial.message));
                         dispatch(alertActions.error(financial.message));
+                        dispatch(loadingActions.success(''))
                         hashHistory.push('/Login');
                     } else {
                         $('#table').DataTable().ajax.reload();
                         dispatch(failure(financial.message));
                         dispatch(alertActions.error(financial.message));
+                        dispatch(loadingActions.success(''))
                     }
                 },
                 error => {
                 }
             )
+            
     }
     function request(financial) { return { type: financialConstants.ADD_REQUEST, financial } }
     function success(financial) { return { type: financialConstants.ADD_SUCCESS, financial } }

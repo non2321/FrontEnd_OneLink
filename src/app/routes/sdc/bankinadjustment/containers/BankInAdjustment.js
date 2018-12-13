@@ -113,62 +113,70 @@ class BankInAdjustment extends React.Component {
             let files = e.target.files, file;
             if (!files || files.length == 0) return;
             file = files[0];
-            let fileReader = new FileReader();
+            
+            if (file.type == 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet') {
+                let fileReader = new FileReader();
 
-            let objectitem = []
-            let tempdata
-            fileReader.onload = function (e) {
+                let objectitem = []
+                let tempdata
+                fileReader.onload = function (e) {
 
-                // call 'xlsx' to read the file
-                let workbook = XLSX.read(e.target.result, { type: 'buffer' });
+                    // call 'xlsx' to read the file
+                    let workbook = XLSX.read(e.target.result, { type: 'buffer' });
 
-                let sheet_name_list = workbook.SheetNames;
+                    let sheet_name_list = workbook.SheetNames;
 
-                sheet_name_list.forEach(function (y) { /* iterate through sheets */
-                    let worksheet = workbook.Sheets[y];
-                    worksheet['!ref'] = "A2:Z10000"
-                    let tempitem = XLSX.utils.sheet_to_json(worksheet)
+                    sheet_name_list.forEach(function (y) { /* iterate through sheets */
+                        let worksheet = workbook.Sheets[y];
+                        worksheet['!ref'] = "A2:Z10000"
+                        let tempitem = XLSX.utils.sheet_to_json(worksheet)
 
-                    for (let item of tempitem) {                                    
-                        tempdata = {}
-                        tempdata['Store ID'] = (item['Store ID']) ? item['Store ID'] : ''
-                        tempdata['Financial Code'] = (item['Financial Code']) ? item['Financial Code'] : ''
-                        tempdata['Financial Date'] = (item['Financial Date']) ? item['Financial Date'] : ''
-                        tempdata['Account Daily Fins'] = (item['Account Daily Fins']) ? item['Account Daily Fins'] : ''
-                        
-                        objectitem.push(tempdata)  
-                    }                     
-                })
-                let checkColumn = true
+                        for (let item of tempitem) {
+                            tempdata = {}
+                            tempdata['Store ID'] = (item['Store ID']) ? item['Store ID'] : ''
+                            tempdata['Financial Code'] = (item['Financial Code']) ? item['Financial Code'] : ''
+                            tempdata['Financial Date'] = (item['Financial Date']) ? item['Financial Date'] : ''
+                            tempdata['Account Daily Fins'] = (item['Account Daily Fins']) ? item['Account Daily Fins'] : ''
 
-                if (objectitem.length > 0) {
-                    if (objectitem[0]['Store ID'] === '') checkColumn = false
-                    if (objectitem[0]['Financial Code'] === '') checkColumn = false
-                    if (objectitem[0]['Financial Date'] === '') checkColumn = false
-                    if (objectitem[0]['Account Daily Fins'] === '') checkColumn = false
-
-                    if (checkColumn == true) {
-                        for (let item in objectitem) {
-                            objectitem[item]['Status'] = ''
+                            objectitem.push(tempdata)
                         }
+                    })
+                    let checkColumn = true
 
-                        let data = {
-                            "aaData": objectitem
+                    if (objectitem.length > 0) {
+                        if (objectitem[0]['Store ID'] === '') checkColumn = false
+                        if (objectitem[0]['Financial Code'] === '') checkColumn = false
+                        if (objectitem[0]['Financial Date'] === '') checkColumn = false
+                        if (objectitem[0]['Account Daily Fins'] === '') checkColumn = false
+
+                        if (checkColumn == true) {
+                            for (let item in objectitem) {
+                                objectitem[item]['Status'] = ''
+                            }
+
+                            let data = {
+                                "aaData": objectitem
+                            }
+                            self.setState({ uploading: false, upload: data, obj: objectitem })
+
+                        } else {
+
+                            self.setState({ file: null, filename: 'Choose a file...', uploading: false, upload: null, obj: null })
+                            self.props.dispatch(alertActions.error("File incorrect."))
                         }
-                        self.setState({ uploading: false, upload: data, obj: objectitem })
-
                     } else {
-
                         self.setState({ file: null, filename: 'Choose a file...', uploading: false, upload: null, obj: null })
-                        self.props.dispatch(alertActions.error("File incorrect."))
+                        self.props.dispatch(alertActions.warning("Data not found."))
                     }
-                } else {
-                    self.setState({ file: null, filename: 'Choose a file...', uploading: false, upload: null, obj: null })
-                    self.props.dispatch(alertActions.warning("Data not found."))
-                }
 
+                }
+                fileReader.readAsArrayBuffer(file)
+            } else {
+                self.setState({ file: null, filename: 'Choose a file...', uploading: false, upload: null, obj: null })
+                self.props.dispatch(alertActions.error("File incorrect."))
             }
-            fileReader.readAsArrayBuffer(file)
+
+
             e.target.value = '';
         }
     }
@@ -447,33 +455,33 @@ class BankInAdjustment extends React.Component {
             obj: null,
             upload: null
         })
-    }   
+    }
 
     async componentDidMount() {
-        try {            
+        try {
             setTimeout(async () => {
-                let response = await fetch(`${PathBackEnd}/api/bankinadjustment/validationstore`)   
-                let json = await response.json()             
+                let response = await fetch(`${PathBackEnd}/api/bankinadjustment/validationstore`)
+                let json = await response.json()
                 this.setState({
                     validationstore: json
                 })
-            }, 300)
+            }, 500)
             setTimeout(async () => {
-                let response = await fetch(`${PathBackEnd}/api/bankinadjustment/validationfinancialcode`)                
-                let json = await response.json()     
+                let response = await fetch(`${PathBackEnd}/api/bankinadjustment/validationfinancialcode`)
+                let json = await response.json()
                 this.setState({
                     validationfinancialcode: json
                 })
-            }, 500)
+            }, 300)
             setTimeout(async () => {
-                let response = await fetch(`${PathBackEnd}/api/report/storeall`) 
-                let json = await response.json()                   
+                let response = await fetch(`${PathBackEnd}/api/report/storeall`)
+                let json = await response.json()
                 this.setState({
                     optionstore: json
                 })
             }, 600)
         }
-        catch (err) {            
+        catch (err) {
             console.log(err);
         }
     }

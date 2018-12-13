@@ -62,6 +62,9 @@ const routes = {
 
     require('./routes/report/sdc/endinginventory').default,
     require('./routes/report/sdc/receiptsallvendor').default,
+
+    //Admin
+    require('./routes/admin/sdcbatchfile').default,
     //Page Not Found
     require('./routes/notfound').default,
     
