@@ -90,8 +90,7 @@ class GenerateG1ToE1 extends React.Component {
 
         const { dispatch } = this.props
         const { gldoc_type, glledger_type, glfrom_date, glto_date, glfrom_store, glto_store, screen_id } = this.state
-        const { optionstore } = this.state
-
+        
         this.setState({
             errorgldoc_type: (gldoc_type) ? '' : 'The doc type is required',
             errorglledger_type: (glledger_type) ? '' : 'The ledger type is required',
@@ -206,7 +205,7 @@ class GenerateG1ToE1 extends React.Component {
                                             <div className="col-md-6 form-group">
                                                 <div className="col-md-4 control-label"><label > To Date</label><span class="text-danger">*</span></div>
                                                 <div className="col-md-6">
-                                                    <UiDatepicker type="text" name="glto_date" id="glto_date" changeMonth="true" changeYear="true" dateFormat="dd/mm/yy" onInputChange={this.handleGLDateTo} value={glto_date} disabled={!glfrom_date}
+                                                    <UiDatepicker type="text" name="glto_date" id="glto_date" changeMonth="true" changeYear="true" dateFormat="dd/mm/yy" addday="120" onInputChange={this.handleGLDateTo} value={glto_date} disabled={!glfrom_date}
                                                         placeholder="Finish date" />
                                                     <span className="text-danger">{errorglto_date}</span>
                                                 </div>

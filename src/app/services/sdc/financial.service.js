@@ -284,10 +284,13 @@ function glprocessbankinadjustment(prm) {
             if (blob.size === undefined) {
                 return blob;
             } else if (blob.size > 0) {
+                let datadate = glfrom_date.split("/")
+
                 const url = window.URL.createObjectURL(blob);
                 const link = document.createElement('a');
                 link.href = url;
-                link.setAttribute('download', `GLSALES_PH${dateFormat(new Date(), "yyyymmdd_hhMMss")}.txt`);
+                // link.setAttribute('download', `GLSALES_PH${dateFormat(new Date(), "yyyymmdd_hhMMss")}.txt`);
+                link.setAttribute('download', `GLSALES_PH${datadate[2]}${datadate[1]}${datadate[0]}.txt`);
                 document.body.appendChild(link);
                 link.click();
 
@@ -388,7 +391,7 @@ function genfileBAL(year, month, screen_id) {
                 const url = window.URL.createObjectURL(blob);
                 const link = document.createElement('a');
                 link.href = url;
-                link.setAttribute('download', `BAL${dateFormat(new Date(), "yyyymmdd_hhMMss")}.txt`);
+                link.setAttribute('download', `BAL${period_year}${period_month}.txt`);
                 document.body.appendChild(link);
                 link.click();
 
@@ -426,7 +429,7 @@ function genfileBAL_ADJ(year, month, screen_id) {
                 const url = window.URL.createObjectURL(blob);
                 const link = document.createElement('a');
                 link.href = url;
-                link.setAttribute('download', `BAL_ADJ${dateFormat(new Date(), "yyyymmdd_hhMMss")}.txt`);
+                link.setAttribute('download', `BAL_ADJ${period_year}${period_month}.txt`);
                 document.body.appendChild(link);
                 link.click();
 
@@ -464,7 +467,7 @@ function genfileBAL_ACTUAL(year, month, screen_id) {
                 const url = window.URL.createObjectURL(blob);
                 const link = document.createElement('a');
                 link.href = url;
-                link.setAttribute('download', `ACTUAL${dateFormat(new Date(), "yyyymmdd_hhMMss")}.txt`);
+                link.setAttribute('download', `ACTUAL${period_year}${period_month}.txt`);
                 document.body.appendChild(link);
                 link.click();
 
@@ -502,7 +505,7 @@ function genfileBAL_ACTUAL_ADJ(year, month, screen_id) {
                 const url = window.URL.createObjectURL(blob);
                 const link = document.createElement('a');
                 link.href = url;
-                link.setAttribute('download', `ACTUAL_ADJ${dateFormat(new Date(), "yyyymmdd_hhMMss")}.txt`);
+                link.setAttribute('download', `ACTUAL_ADJ${period_year}${period_month}.txt`);
                 document.body.appendChild(link);
                 link.click();
 
@@ -540,7 +543,7 @@ function genfileBAL_NetSales(year, month, screen_id) {
                 const url = window.URL.createObjectURL(blob);
                 const link = document.createElement('a');
                 link.href = url;
-                link.setAttribute('download', `NetSales${dateFormat(new Date(), "yyyymmdd_hhMMss")}.txt`);
+                link.setAttribute('download', `NetSales${period_year}${period_month}.txt`);
                 document.body.appendChild(link);
                 link.click();
 
@@ -578,7 +581,7 @@ function genfileBAL_ACTUAL_SPA_AND_ACTUAL_ADJ_SPA(year, month, screen_id) {
                     const url = window.URL.createObjectURL(blob);
                     const link = document.createElement('a');
                     link.href = url;
-                    link.setAttribute('download', `ACTUAL_SPA${dateFormat(new Date(), "yyyymmdd_hhMMss")}.txt`);
+                    link.setAttribute('download', `ACTUAL_SPA${period_year}${period_month}.txt`);
                     document.body.appendChild(link);
                     link.click();
                 }
@@ -587,7 +590,7 @@ function genfileBAL_ACTUAL_SPA_AND_ACTUAL_ADJ_SPA(year, month, screen_id) {
                     const url = window.URL.createObjectURL(blob);
                     const link = document.createElement('a');
                     link.href = url;
-                    link.setAttribute('download', `ACTUAL_ADJ_SPA${dateFormat(new Date(), "yyyymmdd_hhMMss")}.txt`);
+                    link.setAttribute('download', `ACTUAL_ADJ_SPA${period_year}${period_month}.txt`);
                     document.body.appendChild(link);
                     link.click();
                 }

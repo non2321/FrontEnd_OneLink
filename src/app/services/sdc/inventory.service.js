@@ -228,6 +228,7 @@ function genunitcost(prm) {
 
     const period = prm.period   
     const screen_id = prm.screen_id
+    const periodlabel = prm.periodlabel
 
     const requestOptions = {
         method: 'POST',
@@ -247,11 +248,14 @@ function genunitcost(prm) {
         .then(blob => {           
             if (blob.size === undefined) {
                 return blob;
-            } else if (blob.size > 0) {               
+            } else if (blob.size > 0) { 
+                let datadate = periodlabel.split("/") 
+
                 const url = window.URL.createObjectURL(blob);
                 const link = document.createElement('a');
                 link.href = url;
-                link.setAttribute('download', `GLINV_PH${dateFormat(new Date(), "yyyymmdd_hhMMss")}.txt`);
+                // link.setAttribute('download', `GLINV_PH${dateFormat(new Date(), "yyyymmdd_hhMMss")}.txt`);
+                link.setAttribute('download', `GLINV_PH${datadate[2]}${datadate[1]}${datadate[0]}.txt`);
                 document.body.appendChild(link);
                 link.click();
 

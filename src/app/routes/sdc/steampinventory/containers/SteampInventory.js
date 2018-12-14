@@ -178,7 +178,7 @@ class SteampInventory extends React.Component {
                                                     <div className="col-md-4 control-label"><label > Financial Date To</label><span class="text-danger">*</span></div>
                                                     <div className="col-md-6">
                                                         <UiDatepicker type="text" name="dateto" id="dateto" changeMonth="true" changeYear="true" dateFormat="dd/mm/yy"
-                                                            onInputChange={this.handleDateTo} value={dateto} disabled={!dateto}
+                                                            addday="120" onInputChange={this.handleDateTo} value={dateto} disabled={!dateto}
                                                             placeholder="Finish date" />
                                                         <span className="text-danger">{errordateto}</span>
                                                     </div>

@@ -437,6 +437,7 @@ class EndingInventory extends React.Component {
         if (periodgeninven && screen_id) {
             const prm = {
                 period: periodgeninven.value,
+                periodlabel: periodgeninven.label,
                 screen_id: screen_id
             }
             dispatch(inventoryActions.genunitcost(prm))
