@@ -38,10 +38,9 @@ class DatatableSDCBatchFile extends React.Component {
     }
 
     options = _.extend(options, {
-
-      "dom": "<'dt-toolbar '<'col-md-4' B><'pull-right hidden-xs' l><'pull-right' f>r >" +
+      "dom": "<'dt-toolbar'<'col-xs-12 col-sm-8'><'pull-right hidden-xs' ><'pull-right' >r >" +
         "t" +
-        "<'dt-toolbar-footer' <'col-sm-6 col-xs-12 hidden-xs'i>p<'col-xs-12 col-sm-6'>>",
+        "<'dt-toolbar-footer'>",
       oLanguage: {
         "sSearch": "<span class='input-group-addon input-sm'><i class='glyphicon glyphicon-search'></i></span> ",
         "sLengthMenu": "_MENU_"
@@ -53,7 +52,8 @@ class DatatableSDCBatchFile extends React.Component {
 
     const _dataTable = element.DataTable(options); 
    
-
+    _dataTable.page.len(10000).draw();
+    
     if (this.props.filter) {
       // Apply the filter
       element.on('keyup change', 'thead th input[type=text]', function () {

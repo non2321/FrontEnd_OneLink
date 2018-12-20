@@ -2,9 +2,11 @@ import React from 'react'
 import { connect } from 'react-redux';
 
 import { userAuth } from '../../../../actions/auth';
+import { sdcbatchfileAction } from '../../../../actions/sdc';
 
 import { Stats, BigBreadcrumbs, WidgetGrid, JarvisWidget } from '../../../../components'
 import DatatableSDCBatchFile from '../../../../components/tables/DatatableSDCBatchFile'
+
 
 import { ScreenIDSDCBatchFile, PathBackEnd } from '../../../../../../settings'
 
@@ -26,6 +28,8 @@ class SDCBatchFile extends React.Component {
       submitted: false,
       screen_id: ScreenIDSDCBatchFile
     }
+
+    this.handleProcessSubmit = this.handleProcessSubmit.bind(this)
   }
 
   handleChange(e) {
@@ -92,21 +96,85 @@ class SDCBatchFile extends React.Component {
     }
   }
 
-  handleChangesDay = (day) => {
+  handleChangesDay = async (day) => {
+    const { year, month } = this.state
     this.setState({
       day: (day == null) ? '' : day.value,
     })
+
+    if (year && month && day) {
+      let response = await fetch(`${PathBackEnd}/api/sdcbatchfile/validationfile/${year}/${month}/${day.value}`)
+      let json = await response.json()
+      const keys = Object.keys(json)
+
+      const table = $('#table').DataTable()
+
+      await table.rows().eq(0).each(async function (index) {
+        let row = table.row(index)
+        let data = row.data()
+
+        for (let item of keys) {
+          if (data.file_type == item) {
+            if (!json[item].data) {
+              table.cell(index, 0).nodes().to$().find('input').prop("checked", false)
+              table.cell(index, 0).nodes().to$().find('input').attr("disabled", true)
+              table.cell(index, 5).nodes().to$().find('label').text(`${json[item].msg}`)
+            } else {
+              table.cell(index, 0).nodes().to$().find('input').removeAttr("disabled")
+              table.cell(index, 5).nodes().to$().find('label').text('')
+            }
+            break
+          }
+        }
+      })
+    }
+
+  }
+
+  async handleProcessSubmit(e) {
+    e.preventDefault()
+
+    const { dispatch } = this.props
+    const { year, month, day, screen_id } = this.state
+
+    this.setState({
+      erroryear: (year) ? '' : 'The Year is required',
+      errormonth: (month) ? '' : 'The Month is required',
+      errorday: (day) ? '' : 'The Day is required',
+      submitted: false
+    })
+
+    const table = $('#table').DataTable()
+
+    let objectitem = []
+    await table.rows().eq(0).each(async function (index) {
+      let row = table.row(index)
+      let data = row.data()
+
+      let inputchk = table.cell(index, 0).nodes().to$().find('input').prop('checked')
+      if (inputchk) {
+        const item = { file_type: data.file_type }
+        objectitem.push(item)
+      }
+    })
+    if (objectitem.length > 0 && year && month && day) {
+      const prm = {
+        file_type: objectitem,
+        year: year,
+        month: month,
+        day: day,
+        screen_id: screen_id
+      }
+      dispatch(await sdcbatchfileAction.rerunbatchsdcinterface(prm))
+
+      this.setState({
+        submitted: true
+      })
+    }
   }
 
   async componentDidMount() {
     try {
-      // setTimeout(async () => {
-      //   let response = await fetch(`${PathBackEnd}/api/sdcbatchfile/filetypeactive`)
-      //   let json = await response.json()
-      //   this.setState({
-      //     typefile: json
-      //   })
-      // }, 300)
 
       setTimeout(async () => {
         let response = await fetch(`${PathBackEnd}/api/sdcbatchfile/dropdownfile`)
@@ -132,6 +200,15 @@ class SDCBatchFile extends React.Component {
     }
   }
 
+  async componentDidUpdate() {
+    const { alert } = this.props;
+
+    if (alert.type == "alert-success") {
+      $('#table').DataTable().ajax.reload();
+      this.setState({ year: '', month: '', day: '' })
+    }
+  }
+
 
 
   render() {
@@ -152,20 +229,6 @@ class SDCBatchFile extends React.Component {
                 {modify && <div className="widget-body ">
                   <br />
                   <div className="form-horizontal">
-                    {/* <div className="form-group">
-                      <div className="col-md-2">
-                        <div className="col-md-9 control-label"><label >File Type</label><span class="text-danger">*</span></div>
-                      </div>
-                      <div className="col-md-8">
-                        {typefile.map(function (item, index) {
-                          return <div className="col-md-3 smart-form">
-                            <label className="radio align-top">
-                              <input type="radio" name="radio-inline" value={item.value} checked={stamp === item.value} />
-                              <i />{item.label}</label>
-                          </div>
-                        })}
-                      </div>
-                    </div> */}
                     <div className="form-group">
                       <div className="col-md-4">
                         <div className="col-md-4 control-label"><label > Year</label><span class="text-danger">*</span></div>
@@ -204,19 +267,25 @@ class SDCBatchFile extends React.Component {
                                 return '<div class="smart-form checkbox "><label name="lblcheck"  class="checkbox"><input type="checkbox" name="checkbox"/><i name="chklist"/></label></div>'
                               }
                             },
-                            { data: "file_type_id" }, { data: "file_type" }, { data: "file_type_desc" }, { data: "PROCESS_INTERVAL" }
+                            { data: "file_type_id" }, { data: "file_type" }, { data: "file_type_desc" }, { data: "PROCESS_INTERVAL" },
+                            {
+                              data: "Status",
+                              render: function (data, type, row) {
+                                return `<label ></label>`;
+                              }
+                            }
                           ],
                           buttons: [
                           ],
                         }}
-                        paginationLength={true} className="table table-striped table-bordered table-hover"
+                        paginationLength={false} className="table table-striped table-bordered table-hover"
                         width="100%">
                         <thead>
                           <tr>
-                          <th data-class="expand"><i
+                            <th data-class="expand"><i
                               className="text-muted hidden-md hidden-sm hidden-xs" />
-                             
-                                                        </th>
+
+                            </th>
                             <th data-class="expand"><i
                               className="text-muted hidden-md hidden-sm hidden-xs" />
                               File Type ID
@@ -233,10 +302,21 @@ class SDCBatchFile extends React.Component {
                               className="text-muted hidden-md hidden-sm hidden-xs" />
                               Process Interval
                                                         </th>
+                            <th data-hide="user"><i
+                              className="text-muted hidden-md hidden-sm hidden-xs" />
+                              Status
+                                                        </th>
                           </tr>
                         </thead>
                       </DatatableSDCBatchFile>
                       }
+                      <div className="smart-form">
+                        <footer>
+                          <button id="btnGengl" type="button" className="btn btn-primary btn-sm" onClick={this.handleProcessSubmit} data-loading-text="<i class='fa fa-spinner fa-spin '></i> Processing">
+                            Process
+                           </button>
+                        </footer>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -252,12 +332,14 @@ class SDCBatchFile extends React.Component {
 
 
 function mapStateToProps(state) {
+  const { alert } = state;
   const { loadpage } = state;
   const screen_name = loadpage.screen_name
   const modify = loadpage.modify
   return {
     modify,
-    screen_name
+    screen_name,
+    alert
   };
 }
 
