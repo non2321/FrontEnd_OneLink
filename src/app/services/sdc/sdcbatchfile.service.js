@@ -11,12 +11,13 @@ async function rerunbatchsdcinterface(prm) {
     const year = prm.year
     const month = prm.month
     const day = prm.day
+    const store = prm.store
     const screen_id = prm.screen_id
 
     const requestOptions = {
         method: 'POST',
         headers: { ...authHeader(), 'Content-Type': 'application/json' },
-        body: JSON.stringify({ file_type, year, month, day, screen_id }),
+        body: JSON.stringify({ file_type, year, month, day, store, screen_id }),
         timeout: 0,
     };
 

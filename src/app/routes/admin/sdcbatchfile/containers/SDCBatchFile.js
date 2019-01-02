@@ -43,7 +43,8 @@ class SDCBatchFile extends React.Component {
     this.setState({
       year: (year == null) ? '' : year.value,
       month: '',
-      day: ''
+      day: '',
+      store: ''
     })
 
     if (sdcinterfacefile && year) {
@@ -72,7 +73,8 @@ class SDCBatchFile extends React.Component {
 
     this.setState({
       month: (month == null) ? '' : month.value,
-      day: ''
+      day: '',
+      store: ''
     })
 
     if (sdcinterfacefile && month) {
@@ -100,6 +102,7 @@ class SDCBatchFile extends React.Component {
     const { year, month } = this.state
     this.setState({
       day: (day == null) ? '' : day.value,
+      store: ''
     })
 
     if (year && month && day) {
@@ -131,11 +134,71 @@ class SDCBatchFile extends React.Component {
 
   }
 
+  handleChangesStore = async (store) => {
+    const { year, month, day } = this.state
+
+    this.setState({
+      store: (store == null) ? '' : store.value,
+    })
+
+    if (year && month && day && store) {
+      let response = await fetch(`${PathBackEnd}/api/sdcbatchfile/validationfile/${year}/${month}/${day}/${store.value}`)
+      let json = await response.json()
+      const keys = Object.keys(json)
+
+      const table = $('#table').DataTable()
+
+      await table.rows().eq(0).each(async function (index) {
+        let row = table.row(index)
+        let data = row.data()
+
+        for (let item of keys) {
+          if (data.file_type == item) {
+            if (!json[item].data) {
+              table.cell(index, 0).nodes().to$().find('input').prop("checked", false)
+              table.cell(index, 0).nodes().to$().find('input').attr("disabled", true)
+              table.cell(index, 5).nodes().to$().find('label').text(`${json[item].msg}`)
+            } else {
+              table.cell(index, 0).nodes().to$().find('input').removeAttr("disabled")
+              table.cell(index, 5).nodes().to$().find('label').text('')
+            }
+            break
+          }
+        }
+      })
+    } else if (year && month && day) {
+      let response = await fetch(`${PathBackEnd}/api/sdcbatchfile/validationfile/${year}/${month}/${day}`)
+      let json = await response.json()
+      const keys = Object.keys(json)
+
+      const table = $('#table').DataTable()
+
+      await table.rows().eq(0).each(async function (index) {
+        let row = table.row(index)
+        let data = row.data()
+
+        for (let item of keys) {
+          if (data.file_type == item) {
+            if (!json[item].data) {
+              table.cell(index, 0).nodes().to$().find('input').prop("checked", false)
+              table.cell(index, 0).nodes().to$().find('input').attr("disabled", true)
+              table.cell(index, 5).nodes().to$().find('label').text(`${json[item].msg}`)
+            } else {
+              table.cell(index, 0).nodes().to$().find('input').removeAttr("disabled")
+              table.cell(index, 5).nodes().to$().find('label').text('')
+            }
+            break
+          }
+        }
+      })
+    }
+  }
+
   async handleProcessSubmit(e) {
     e.preventDefault()
 
     const { dispatch } = this.props
-    const { year, month, day, screen_id } = this.state
+    const { year, month, day, store, screen_id } = this.state
 
     this.setState({
       erroryear: (year) ? '' : 'The Year is required',
@@ -163,6 +226,7 @@ class SDCBatchFile extends React.Component {
         year: year,
         month: month,
         day: day,
+        store: store,
         screen_id: screen_id
       }
       dispatch(await sdcbatchfileAction.rerunbatchsdcinterface(prm))
@@ -194,6 +258,16 @@ class SDCBatchFile extends React.Component {
           optionyear: optionyear
         })
       }, 600)
+
+      setTimeout(async () => {
+        let response = await fetch(`${PathBackEnd}/api/report/storeall`)
+        let json = await response.json()
+        this.setState({
+          optionstore: json
+        })
+      }, 600)
+
+
     }
     catch (err) {
       console.log(err);
@@ -205,16 +279,16 @@ class SDCBatchFile extends React.Component {
 
     if (alert.type == "alert-success") {
       $('#table').DataTable().ajax.reload();
-      this.setState({ year: '', month: '', day: '' })
+      this.setState({ year: '', month: '', day: '', store: '' })
     }
   }
 
 
 
   render() {
-    const { year, month, day, stamp, typefile } = this.state
+    const { year, month, day, store } = this.state
     const { optionyear, errormonth, errorday } = this.state
-    const { erroryear, optionmonth, optionday } = this.state
+    const { erroryear, optionmonth, optionday, optionstore } = this.state
     const { modify, screen_name } = this.props;
     const seft = this
 
@@ -252,6 +326,25 @@ class SDCBatchFile extends React.Component {
                         </div>
                       </div>
                     </div>
+                    <div className="form-group">
+                      <div className="col-md-4">
+                        <div className="col-md-4 control-label"><label > Store</label></div>
+                        <div className="col-md-7">
+                          <Select options={optionstore} placeholder='All Store' name="store" value={store} onChange={this.handleChangesStore} disabled={!day} />
+                        </div>
+                      </div>
+                      <div className="col-md-4">
+                        <div className="col-md-4 control-label"></div>
+                        <div className="col-md-7">
+                        </div>
+                      </div>
+                      <div className="col-md-4">
+                        <div className="col-md-4 control-label"></div>
+                        <div className="col-md-7">
+                        </div>
+                      </div>
+                    </div>
+
                     <div className="widget-body no-padding">
                       <hr />
                       {modify && <DatatableSDCBatchFile

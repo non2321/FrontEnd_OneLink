@@ -13,6 +13,7 @@ async function rerunbatchsdcinterface(prm) {
     const year = prm.year
     const month = prm.month
     const day = prm.day
+    const store = prm.store
     const screen_id = prm.screen_id
 
 
