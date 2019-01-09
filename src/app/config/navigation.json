@@ -132,6 +132,12 @@
               "route": "/SDC/SteampInventory",
               "comment": "Stamp Inventory",
               "screen_id": "S0016"
+            },
+            {
+              "title": "New Inventory Items",
+              "route": "/SDC/NewInventoryItems",
+              "comment": "New Inventory Items",
+              "screen_id": "S0036"
             }
           ]
         },

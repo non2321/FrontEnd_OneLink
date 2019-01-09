@@ -19,6 +19,8 @@ export const inventoryService = {
     genunitcost,
 
     stampinventory,
+
+    addnewinventoryitems
 }
 
 function addaccountcodeforinventory(prm) {
@@ -284,6 +286,46 @@ function stampinventory(prm) {
             return handleResponse(response)
         })
         .then(user => {
+            if (user && user.status == 'Y') {               
+                localStorage.setItem(localStorageAuth, JSON.stringify(user.user));
+            }
+            return user;
+        });
+}
+
+function addnewinventoryitems(prm) {  
+    
+    const stock_code = prm.stock_code
+    const description = prm.description
+    const postinginterval = prm.postinginterval
+    const vendor = prm.vendor
+    const costperinvoice = prm.costperinvoice
+    const unitm2 = prm.unitm2
+    const scalm2 = prm.scalm2
+    const costm2 = prm.costm2
+    const unitm3 = prm.unitm3
+    const scalm3 = prm.scalm3
+    const costm3 = prm.costm3
+    const unitm4 = prm.unitm4
+    const scalm4 = prm.scalm4
+    const costm4 = prm.costm4
+    const screen_id = prm.screen_id
+
+    const requestOptions = {
+        method: 'POST',
+        headers: { ...authHeader(), 'Content-Type': 'application/json' },
+        body: JSON.stringify({ 
+            stock_code: stock_code, description: description, postinginterval: postinginterval, vendor: vendor, costperinvoice: costperinvoice,
+            unitm2: unitm2, scalm2: scalm2, costm2: costm2,
+            unitm3: unitm3, scalm3: scalm3, costm3: costm3,
+            unitm4: unitm4, scalm4: scalm4, costm4: costm4, screen_id: screen_id})
+    };
+
+    return fetch(`${PathBackEnd}/api/newinventoryitems`, requestOptions)
+        .then(response => {
+            return handleResponse(response)
+        })
+        .then(user => { 
             if (user && user.status == 'Y') {               
                 localStorage.setItem(localStorageAuth, JSON.stringify(user.user));
             }

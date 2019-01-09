@@ -18,7 +18,9 @@ export const inventoryActions = {
     importunitcost,
     genunitcost,
 
-    stampinventory
+    stampinventory,
+
+    addnewinventoryitems
 }
 
 function addaccountcodeforinventory(prm) {
@@ -362,6 +364,42 @@ function stampinventory(prm) {
                 error => {
                     // dispatch(failure(error));
                     // dispatch(alertActions.error(error));
+                }
+            )
+    }
+
+    function request(inventory) { return { type: inventoryConstants.ADD_REQUEST, inventory } }
+    function success(inventory) { return { type: inventoryConstants.ADD_SUCCESS, inventory } }
+    function failure(error) { return { type: inventoryConstants.ADD_FAILURE, error } }
+}
+
+function addnewinventoryitems(prm) {  
+
+    return dispatch => {
+        dispatch(request({ prm }));
+        inventoryService.addnewinventoryitems(prm)
+            .then(
+                inventory => {
+                    if (inventory.status == 'Y') {
+                        $('#myModalAdd').modal('hide');
+                        $('#table').DataTable().ajax.reload();
+
+                        dispatch(success(inventory));
+                        dispatch(alertActions.success(inventory.message));
+                    } else if (inventory.status == 'NA') {
+
+                        dispatch(failure(inventory.message));
+                        dispatch(alertActions.error(inventory.message));
+                        hashHistory.push('/Login');
+                    } else {
+
+                        dispatch(failure(inventory.message));
+                        dispatch(alertActions.error(inventory.message));
+                    }
+                },
+                error => {
+                    dispatch(failure(error));
+                    dispatch(alertActions.error(error));
                 }
             )
     }

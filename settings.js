@@ -29,6 +29,7 @@ exports.ScreenIDTermClosing = 'S0013'
 exports.ScreenIDTransferInventory = 'S0014'
 exports.ScreenIDUnitCost = 'S0015'
 exports.ScreenIDSteampInventory = 'S0016'
+exports.ScreenIDNewInventoryItems = 'S0036'
 
 //Report
 //SDC Sales

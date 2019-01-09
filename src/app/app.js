@@ -40,6 +40,7 @@ const routes = {
     require('./routes/sdc/transferinventory').default,
     require('./routes/sdc/unitcost').default,
     require('./routes/sdc/steampinventory').default,
+    require('./routes/sdc/newinventoryitems').default,
        
     //Report
     //SDC Sale

@@ -191,8 +191,8 @@ class SetupCompanyAccount extends React.Component {
                           columns: [{ data: "FINANCIAL_CODE" }, { data: "FINANCIAL_DESC", "visible": false },
                           {
                             data: "FINANCIAL_DESC",
-                            render: function (data, type, row) {
-                              return `<input type="text"  name="txtfinname" class="form-control input-xs" disabled="disabled" value=${data}></div><label class="text-danger"></label>`;
+                            render: function (data, type, row) {                              
+                              return `<input type="text"  name="txtfinname" class="form-control input-xs" disabled="disabled" value='${data}'></div><label class="text-danger"></label>`;
                             }
                           },
                           {
